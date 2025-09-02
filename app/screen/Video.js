@@ -1,7 +1,6 @@
 import {
     FlatList,
     Image,
-    SafeAreaView,
     StyleSheet,
     Text,
     View,
@@ -14,6 +13,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 
@@ -67,7 +67,7 @@ export default function Video() {
         </TouchableOpacity>
     );
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}edges={['top', 'left', 'right']}>
 
            <View style={styles.header}>
                 <TouchableOpacity style={styles.nav} onPress={() => navigation.goBack()}>

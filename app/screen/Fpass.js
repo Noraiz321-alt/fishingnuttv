@@ -52,7 +52,7 @@ export default function Fpass({ navigation }) {
             setLoading(false);
 
             if (responseData.message === "Password reset code sent successfully to your email.") {
-                navigation.navigate('Code_field', { responseData: responseData });
+                navigation.navigate('Code_field', { responseData: responseData,email: email });
             } else {
                 Alert.alert('Error', responseData.error || 'An unknown error occurred.');
             }

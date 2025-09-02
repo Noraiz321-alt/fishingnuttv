@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  FlatList, Image, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, Alert
+  FlatList, Image,  StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, Alert
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -11,6 +11,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import axios from 'axios';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function View_Post() {

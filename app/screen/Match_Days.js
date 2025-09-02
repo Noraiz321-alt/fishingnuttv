@@ -4,7 +4,6 @@ import {
     Text,
     FlatList,
     ActivityIndicator,
-    SafeAreaView,
     TouchableOpacity,
     Image,
     StyleSheet,
@@ -16,6 +15,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Match_Days({ route }) {
     const navigation = useNavigation();

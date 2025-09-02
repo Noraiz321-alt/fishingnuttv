@@ -1,11 +1,12 @@
 import React,{useState} from 'react';
-import { StyleSheet, View, SafeAreaView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp }
 from 'react-native-responsive-screen'
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function VideoPlayerScreen({ route }) {
 

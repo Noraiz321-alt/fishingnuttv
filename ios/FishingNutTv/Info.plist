@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <true/>
     <key>NSCameraUsageDescription</key>
 	<string>Your message to user when the camera is accessed for the first time</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -10,10 +12,6 @@
     <string>$(App_Name) requires FaceID access to allow you quick and secure access.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-    <string>This app needs permission to save photos to your library.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app needs access to your photo library to share pictures.</string>
 	<key>CFBundleDisplayName</key>
 	<string>FishingNutTv</string>
 	<key>CFBundleExecutable</key>

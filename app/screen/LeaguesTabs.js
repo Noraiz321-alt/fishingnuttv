@@ -4,7 +4,7 @@ import {
     Text,
     FlatList,
     ActivityIndicator,
-    SafeAreaView,
+
     TouchableOpacity,
     Image,
     RefreshControl,
@@ -18,6 +18,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import League from './League';
 import LeaderBoard from './LeaderBoard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LeaguesTabs() {
     const navigation = useNavigation()

@@ -100,10 +100,19 @@ const DraweContant = (props) => {
       console.error('Sidebar post error:', err);
     }
   };
+
   useEffect(() => {
-    const unsubscribe = props.navigation.addListener('drawerOpen', () => {
-      console.log('🔄 Drawer open hua, ab API call ho rahi hai...');
-      fetchSidebarVisibility();
+    const unsubscribe = props.navigation.addListener('state', () => {
+      const drawerState = props.navigation.getState();
+  
+      const isDrawerOpen = drawerState.history?.some(
+        (entry) => entry.type === 'drawer'
+      );
+  
+      if (isDrawerOpen) {
+        console.log('📂 Drawer open detected (via state listener)');
+        fetchSidebarVisibility();
+      }
     });
   
     return unsubscribe;
@@ -111,6 +120,7 @@ const DraweContant = (props) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log('🔔 DrawerContent focused, API call hone wali hai...');
       const fetchAndPost = async () => {
         await getUserProfile();
         await fetchSidebarVisibility();

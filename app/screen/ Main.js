@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TouchableOpacity, Alert, Linking,ActivityIndicator,StatusBar} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TouchableOpacity, Alert, Linking, ActivityIndicator, StatusBar } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import image from '../Utilis/image';
 import { useNavigation, DrawerActions, useFocusEffect } from '@react-navigation/native'
 import axios from 'react-native-axios'
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from 'react-native-responsive-screen';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
+
 
 const Main = ({ route }) => {
   const navigation = useNavigation();
@@ -19,11 +16,19 @@ const Main = ({ route }) => {
   const url = 'https://www.fishingnuttv.com/fntv-custom/fntvAPIs/refApi.php?auth=fntv7945@@-&act=qrLink&memberStatus=' + responseData.memberStatus + '&memberID=' + responseData.memberID;
   const [vari, setVari] = useState('');
   const [expirdata, setExpirData] = useState('');
-  const [updateexpiry,setUpdateExpiry] = useState('');
+  const [updateexpiry, setUpdateExpiry] = useState('');
   const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
+      if (Platform.OS === 'android') {
+        StatusBar.setBackgroundColor('#000000', true); // black background
+        StatusBar.setBarStyle('light-content', true);  // white text/icons
+      } else if (Platform.OS === 'ios') {
+        StatusBar.setBarStyle('dark-content', true);   // black text/icons
+        // iOS doesn't support setting background color directly from JS
+        // So you can adjust it using your View background or Navigation options
+      }
       getUserProfile();
       expirydata();
       update_expiry();
@@ -34,7 +39,7 @@ const Main = ({ route }) => {
   useEffect(() => {
     update_expiry();
     getdata();
-    
+
   }, [navigation]);
   const getdata = async () => {
     const res = await axios({
@@ -82,78 +87,53 @@ const Main = ({ route }) => {
       console.error('Error fetching user profile data:', error);
     }
   };
+  // const handleButtonPress = () => {
+  //   if (updateexpiry) {
+  //     const redirectUrl = updateexpiry.redirect_url?.trim(); // remove extra spaces
+
+  //     if (redirectUrl && redirectUrl !== '') {
+  //       // If redirect_url exists and is not empty, navigate
+  //       navigation.navigate('LeagueWebView', {
+  //         url: redirectUrl,
+  //         title: 'Extend Membership'
+  //       });
+  //     } else if (typeof updateexpiry.message === 'string' && updateexpiry.message !== '') {
+  //       // If redirect_url is empty and message is present, show alert
+  //       Alert.alert(
+  //         'Details',
+  //         updateexpiry.message.substring(0, 500), // show first 500 characters
+  //         [{ text: 'OK' }]
+  //       );
+  //     } else {
+  //       Alert.alert('Error', 'Unexpected response format.');
+  //     }
+  //   } else {
+  //     Alert.alert('Error', 'No response received.');
+  //   }
+  // };
+
   const handleButtonPress = () => {
-    if (updateexpiry) {
-      const redirectUrl = updateexpiry.redirect_url?.trim(); // remove extra spaces
-  
-      if (redirectUrl && redirectUrl !== '') {
-        // If redirect_url exists and is not empty, navigate
-        navigation.navigate('LeagueWebView', {
-          url: redirectUrl,
-          title: 'Extend Membership'
-        });
-      } else if (typeof updateexpiry.message === 'string' && updateexpiry.message !== '') {
-        // If redirect_url is empty and message is present, show alert
-        Alert.alert(
-          'Details',
-          updateexpiry.message.substring(0, 500), // show first 500 characters
-          [{ text: 'OK' }]
-        );
-      } else {
-        Alert.alert('Error', 'Unexpected response format.');
-      }
+    if (typeof updateexpiry === 'string') {
+      Alert.alert(
+        'Details',
+        updateexpiry.substring(0, 500),
+        [{ text: 'OK' }]
+      );
+    } else if (
+      updateexpiry &&
+      typeof updateexpiry === 'object' &&
+      updateexpiry.redirect_url
+    ) {
+      navigation.navigate('LeagueWebView', {
+        url: updateexpiry.redirect_url,
+        title: 'Extend Membership'
+      });
     } else {
-      Alert.alert('Error', 'No response received.');
+      Alert.alert('Error', 'Unexpected response format.');
     }
   };
 
-  // const handleButtonPress = () => {
-  //   if (typeof updateexpiry === 'string') {
-  //     // Show alert with message
-  //     Alert.alert(
-  //       'Details',
-  //       updateexpiry.substring(0, 500) , // show first 500 chars
-  //       [{ text: 'OK' }]
-  //     );
-  //   } else if (updateexpiry && updateexpiry.redirect_url) {
-  //     if (Platform.OS === 'android') {
-  //       if (updateexpiry?.redirect_url) {
-  //         navigation.navigate('LeagueWebView', {
-  //           url: updateexpiry.redirect_url,
-  //           title: 'Extend Membership'
-  //         });
-  //       } else {
-  //         Alert.alert('Error', 'No URL found');
-  //       }
-  //     }
-  //     else if (Platform.OS === 'ios') {
-  //       sendPostRequest(); // iOS logic
-  //     }
-  //   } else {
-  //     Alert.alert('Error', 'Unexpected response format.');
-  //   }
-  // };
 
-  
- 
-  // const handleButtonPress = () => {
-  //   if (Platform.OS === 'android') {
-  //     const url = updateexpiry.redirect_url;
-  //     Linking.openURL(url)
-  //       .then((data) => {
-  //         // Do something if the URL was opened successfully
-  //         console.log('URL Opened:', data);
-  //       })
-  //       .catch((error) => {
-  //         // Handle errors when trying to open the URL
-  //         console.error('Error opening URL:', error);
-  //       });
-  //   } else if (Platform.OS === 'ios') {
-    
-  //     sendPostRequest()
-  //     // navigation.navigate('SignUp');
-  //   }
-  // };
   // const sendPostRequest = async () => {
   //   try {
   //     setLoading(true)
@@ -161,7 +141,7 @@ const Main = ({ route }) => {
   //     const formdata = new FormData();
   //     formdata.append('id',responseData.memberID );
   //     console.log('id show!!!!!',formdata )
-      
+
   //     const response = await fetch('https://www.fishingnuttv.com/fntv-custom/signupWizard/memExpiryMail.php', {
   //       method: 'POST',
   //       headers: {
@@ -180,11 +160,7 @@ const Main = ({ route }) => {
   //   }
   // };
   return (
-    <>
-     <StatusBar
-          backgroundColor="#000000" // Android
-          barStyle="#ffffff"   // iOS + Android icon color
-          translucent={false}  />
+
     <SafeAreaView style={styles.container}>
       <ImageBackground style={styles.background} source={image.logo}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -203,37 +179,38 @@ const Main = ({ route }) => {
             <Text style={styles.cardText}>{responseData.first_name} {responseData.last_name}</Text>
             <QRCode
               value={vari.qrcode}
-              size={140} // Set the size of the QR code (optional)
-              color="black" // Set the color of the QR code (optional)
-              backgroundColor="white" // Set the background color (optional)
-              logo={{ uri: 'https://example.com/logo.png', backgroundColor: 'transparent' }} // Add a logo to the center of the QR code (optional)
+              size={160}
+              color="black"
+              backgroundColor="white"
+              logo={image.logo1}
+              logoSize={40}
+              logoBackgroundColor="transparent"
+              logoBorderRadius={100} // ✅ Yeh line logo ko gol bana degi
             />
-            
-              <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontWeight: '700', color: '#1b6001', fontSize: 25, paddingBottom: 20 }} >Membership expiry</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',flexWrap:'wrap',gap:10,paddingHorizontal:10 }}>
-                    <View>
-                      <Text style={{ fontSize: 20, color: 'red' }} >{expirdata.membership_expiry_date}</Text>
-                    </View>
-                    <TouchableOpacity onPress={handleButtonPress} style={{ paddingHorizontal: 10, backgroundColor: '#1b6001', borderRadius: 5, paddingVertical: 5,alignItems:'center' }}>
-                    {loading ?
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontWeight: '700', color: '#1b6001', fontSize: 25, paddingBottom: 20 }} >Membership expiry</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 10, paddingHorizontal: 10 }}>
+                <View>
+                  <Text style={{ fontSize: 20, color: 'red' }} >{expirdata.membership_expiry_date}</Text>
+                </View>
+                <TouchableOpacity onPress={handleButtonPress} style={{ paddingHorizontal: 10, backgroundColor: '#1b6001', borderRadius: 5, paddingVertical: 5, alignItems: 'center' }}>
+                  {loading ?
                     <ActivityIndicator size="small" color="white" />
                     :
-                      <Text style={{ fontSize: 15, color: 'white',}} >Extend Membership</Text>
-                    }
-                    </TouchableOpacity>
-                  </View>
+                    <Text style={{ fontSize: 15, color: 'white', }} >Extend Membership</Text>
+                  }
+                </TouchableOpacity>
               </View>
-          
+            </View>
           </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-    </>
+
   );
 }
 export default Main;
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
   },
@@ -245,69 +222,61 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     width: '100%',
-    height: 180,
+    height: vs(180),  // vertical scaling
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    top: -15,
+    top: vs(-15),
     alignContent: 'center',
   },
   logoImage: {
-    width: '90%',
-    height: 60,
+    width: '70%',
+    height: vs(60),
   },
   headerContainer: {
-    marginTop: 10,
+    marginTop: vs(10),
   },
   headerText: {
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: s(30),  // scale according to width
     color: 'white',
     fontWeight: '600',
   },
   cardContainer: {
-    marginTop: 100,
+    marginTop: vs(100),
     flex: 1,
     width: '100%',
     backgroundColor: '#b9dfab',
-    borderTopRightRadius: 35,
-    borderTopLeftRadius: 35,
+    borderTopRightRadius: s(35),
+    borderTopLeftRadius: s(35),
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: vs(10),
   },
   cardImageContainer: {
-    borderWidth: 4,
-    borderRadius: 120,
+    borderWidth: s(4),
+    borderRadius: s(120),
     borderColor: '#1b6001',
   },
   cardImage: {
-    width: 140,
-    height: 140,
-    borderRadius: 120,
+    width: s(140),
+    height: s(140),
+    borderRadius: s(120),
   },
   cardText: {
     fontWeight: '700',
     color: '#1b6001',
-    fontSize: 25,
-    // paddingVertical: 20s
-    // paddingBottom: 25,
+    fontSize: s(25),
   },
   cardText1: {
     fontWeight: '700',
     color: '#1b6001',
-    fontSize: 25,
-    top: 10,
-
-    // paddingVertical: 20
-    // paddingBottom: 25,
+    fontSize: s(25),
+    top: vs(10),
   },
   cardText2: {
     color: '#1b6001',
-    fontSize: 25,
-    top: 10,
-
-    // paddingVertical: 20
-    // paddingBottom: 25,
+    fontSize: s(25),
+    top: vs(10),
   },
 });

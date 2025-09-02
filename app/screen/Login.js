@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking, ActivityIndicator, Switch } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking, ActivityIndicator, Switch,StatusBar } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import image from '../Utilis/image'
 import { StackActions, useNavigation } from '@react-navigation/native'
@@ -29,6 +29,14 @@ const Login = ({ navigation }) => {
   const [signupUrl, setSignupUrl] = useState(null);
 
   useEffect(() => {
+     if (Platform.OS === 'android') {
+            StatusBar.setBackgroundColor('#000000', true); // black background
+            StatusBar.setBarStyle('light-content', true);  // white text/icons
+          } else if (Platform.OS === 'ios') {
+            StatusBar.setBarStyle('dark-content', true);   // black text/icons
+            // iOS doesn't support setting background color directly from JS
+            // So you can adjust it using your View background or Navigation options
+          }
     loadFingerprintPreference();
     checkFingerprintStatus();
     console.log('update page')

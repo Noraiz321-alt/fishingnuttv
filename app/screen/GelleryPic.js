@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, FlatList, Alert } from 'react-native';
+import {  StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, FlatList, Alert } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import axios from 'react-native-axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import Gelery from './Gelery';

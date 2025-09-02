@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View,ScrollView, TouchableOpacity, Image, FlatList,StatusBar } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 // import Bcalender from '../componnent/Bcalender'
@@ -11,6 +11,7 @@ import Upcoming from '../componnent/Upcoming'
 import Testm from '../componnent/Testm'
 import axios from 'react-native-axios';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function BookingDetails({ route }) {
@@ -21,6 +22,10 @@ export default function BookingDetails({ route }) {
 
   useFocusEffect(
     React.useCallback(() => {
+      if (Platform.OS === 'android') {
+      StatusBar.setBarStyle('dark-content', true);        // 👈 force override
+      StatusBar.setBackgroundColor('#ffffff', true);  
+      }
       fetchDataAndFilter();
       getUserProfile();
       return () => {};
@@ -63,6 +68,7 @@ export default function BookingDetails({ route }) {
   };
 
   return (
+   
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.header}>
@@ -109,12 +115,14 @@ export default function BookingDetails({ route }) {
         </Tab.Screen>
       </Tab.Navigator>
     </SafeAreaView>
+
   );
 }
 
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: "#ffffff",
   },
   headerContainer: {

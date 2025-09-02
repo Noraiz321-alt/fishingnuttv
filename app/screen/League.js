@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import {
-    View, Text, FlatList, ActivityIndicator, SafeAreaView, TouchableOpacity,
+    View, Text, FlatList, ActivityIndicator,TouchableOpacity,
     Image, RefreshControl
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScaledSheet } from 'react-native-size-matters';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const League = ({ route }) => {
     const navigation = useNavigation();

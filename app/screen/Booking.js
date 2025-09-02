@@ -1,6 +1,7 @@
-import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image, Dimensions,Modal, Animated } from 'react-native'
+import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet,TouchableOpacity, Image, Dimensions,Modal, Animated,StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, DrawerActions, useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'react-native-axios';
 import apipost from '../api/GetApi';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -13,7 +14,7 @@ import Bcalender from '../componnent/Bcalender';
 
 export default function Booking({ route }) {
   const responseData = route.params?.responseData || null;
-  // console.log('Lake  details data>>>>>>>???????', responseData)
+  console.log('Lake  details data>>>>>>>???????', responseData.memInfo)
   const toggleDrawer = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
@@ -30,7 +31,10 @@ export default function Booking({ route }) {
 
   useFocusEffect(
     React.useCallback(() => {
-
+      if (Platform.OS === 'android') {
+      StatusBar.setBarStyle('dark-content', true);        // 👈 force override
+      StatusBar.setBackgroundColor('#ffffff', true);  
+      }
       LakeApies()
       getUserProfile()
       return () => {
@@ -39,30 +43,23 @@ export default function Booking({ route }) {
   );
 
 
-  const geturl = async () => {
+  const saveMemInfo = async () => {
     try {
-      const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/signupWizard/update_memExpiry.php?id=${responseData.memberID}`);
-      
-      const memInfo = response.data?.memInfo; // 🛠️ Yeh line important hai
-  
-      console.log('show memInfo >>>>>>>ccccc>>>>>>>', memInfo);
-  
-      if (memInfo) {
-        await AsyncStorage.setItem('redirect_params', memInfo);
-        console.log('✅ Only memInfo saved:', memInfo);
+      if (responseData?.memInfo) {
+        await AsyncStorage.setItem('redirect_params', responseData.memInfo);
+        console.log('✅ memInfo saved directly:', responseData.memInfo);
       } else {
-        console.warn('⚠️ memInfo not found in response');
+        console.warn('⚠️ memInfo not found in route params');
       }
-  
     } catch (error) {
-      console.error('Error fetching user profile data:', error);
+      console.error('Error saving memInfo to AsyncStorage:', error);
     }
   };
 
 
   useEffect(() => {
     
-    geturl()
+    saveMemInfo()
     LakeApies()
     Favorite()
     getUserDataaa()
@@ -234,7 +231,9 @@ export default function Booking({ route }) {
   
 
   return (
-    <SafeAreaView style={styles.container}>
+ 
+    
+    <SafeAreaView style={styles.container}edges={['top', 'left', 'right']}>
       <View style={styles.headerContainer}>
         <TouchableOpacity style={styles.nav} onPress={toggleDrawer}>
           <EvilIcons name="navicon" size={s(35)} color='black' />
@@ -293,6 +292,7 @@ export default function Booking({ route }) {
     </Modal>
 
     </SafeAreaView>
+
   );
 }
 

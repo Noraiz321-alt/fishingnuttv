@@ -11,7 +11,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import NewsUpload from './NewsUpload';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Blog() {
+export default function News() {
 
     const isAdminRef = useRef(false);
     const navigation = useNavigation()
@@ -40,7 +40,7 @@ export default function Blog() {
                 const userData = await AsyncStorage.getItem('user');
                 if (userData) {
                     const parsedData = JSON.parse(userData);
-                    isAdminRef.current = parsedData.custom_admin === 1;
+                    isAdminRef.current = parsedData.custom_admin === 20;
                     console.log('Is Admin:', isAdminRef.current);
                 }
             } catch (error) {

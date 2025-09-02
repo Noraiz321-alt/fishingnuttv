@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Image, StyleSheet,TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Image, StyleSheet,TouchableOpacity,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Zoom_image({ route }) {
     const navigation = useNavigation();

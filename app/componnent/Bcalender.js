@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, SafeAreaView, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert,  Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import ImageSlider from 'react-native-image-slider';
-import Carousel from 'react-native-snap-carousel';
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 
 const Bcalender = ({ route }) => {

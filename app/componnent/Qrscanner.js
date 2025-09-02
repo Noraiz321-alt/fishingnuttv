@@ -1,93 +1,18 @@
-// import { StyleSheet, Text, View, TouchableOpacity,Linking } from 'react-native'
-// import React, { useState } from 'react'
-// import AntDesign from 'react-native-vector-icons/AntDesign';
-// import { useNavigation } from '@react-navigation/native';
-// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-// import { RNCamera } from 'react-native-camera'
-// import QRCodeScanner from 'react-native-qrcode-scanner'
 
-// export default function Qrscanner() {
-//     const navigation = useNavigation();
-//     const [scanStatus, setScanStatus] = useState('Check Availability');
-
-//     const onRead = (e) => {
-//     console.log(e.data); // Scanned QR code data
-//     // Extract domain from the scanned URL
-//     const domain = e.data.split('/')[2]; // Split the URL by '/' and get the third part
-//     // Handle the scanned data as per your requirement
-//     setScanStatus(domain); // Update scanStatus state with the domain
-//     // Redirect to the URL
-//     Linking.openURL(e.data);
-// };
-
-//     return (
-//         <View style={styles.container}>
-//             <QRCodeScanner
-//                 onRead={(e) => onRead(e)}
-//                 reactivate={true}
-//                 reactivateTimeout={500}
-//                 showMarker={true}
-//                 markerStyle={styles.marker}
-//                 cameraStyle={styles.camera}
-//                 topContent={
-//                     <View>
-//                         <View>
-//                             <Text style={{ position:'relative',color: 'black',top:-25,fontWeight:'bold',textAlign:'center'}}>{scanStatus}</Text>
-//                         </View>
-//                         <View>
-//                             <Text style={{ position:'relative',color: 'black',top:-20,textAlign:'center'}}>Simply scan the QR code of the peg to check if it is available for fishing today.</Text>
-//                         </View>
-//                     </View>
-//                 }
-//                 bottomContent={
-//                     <View>
-//                         <Text style={styles.bottomText}>Peg Scanner</Text>
-//                     </View>
-//                 }
-//             />
-//         </View>
-//     );
-// };
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     icon: {
-//         // marginRight: 10,
-//         width: wp('12%'),
-//         height: wp('12%'),
-//         borderRadius: 25,
-//         backgroundColor: '#b9dfab',
-//         overflow: 'hidden',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     marker: {
-//         borderColor: '#FFF',
-//         borderRadius:10,
-//     },
-//     bottomText: {
-//         marginTop: 20,
-//         fontSize: 18,
-//         color: 'black',
-//         fontWeight: 'bold',
-//     },
-// });
-
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useEffect } from 'react';
 import {
     StyleSheet,
     Text,
     View,
     TouchableOpacity,
     Linking,
-    SafeAreaView,
+ 
 } from 'react-native';
 import React, { useState } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -104,7 +29,29 @@ export default function Qrscanner() {
         setScanStatus(domain);
         Linking.openURL(e.data);
     };
-
+    useEffect(() => {
+        const checkCameraPermission = async () => {
+          try {
+            let result;
+            if (Platform.OS === 'ios') {
+              result = await request(PERMISSIONS.IOS.CAMERA);
+              console.log('iOS Camera Permission:', result);
+            } else {
+              return; // Skip Android if not needed
+            }
+      
+            if (result === RESULTS.GRANTED) {
+              console.log('Camera access granted on iOS');
+            } else if (result === RESULTS.BLOCKED) {
+              console.warn('Camera permission blocked. Guide user to settings.');
+            }
+          } catch (error) {
+            console.error('iOS Permission Error:', error);
+          }
+        };
+        checkCameraPermission();
+      }, []);
+    
     return (
         <SafeAreaView style={styles.safeContainer}>
             {/* Header */}

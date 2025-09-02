@@ -40,7 +40,7 @@ export default function Blog() {
                 const userData = await AsyncStorage.getItem('user');
                 if (userData) {
                     const parsedData = JSON.parse(userData);
-                    isAdminRef.current = parsedData.custom_admin === 1;
+                    isAdminRef.current = parsedData.custom_admin === 20;
                     console.log('Is Admin:', isAdminRef.current);
                 }
             } catch (error) {
@@ -62,7 +62,7 @@ export default function Blog() {
             );
 
             setloading(false);
-            console.log('✅ API Response:', response.data);
+            console.log('✅ API Response: Bloggg', response.data);
 
             if (response.data.posts) {
                 setApiData([...response.data.posts]); // ✅ Spread operator to avoid state mutation

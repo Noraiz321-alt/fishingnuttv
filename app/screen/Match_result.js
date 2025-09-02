@@ -4,12 +4,12 @@ import {
     Text,
     FlatList,
     ActivityIndicator,
-    SafeAreaView,
     Alert,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
 import Header from '../componnent/Header';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Match_result({ route }) {
     const { id } = route.params;
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 10,
+        // paddingTop: 10,
     },
     headerRow: {
         flexDirection: 'row',

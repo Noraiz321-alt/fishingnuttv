@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {  View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LeagueWebView = ({ route }) => {
   const { url, title } = route.params;
@@ -18,8 +19,8 @@ const LeagueWebView = ({ route }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    
     checkRedirectParams();
-
   }, []);
 
   const checkRedirectParams = async () => {

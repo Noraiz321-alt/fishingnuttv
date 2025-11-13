@@ -12,9 +12,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
 
-
-
-
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs({ route }) {
@@ -67,7 +64,7 @@ export default function BottomTabs({ route }) {
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons name="home" size={s(25)} color="#1b6001" />
+              <Ionicons name="home" size={s(23)} color="#1b6001" />
             ),
           }}
         >
@@ -78,7 +75,7 @@ export default function BottomTabs({ route }) {
           options={{
             tabBarLabel: 'Bookings',
             tabBarIcon: ({ focused, color, size }) => (
-              <FontAwesome6 name="box-open" size={s(25)} color="#1b6001" />
+              <FontAwesome5 name="box-open" size={s(20)} color="#1b6001" />
             ),
           }}
         >

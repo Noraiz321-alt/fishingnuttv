@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-# Flipper setup with safe fallback (disabled)
+# Flipper setup (optional, disabled)
 begin
   require 'flipper'
   require 'flipper/configuration'
@@ -14,50 +14,42 @@ rescue LoadError
   flipper_config = nil
 end
 
-platform :ios, '14.0'
+platform :ios, '15.1'
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# 👇 force static linkage & modular headers
+use_frameworks! :linkage => :static
+use_modular_headers!
 
 target 'FishingNutTv' do
   config = use_native_modules!
 
-  # Flags change depending on the env values.
   flags = get_default_flags()
 
+  # Permissions pods
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
+  # React Native pods
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
-    # Flipper ko disable kar diya (commented out)
-    # :flipper_configuration => flipper_config,
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :new_arch_enabled => false  # 👈 new architecture off
   )
 
-  target 'FishingNutTvTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-
   post_install do |installer|
-    react_native_post_install(
-      installer,
-      config[:reactNativePath],
-      :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
-    )
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+        # simulator arm64 problem fix
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        # non-modular include fix
+        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+        # warnings as errors ko off
+        config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
       end
     end
   end
+  
 end
-

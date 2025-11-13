@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert,  Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import ImageSlider from 'react-native-image-slider';
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Swiper from 'react-native-swiper';
+
+
 
 
 
@@ -30,8 +32,9 @@ const Bcalender = ({ route }) => {
   const [index, setIndex] = useState(0);
 
   const handleIndexChanged = async (index, id) => {
-    console.log('value name', id)
+    console.log('value name 12345134', id)
     setCurrentIndex(index);
+
     console.log('user id:', memberID);
     // console.log('Current Date:',i
     try {
@@ -45,7 +48,7 @@ const Bcalender = ({ route }) => {
         }),
       });
       const responseData = await response.json();
-      console.log('show data zzzzzz',responseData )
+      // console.log('show data zzzzzz', responseData)
       setLoading(false)
       setGetDates(responseData);
       // console.log('flaf data with date :', responseData);
@@ -109,7 +112,7 @@ const Bcalender = ({ route }) => {
       const formdata = new FormData();
       formdata.append('peg_id', dataa[currentIndex]?.id || 'N/A');
       formdata.append('lake_id', itemData.lake_id);
-      console.log('show booking dataa>>>o>>>>>',formdata,memberID,selectedDateNow)
+      console.log('show booking dataa>>>o>>>>>', formdata, memberID, selectedDateNow)
 
 
       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
@@ -119,7 +122,7 @@ const Bcalender = ({ route }) => {
 
       const responseData = await response.json();
       console.log('Response data: post api', responseData);
-      
+
       if (responseData.error) {
         Alert.alert("Details", responseData.error.replace(/\n/g, "\n"));
       } else {
@@ -262,7 +265,7 @@ const Bcalender = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1.5, position: 'relative' }}>
-        <ImageSlider
+        {/* <ImageSlider
           images={images}
           onEndReached={() => console.log('End reached')}
           position={currentIndex}
@@ -272,7 +275,62 @@ const Bcalender = ({ route }) => {
             handleIndexChanged(index, id);
           }}
         // height={hp('32%')}
-        />
+        /> */}
+        {dataa.length > 0 && (
+          <>
+            <Swiper
+              key={currentIndex} // 👈 force re-render when index changes by dot click
+              loop={false}
+              index={currentIndex} // 👈 controlled index
+              showsPagination={false}
+              onIndexChanged={(index) => {
+                setCurrentIndex(index);
+                const id = dataa[index]?.id ?? "NO_ID_FOUND";
+                handleIndexChanged(index, id);
+              }}
+            >
+              {images.map((img, index) => (
+                <View key={index} style={{ width: '100%', height: hp('36%') }}>
+                  <Image
+                    source={{ uri: img }}
+                    style={{ width: '100%', height: '80%' }}
+                    resizeMode="cover"
+                  />
+                </View>
+              ))}
+            </Swiper>
+
+            {/* custom clickable dots */}
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                flexDirection: 'row',
+                alignSelf: 'center',
+                gap: 3,
+              }}
+            >
+              {images.map((_, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    const id = dataa[index]?.id ?? "NO_ID_FOUND";
+                    setCurrentIndex(index);
+                    handleIndexChanged(index, id);
+                  }}
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor:
+                      currentIndex === index ? '#1b6001' : '#dcdcdc',
+                  }}
+                />
+              ))}
+            </View>
+          </>
+        )}
+
         <View style={{ position: 'absolute', top: 10, width: '100%' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15 }}>
             <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack()}>
@@ -286,9 +344,9 @@ const Bcalender = ({ route }) => {
             </View>
           </View>
         </View>
-        <View style={{ position: 'absolute', bottom: 35, left: 0, right: 0, alignItems: 'center' }}>
-          <View style={{ backgroundColor: '#1b6001', width: hp('15%'), borderRadius: 5, height: hp('4%'), justifyContent:'center' }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name|| 'N/A'}  `}</Text>
+        <View style={{ position: 'absolute', bottom: 30, left: 0, right: 0, alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#1b6001', width: hp('12%'), borderRadius: 5, height: hp('3%'), justifyContent: 'center' }}>
+            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name || 'N/A'}  `}</Text>
           </View>
         </View>
       </View>
@@ -319,22 +377,22 @@ const Bcalender = ({ route }) => {
             <Text style={{ color: '#555555', fontSize: 12 }}>All Booking are for 24 hours - 8 AM to 8 AM</Text>
           </View>
           <View>
-            <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between',}}>
+            <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between', }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#1b6001' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black',letterSpacing: -0.8, }}> Available</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Available</Text></View>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#959595' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black' ,letterSpacing: -0.8, }}> Unavailable</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Unavailable</Text></View>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: 'blueviolet' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black' ,letterSpacing: -0.8, }}> Booked</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Booked</Text></View>
               </View>
             </View>
             {loading ?
-              <ActivityIndicator size="large" color="black" style={{top:'100%'}} />
+              <ActivityIndicator size="large" color="black" style={{ top: '100%' }} />
               :
               <View style={{ height: hp('48%'), }}>
                 {dataForFlatList && dataForFlatList.length > 0 ? (
@@ -478,7 +536,7 @@ const Bcalender = ({ route }) => {
                 )}
 
               </View>
-}
+            }
           </View>
         </View>
       </View>
@@ -502,7 +560,7 @@ const Bcalender = ({ route }) => {
 
               </Text>
               <Text style={{ paddingTop: 10, color: '#555555' }}>We allow only fishery pellet.</Text>
-              <Text style={{ color: '#555555',textAlign:'center' }}>
+              <Text style={{ color: '#555555', textAlign: 'center' }}>
                 Would you like to order some here?
               </Text>
             </View>

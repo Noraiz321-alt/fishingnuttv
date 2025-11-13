@@ -22,6 +22,10 @@ const Login = ({ navigation }) => {
   const [show, setshow] = useState(false)
   const [email, setEmail] = useState('sami@searlco.com');
   const [password, setPassword] = useState('Test123@');
+
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+
   const [valemail, setvalemail] = useState(false)
   const [valpass, setvalpass] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -57,7 +61,7 @@ const Login = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error fetching signup URL:', error);
-      Alert.alert('Error', 'Something went wrong while fetching the signup URL.');
+      // Alert.alert('Error', 'Something went wrong while fetching the signup URL.');
     }
   };
 

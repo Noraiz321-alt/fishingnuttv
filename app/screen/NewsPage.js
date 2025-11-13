@@ -15,6 +15,8 @@ const NewsPage = ({ route }) => {
     console.log('Share URL:', itemData.share_url);
 
     const shareContent = async () => {
+        console.log('Share URL:', itemData.share_url);
+
         if (!itemData.share_url) {
             console.warn('Share URL is missing!');
             return;

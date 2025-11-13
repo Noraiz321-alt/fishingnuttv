@@ -352,6 +352,7 @@ export default function Gelery({ route }) {
                             <DateTimePickerModal
                                 isVisible={isTimePickerVisible}
                                 mode="time"
+                                date={new Date()}              
                                 onConfirm={handleConfirm}
                                 onCancel={hideTimePicker}
                             />

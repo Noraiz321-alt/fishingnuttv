@@ -20,6 +20,10 @@ export default function NavigationDrawer({route}) {
     screenOptions={{
       swipeEnabled: false,
       headerShown: false,
+      drawerStyle: {
+        // backgroundColor: '#111',
+        width: 270,
+      },
     }}
       drawerContent={(props) => <DraweContant {...props} route={route} />}
       drawerPosition="left"

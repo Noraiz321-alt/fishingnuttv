@@ -108,7 +108,7 @@ export default function Booking({ route }) {
   const getUserProfile = async () => {
     try {
       const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/profile/${responseData.memberID}`);
-      // console.log('User Profile Image :', response.data);
+      console.log('User Profile Image :', response.data);
       const imageUrl = response.data.data.image_url;
       setProfileImage(imageUrl);
 

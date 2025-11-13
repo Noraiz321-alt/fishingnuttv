@@ -7,117 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* FishingNutTvTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FishingNutTvTests.m */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1CE9A4204B40440D78AA3BF0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C16523167B1FDE1353BC9604 /* PrivacyInfo.xcprivacy */; };
-		1F9A5F542E5F037100C7D097 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB61A68108700A75B9A /* Info.plist */; };
-		98CCB6C5D2E52FBAFF823CE7 /* libPods-FishingNutTv-FishingNutTvTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D434521C9FE53F45771DDDB /* libPods-FishingNutTv-FishingNutTvTests.a */; };
-		BE3715822B88BB4800113C8D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		BE3715832B88BB4F00113C8D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		FD0184F967A95CED8F12554E /* libPods-FishingNutTv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D640AECC19692EE2494DF7 /* libPods-FishingNutTv.a */; };
+		9EB4A7D41113D8867DCA7ABF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F5EE87C567B4117552AE670B /* PrivacyInfo.xcprivacy */; };
+		DE8C5C5937C25E73C85BB49D /* Pods_FishingNutTv.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C4F8690CB7B5A796B64782 /* Pods_FishingNutTv.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = FishingNutTv;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* FishingNutTvTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FishingNutTvTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* FishingNutTvTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FishingNutTvTests.m; sourceTree = "<group>"; };
-		0D434521C9FE53F45771DDDB /* libPods-FishingNutTv-FishingNutTvTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FishingNutTv-FishingNutTvTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		11D640AECC19692EE2494DF7 /* libPods-FishingNutTv.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FishingNutTv.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		11C4F8690CB7B5A796B64782 /* Pods_FishingNutTv.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishingNutTv.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* FishingNutTv.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishingNutTv.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = FishingNutTv/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = FishingNutTv/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = FishingNutTv/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = FishingNutTv/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = FishingNutTv/main.m; sourceTree = "<group>"; };
-		39E7AE21B2E59682F4E10645 /* Pods-FishingNutTv.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv.debug.xcconfig"; path = "Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv.debug.xcconfig"; sourceTree = "<group>"; };
-		6329C2F0241373DF4F231BF1 /* Pods-FishingNutTv-FishingNutTvTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv-FishingNutTvTests.debug.xcconfig"; path = "Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests.debug.xcconfig"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = FishingNutTv/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = FishingNutTv/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		88817B5126112BCBC4FF505C /* Pods-FishingNutTv.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv.release.xcconfig"; path = "Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv.release.xcconfig"; sourceTree = "<group>"; };
-		88F3DD92C501048361392505 /* Pods-FishingNutTv-FishingNutTvTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv-FishingNutTvTests.release.xcconfig"; path = "Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests.release.xcconfig"; sourceTree = "<group>"; };
-		BE6330E22CB0093D00E75632 /* FishingNutTv.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FishingNutTv.entitlements; path = FishingNutTv/FishingNutTv.entitlements; sourceTree = "<group>"; };
-		BEED92D42AFA5BE2007F0F73 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
-		BEED92D52AFA5BE2007F0F73 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
-		BEED92D62AFA5BE2007F0F73 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
-		BEED92D72AFA5BE2007F0F73 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
-		BEED92D82AFA5BE2007F0F73 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
-		BEED92D92AFA5BE2007F0F73 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
-		BEED92DA2AFA5BE2007F0F73 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
-		BEED92DB2AFA5BE2007F0F73 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
-		BEED92DC2AFA5BE2007F0F73 /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
-		BEED92DD2AFA5BE2007F0F73 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
-		BEED92DE2AFA5BE2007F0F73 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
-		BEED92DF2AFA5BE2007F0F73 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
-		BEED92E02AFA5BE2007F0F73 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
-		BEED92E12AFA5BE2007F0F73 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
-		BEED92E22AFA5BE2007F0F73 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
-		BEED92E32AFA5BE2007F0F73 /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
-		BEED92E42AFA5BE2007F0F73 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
-		BEED92E52AFA5BE2007F0F73 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
-		BEED92E62AFA5BE2007F0F73 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		C16523167B1FDE1353BC9604 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = FishingNutTv/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B2055E90B4EE40FCA5063FF1 /* Pods-FishingNutTv.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv.release.xcconfig"; path = "Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv.release.xcconfig"; sourceTree = "<group>"; };
+		BADBD3C2A73C5F00DCB58FF3 /* Pods-FishingNutTv.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishingNutTv.debug.xcconfig"; path = "Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F5EE87C567B4117552AE670B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = FishingNutTv/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00E356EB1AD99517003FC87E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				98CCB6C5D2E52FBAFF823CE7 /* libPods-FishingNutTv-FishingNutTvTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD0184F967A95CED8F12554E /* libPods-FishingNutTv.a in Frameworks */,
+				DE8C5C5937C25E73C85BB49D /* Pods_FishingNutTv.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* FishingNutTvTests */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F21AD99517003FC87E /* FishingNutTvTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
-			);
-			path = FishingNutTvTests;
-			sourceTree = "<group>";
-		};
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* FishingNutTv */ = {
 			isa = PBXGroup;
 			children = (
-				BE6330E22CB0093D00E75632 /* FishingNutTv.entitlements */,
 				BEED92D32AFA5BE2007F0F73 /* Fonts */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
-				C16523167B1FDE1353BC9604 /* PrivacyInfo.xcprivacy */,
+				F5EE87C567B4117552AE670B /* PrivacyInfo.xcprivacy */,
 			);
 			name = FishingNutTv;
 			sourceTree = "<group>";
@@ -126,8 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				11D640AECC19692EE2494DF7 /* libPods-FishingNutTv.a */,
-				0D434521C9FE53F45771DDDB /* libPods-FishingNutTv-FishingNutTvTests.a */,
+				11C4F8690CB7B5A796B64782 /* Pods_FishingNutTv.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -144,7 +70,6 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* FishingNutTv */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* FishingNutTvTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -158,7 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* FishingNutTv.app */,
-				00E356EE1AD99517003FC87E /* FishingNutTvTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,10 +90,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				39E7AE21B2E59682F4E10645 /* Pods-FishingNutTv.debug.xcconfig */,
-				88817B5126112BCBC4FF505C /* Pods-FishingNutTv.release.xcconfig */,
-				6329C2F0241373DF4F231BF1 /* Pods-FishingNutTv-FishingNutTvTests.debug.xcconfig */,
-				88F3DD92C501048361392505 /* Pods-FishingNutTv-FishingNutTvTests.release.xcconfig */,
+				BADBD3C2A73C5F00DCB58FF3 /* Pods-FishingNutTv.debug.xcconfig */,
+				B2055E90B4EE40FCA5063FF1 /* Pods-FishingNutTv.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -177,25 +99,6 @@
 		BEED92D32AFA5BE2007F0F73 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				BEED92D42AFA5BE2007F0F73 /* Fontisto.ttf */,
-				BEED92D52AFA5BE2007F0F73 /* Octicons.ttf */,
-				BEED92D62AFA5BE2007F0F73 /* Feather.ttf */,
-				BEED92D72AFA5BE2007F0F73 /* FontAwesome6_Regular.ttf */,
-				BEED92D82AFA5BE2007F0F73 /* Entypo.ttf */,
-				BEED92D92AFA5BE2007F0F73 /* FontAwesome5_Brands.ttf */,
-				BEED92DA2AFA5BE2007F0F73 /* MaterialCommunityIcons.ttf */,
-				BEED92DB2AFA5BE2007F0F73 /* AntDesign.ttf */,
-				BEED92DC2AFA5BE2007F0F73 /* Foundation.ttf */,
-				BEED92DD2AFA5BE2007F0F73 /* Ionicons.ttf */,
-				BEED92DE2AFA5BE2007F0F73 /* FontAwesome5_Solid.ttf */,
-				BEED92DF2AFA5BE2007F0F73 /* FontAwesome5_Regular.ttf */,
-				BEED92E02AFA5BE2007F0F73 /* FontAwesome.ttf */,
-				BEED92E12AFA5BE2007F0F73 /* Zocial.ttf */,
-				BEED92E22AFA5BE2007F0F73 /* EvilIcons.ttf */,
-				BEED92E32AFA5BE2007F0F73 /* FontAwesome6_Solid.ttf */,
-				BEED92E42AFA5BE2007F0F73 /* SimpleLineIcons.ttf */,
-				BEED92E52AFA5BE2007F0F73 /* FontAwesome6_Brands.ttf */,
-				BEED92E62AFA5BE2007F0F73 /* MaterialIcons.ttf */,
 			);
 			name = Fonts;
 			path = "../node_modules/react-native-vector-icons/Fonts";
@@ -204,39 +107,18 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* FishingNutTvTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "FishingNutTvTests" */;
-			buildPhases = (
-				FBC8CF879F76127DF0439809 /* [CP] Check Pods Manifest.lock */,
-				00E356EA1AD99517003FC87E /* Sources */,
-				00E356EB1AD99517003FC87E /* Frameworks */,
-				00E356EC1AD99517003FC87E /* Resources */,
-				E764A2A9B727A5D462D5579F /* [CP] Embed Pods Frameworks */,
-				E58417E3E3D900F3F790F480 /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				00E356F51AD99517003FC87E /* PBXTargetDependency */,
-			);
-			name = FishingNutTvTests;
-			productName = FishingNutTvTests;
-			productReference = 00E356EE1AD99517003FC87E /* FishingNutTvTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		13B07F861A680F5B00A75B9A /* FishingNutTv */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "FishingNutTv" */;
 			buildPhases = (
-				7FEC7BD4A11C1F6685FDC5DC /* [CP] Check Pods Manifest.lock */,
+				26DA614F0A9C4D25B87F15C2 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				1293BA08375875E4C48337FF /* [CP] Embed Pods Frameworks */,
-				852C8B6EEB4834A42588CAA7 /* [CP] Copy Pods Resources */,
+				70E5D288DE0406B8C4488580 /* [CP] Embed Pods Frameworks */,
+				0302A09238F922CC8F9BEA2F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -255,10 +137,6 @@
 			attributes = {
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
 					};
@@ -278,27 +156,16 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* FishingNutTv */,
-				00E356ED1AD99517003FC87E /* FishingNutTvTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00E356EC1AD99517003FC87E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F9A5F542E5F037100C7D097 /* Info.plist in Resources */,
-				BE3715822B88BB4800113C8D /* LaunchScreen.storyboard in Resources */,
-				BE3715832B88BB4F00113C8D /* Images.xcassets in Resources */,
-				1CE9A4204B40440D78AA3BF0 /* PrivacyInfo.xcprivacy in Resources */,
+				9EB4A7D41113D8867DCA7ABF /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,24 +188,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		1293BA08375875E4C48337FF /* [CP] Embed Pods Frameworks */ = {
+		0302A09238F922CC8F9BEA2F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7FEC7BD4A11C1F6685FDC5DC /* [CP] Check Pods Manifest.lock */ = {
+		26DA614F0A9C4D25B87F15C2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -360,77 +227,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		852C8B6EEB4834A42588CAA7 /* [CP] Copy Pods Resources */ = {
+		70E5D288DE0406B8C4488580 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E58417E3E3D900F3F790F480 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E764A2A9B727A5D462D5579F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv-FishingNutTvTests/Pods-FishingNutTv-FishingNutTvTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FBC8CF879F76127DF0439809 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FishingNutTv-FishingNutTvTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishingNutTv/Pods-FishingNutTv-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -439,13 +250,9 @@
 			buildActionMask = 8;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 			);
 			name = "Start Packager";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
@@ -456,92 +263,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00E356EA1AD99517003FC87E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				00E356F31AD99517003FC87E /* FishingNutTvTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F871A680F5B00A75B9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* FishingNutTv */;
-			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		00E356F61AD99517003FC87E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6329C2F0241373DF4F231BF1 /* Pods-FishingNutTv-FishingNutTvTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 425CXN4JHH;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = FishingNutTvTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FishingNutTv.app/FishingNutTv";
-			};
-			name = Debug;
-		};
-		00E356F71AD99517003FC87E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88F3DD92C501048361392505 /* Pods-FishingNutTv-FishingNutTvTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 425CXN4JHH;
-				INFOPLIST_FILE = FishingNutTvTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FishingNutTv.app/FishingNutTv";
-			};
-			name = Release;
-		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39E7AE21B2E59682F4E10645 /* Pods-FishingNutTv.debug.xcconfig */;
+			baseConfigurationReference = BADBD3C2A73C5F00DCB58FF3 /* Pods-FishingNutTv.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -553,6 +287,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = FishingNutTv/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FishingNutTv;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -575,7 +310,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88817B5126112BCBC4FF505C /* Pods-FishingNutTv.release.xcconfig */;
+			baseConfigurationReference = B2055E90B4EE40FCA5063FF1 /* Pods-FishingNutTv.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -586,6 +321,7 @@
 				DEVELOPMENT_TEAM = 425CXN4JHH;
 				INFOPLIST_FILE = FishingNutTv/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FishingNutTv;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -655,7 +391,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -674,9 +421,13 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -727,7 +478,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -745,7 +507,10 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -756,15 +521,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "FishingNutTvTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00E356F61AD99517003FC87E /* Debug */,
-				00E356F71AD99517003FC87E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "FishingNutTv" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

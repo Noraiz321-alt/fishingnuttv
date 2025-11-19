@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet,TouchableOpacity, Image, Dimensions,Modal, Animated,StatusBar } from 'react-native'
+import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, Modal, Animated, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, DrawerActions, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import LinearGradient from "react-native-linear-gradient";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Bcalender from '../componnent/Bcalender';
 
@@ -18,11 +20,12 @@ export default function Booking({ route }) {
   const toggleDrawer = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
- 
+
   const [isVisible, setIsVisible] = useState(false);
   const scaleAnimation = new Animated.Value(0.8);
 
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [lakeData, setLakeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [favorite, setFavorite] = useState([]);
@@ -32,8 +35,8 @@ export default function Booking({ route }) {
   useFocusEffect(
     React.useCallback(() => {
       if (Platform.OS === 'android') {
-      StatusBar.setBarStyle('dark-content', true);        // 👈 force override
-      StatusBar.setBackgroundColor('#ffffff', true);  
+        StatusBar.setBarStyle('dark-content', true);        // 👈 force override
+        StatusBar.setBackgroundColor('#ffffff', true);
       }
       LakeApies()
       getUserProfile()
@@ -58,12 +61,12 @@ export default function Booking({ route }) {
 
 
   useEffect(() => {
-    
+
     saveMemInfo()
     LakeApies()
     Favorite()
     getUserDataaa()
-   const checkAdminStatus = async () => {
+    const checkAdminStatus = async () => {
       try {
         const userData = await AsyncStorage.getItem('user');
         if (userData) {
@@ -127,6 +130,9 @@ export default function Booking({ route }) {
     } catch (error) {
       console.error('Error:', error.message);
     }
+    finally {
+      setLoading(false); // 👈 DATA LOAD HONE KE BAAD
+    }
   };
 
   const Favorite = async () => {
@@ -154,9 +160,11 @@ export default function Booking({ route }) {
       // setFavorite(favoriteIds);
       Favorite();
       LakeApies(); // Refresh the lake data after marking as favorite
+
     } catch (error) {
       console.error('Error marking as favorite:', error);
     }
+
   };
 
 
@@ -174,6 +182,44 @@ export default function Booking({ route }) {
     }
   };
   console.log(favorite, "testfav");
+  const SkeletonCard = () => {
+    return (
+      <View style={{ paddingBottom: 15, paddingTop: 5 }}>
+        <View style={styles.card}>
+          <ShimmerPlaceholder
+            LinearGradient={LinearGradient}
+            style={{ width: 90, height: 127, borderRadius: 8 }}
+          />
+
+          <View style={{ flex: 1, paddingHorizontal: 10 }}>
+            <ShimmerPlaceholder
+              LinearGradient={LinearGradient}
+              style={{ width: '60%', height: 18, borderRadius: 4, marginBottom: 10 }}
+            />
+            <ShimmerPlaceholder
+              LinearGradient={LinearGradient}
+              style={{ width: '90%', height: 14, borderRadius: 4, marginBottom: 6 }}
+            />
+            <ShimmerPlaceholder
+              LinearGradient={LinearGradient}
+              style={{ width: '85%', height: 14, borderRadius: 4 }}
+            />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+              <ShimmerPlaceholder
+                LinearGradient={LinearGradient}
+                style={{ width: 120, height: 14, borderRadius: 4 }}
+              />
+              <ShimmerPlaceholder
+                LinearGradient={LinearGradient}
+                style={{ width: 90, height: 28, borderRadius: 6 }}
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
   const renderItem = ({ item, index }) => (
     <View style={{ paddingBottom: 15, paddingTop: 5 }}>
       <View style={styles.card}>
@@ -185,8 +231,8 @@ export default function Booking({ route }) {
         </View>
         <View style={styles.textContainer}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <View> 
-              
+            <View>
+
               <View style={{ flexDirection: 'row' }}>
                 {item.name.length > 20 ? (
                   <>
@@ -227,13 +273,13 @@ export default function Booking({ route }) {
     </View>
   );
 
-  
-  
+
+
 
   return (
- 
-    
-    <SafeAreaView style={styles.container}edges={['top', 'left', 'right']}>
+
+
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.headerContainer}>
         <TouchableOpacity style={styles.nav} onPress={toggleDrawer}>
           <EvilIcons name="navicon" size={s(35)} color='black' />
@@ -268,28 +314,34 @@ export default function Booking({ route }) {
       </View>
 
       <View style={styles.listContainer}>
-        <FlatList
-          data={lakeData.filter(item =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.description.toLowerCase().includes(searchQuery.toLowerCase())
-          )}
-          keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
-          renderItem={({ item, index }) => renderItem({ item, index })}
-          showsVerticalScrollIndicator={false}
-        />
+        {loading ? (
+          Array.from({ length: lakeData?.length || 1 }).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))
+        ) : (
+          <FlatList
+            data={lakeData.filter(item =>
+              item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              item.description.toLowerCase().includes(searchQuery.toLowerCase())
+            )}
+            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+            renderItem={({ item, index }) => renderItem({ item, index })}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </View>
       <Modal
-      visible={isVisible}
-      transparent
-      animationType="fade"
-      onRequestClose={() => setIsVisible(false)}
-    >
-      <View style={styles.overlay}>
-        <Animated.View style={[styles.popup, { transform: [{ scale: scaleAnimation }] }]}>
-          <Text style={styles.text}>🎉 Welcome to Admin Version 🎯</Text>
-        </Animated.View>
-      </View>
-    </Modal>
+        visible={isVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsVisible(false)}
+      >
+        <View style={styles.overlay}>
+          <Animated.View style={[styles.popup, { transform: [{ scale: scaleAnimation }] }]}>
+            <Text style={styles.text}>🎉 Welcome to Admin Version 🎯</Text>
+          </Animated.View>
+        </View>
+      </Modal>
 
     </SafeAreaView>
 

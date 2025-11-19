@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert,  Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import LinearGradient from "react-native-linear-gradient";
 
 
 const Bcalender = ({ route }) => {
@@ -30,6 +31,7 @@ const Bcalender = ({ route }) => {
   const [index, setIndex] = useState(0);
 
   const handleIndexChanged = async (index, id) => {
+    setLoading(true);
     console.log('value name', id)
     setCurrentIndex(index);
     console.log('user id:', memberID);
@@ -45,7 +47,7 @@ const Bcalender = ({ route }) => {
         }),
       });
       const responseData = await response.json();
-      console.log('show data zzzzzz',responseData )
+      console.log('show data zzzzzz', responseData)
       setLoading(false)
       setGetDates(responseData);
       // console.log('flaf data with date :', responseData);
@@ -109,7 +111,7 @@ const Bcalender = ({ route }) => {
       const formdata = new FormData();
       formdata.append('peg_id', dataa[currentIndex]?.id || 'N/A');
       formdata.append('lake_id', itemData.lake_id);
-      console.log('show booking dataa>>>o>>>>>',formdata,memberID,selectedDateNow)
+      console.log('show booking dataa>>>o>>>>>', formdata, memberID, selectedDateNow)
 
 
       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
@@ -119,7 +121,7 @@ const Bcalender = ({ route }) => {
 
       const responseData = await response.json();
       console.log('Response data: post api', responseData);
-      
+
       if (responseData.error) {
         Alert.alert("Details", responseData.error.replace(/\n/g, "\n"));
       } else {
@@ -259,6 +261,28 @@ const Bcalender = ({ route }) => {
       console.error('Error:', error.message);
     }
   };
+  const SkeletonRow = () => {
+    return (
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 6,
+        paddingVertical: 15,
+        paddingHorizontal: 15,
+        backgroundColor: '#D9D9D9',
+        borderRadius: 6,
+      }}>
+        <ShimmerPlaceholder
+          LinearGradient={LinearGradient}
+          style={{ width: 140, height: 18, borderRadius: 4 }}
+        />
+        <ShimmerPlaceholder
+          LinearGradient={LinearGradient}
+          style={{ width: 100, height: 18, borderRadius: 4 }}
+        />
+      </View>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1.5, position: 'relative' }}>
@@ -287,8 +311,8 @@ const Bcalender = ({ route }) => {
           </View>
         </View>
         <View style={{ position: 'absolute', bottom: 35, left: 0, right: 0, alignItems: 'center' }}>
-          <View style={{ backgroundColor: '#1b6001', width: hp('15%'), borderRadius: 5, height: hp('4%'), justifyContent:'center' }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name|| 'N/A'}  `}</Text>
+          <View style={{ backgroundColor: '#1b6001', width: hp('15%'), borderRadius: 5, height: hp('4%'), justifyContent: 'center' }}>
+            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name || 'N/A'}  `}</Text>
           </View>
         </View>
       </View>
@@ -319,23 +343,27 @@ const Bcalender = ({ route }) => {
             <Text style={{ color: '#555555', fontSize: 12 }}>All Booking are for 24 hours - 8 AM to 8 AM</Text>
           </View>
           <View>
-            <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between',}}>
+            <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between', }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#1b6001' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black',letterSpacing: -0.8, }}> Available</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Available</Text></View>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#959595' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black' ,letterSpacing: -0.8, }}> Unavailable</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Unavailable</Text></View>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: 'blueviolet' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black' ,letterSpacing: -0.8, }}> Booked</Text></View>
+                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Booked</Text></View>
               </View>
             </View>
-            {loading ?
-              <ActivityIndicator size="large" color="black" style={{top:'100%'}} />
-              :
+            {loading ? (
+              <View style={{ height: hp('48%'), paddingTop: 10 }}>
+                {[1, 2, 3, 4, 5, 6, 7,8].map((_, i) => (
+                  <SkeletonRow key={i} />
+                ))}
+              </View>
+            ) : (
               <View style={{ height: hp('48%'), }}>
                 {dataForFlatList && dataForFlatList.length > 0 ? (
                   <FlatList
@@ -400,35 +428,7 @@ const Bcalender = ({ route }) => {
                               </View>
                             </View>
                           ) : (
-                            // item.flag == 2 && (
-                            //   <View style={styles.btn2}>
-                            //     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            //       <Text style={{ color: 'black' }}>Booked</Text>
-                            //       <TouchableOpacity onPress={() => {
-                            //         Alert.alert(
-                            //           'Confirmation',
-                            //           'Are you sure you want to cancel booking',
-                            //           [
-                            //             {
-                            //               text: 'No',
-                            //               style: 'cancel',
-                            //             },
-                            //             {
-                            //               text: 'Yes',
-                            //               onPress: () => {
-                            //                 handleDelete(item.value)
-                            //                 pelletDelete(item.value)
-                            //               },
-                            //             },
-                            //           ],
-                            //           { cancelable: false }
-                            //         );
-                            //       }} >
-                            //         <AntDesign name="delete" size={wp('5%')} color={'black'} />
-                            //       </TouchableOpacity>
-                            //     </View>
-                            //   </View>
-                            // )
+
                             item.flag == 2 && (
                               <View style={styles.btn2}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -478,7 +478,7 @@ const Bcalender = ({ route }) => {
                 )}
 
               </View>
-}
+            )}
           </View>
         </View>
       </View>
@@ -502,7 +502,7 @@ const Bcalender = ({ route }) => {
 
               </Text>
               <Text style={{ paddingTop: 10, color: '#555555' }}>We allow only fishery pellet.</Text>
-              <Text style={{ color: '#555555',textAlign:'center' }}>
+              <Text style={{ color: '#555555', textAlign: 'center' }}>
                 Would you like to order some here?
               </Text>
             </View>

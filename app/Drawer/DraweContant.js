@@ -14,6 +14,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import StoreProductsScreen from '../screen/StoreProductsScreen';
 
 import { launchImageLibrary } from 'react-native-image-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -229,7 +231,10 @@ const DraweContant = (props) => {
           {renderItem('Leagues', <Entypo name="trophy" size={33} color="#1b6001" />, LeaguesTabs, 'LeaguesTabs')}
           {renderItem('Videos', <MaterialCommunityIcons name="message-video" size={33} color="#1b6001" />, Video, 'Video')}
 
-
+          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('StoreProductsScreen')} >
+            <FontAwesome name="shopping-basket" size={25} color="#1b6001" />
+            <Text style={styles.text2}>Visit Our Shops →</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.item1} onPress={() => setModalVisible(true)}>
             <AntDesign name="delete" size={25} color="#DC143C" />
             <Text style={styles.text1}>Close My Account</Text>

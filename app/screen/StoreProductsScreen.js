@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   View,
   Text,
@@ -125,6 +125,22 @@ const StoreProductsScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+
+  // Get Api fatch 
+  useEffect(() => {
+    fetch('https://fishingnuttv.com/fntv-custom/fntvAPIs/baitshop_api.php?action=get_products')
+      .then(res => res.json())
+      .then(data => {
+        console.log("API RESPONSE:", JSON.stringify(data, null, 2));
+      })
+      .catch(err => {
+        console.log("API ERROR:", err);
+      });
+  }, []);
+
+
+
+
   // Get filtered products based on selected category
   const getFilteredProducts = () => {
     if (selectedCategory === 'all') {
@@ -174,9 +190,9 @@ const StoreProductsScreen = ({ navigation }) => {
                 <Text style={styles.outOfStockText}>Out of Stock</Text>
               </View>
             )}
-            <TouchableOpacity style={styles.favoriteButton}>
+            {/* <TouchableOpacity style={styles.favoriteButton}>
               <Icon name="heart-outline" size={22} color="#000" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* Product Info */}
@@ -223,7 +239,7 @@ const StoreProductsScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.menuButton} onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={26} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Fishing Store</Text>
+        <Text style={styles.headerTitle}>Bait Store</Text>
         <TouchableOpacity style={styles.cartButton}>
           <Icon name="cart-outline" size={28} color="#000" />
           <View style={styles.cartBadge}>
@@ -532,3 +548,324 @@ const styles = ScaledSheet.create({
     padding: '2@s',
   },
 });
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   View,
+//   Text,
+//   TouchableOpacity,
+//   Image,
+//   FlatList,
+//   StatusBar,
+//   Dimensions,
+// } from 'react-native';
+// import { ScaledSheet } from 'react-native-size-matters';
+// import Icon from 'react-native-vector-icons/Ionicons';
+// import * as Animatable from 'react-native-animatable';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+
+// const { width } = Dimensions.get('window');
+
+// const CATEGORIES = [
+//   { id: 'all', name: 'All Products', icon: 'grid-outline' },
+//   { id: 'pellets', name: 'Pellets', icon: 'nutrition-outline' },
+//   { id: 'boilies', name: 'Boilies', icon: 'ellipse-outline' },
+//   { id: 'popups', name: 'Pop Ups', icon: 'balloon-outline' },
+//   { id: 'groundbait', name: 'Ground Bait', icon: 'cube-outline' },
+// ];
+
+// const BASE_URL = "https://fishingnuttv.com/fntv-custom/";
+
+// const StoreProductsScreen = ({ navigation }) => {
+//   const [selectedCategory, setSelectedCategory] = useState('all');
+//   const [productsData, setProductsData] = useState({});
+//   const [loading, setLoading] = useState(true);
+
+//   // Fetch Products from API
+//   useEffect(() => {
+//     fetch(`${BASE_URL}fntvAPIs/baitshop_api.php?action=get_products`)
+//       .then(res => res.json())
+//       .then(data => {
+//         console.log("API RESPONSE:", JSON.stringify(data, null, 2));
+//         if (data.status) {
+//           setProductsData(data.products);
+//         }
+//         setLoading(false);
+//       })
+//       .catch(err => {
+//         console.log("API ERROR:", err);
+//         setLoading(false);
+//       });
+//   }, []);
+
+//   // Filter products based on selected category
+//   const getFilteredProducts = () => {
+//     if (!productsData || Object.keys(productsData).length === 0) return [];
+
+//     if (selectedCategory === 'all') {
+//       return Object.values(productsData).flat();
+//     }
+
+//     return productsData[selectedCategory] || [];
+//   };
+
+//   const filteredProducts = getFilteredProducts();
+
+//   const renderCategoryItem = ({ item }) => {
+//     const isSelected = selectedCategory === item.id;
+//     return (
+//       <TouchableOpacity
+//         style={[styles.categoryChip, isSelected && styles.categoryChipActive]}
+//         onPress={() => setSelectedCategory(item.id)}
+//         activeOpacity={0.7}
+//       >
+//         <Icon name={item.icon} size={20} color={isSelected ? '#FFF' : '#000'} />
+//         <Text style={[styles.categoryText, isSelected && styles.categoryTextActive]}>
+//           {item.name}
+//         </Text>
+//       </TouchableOpacity>
+//     );
+//   };
+
+//   const renderProductCard = ({ item, index }) => {
+//     return (
+//       <Animatable.View animation="fadeInUp" delay={index * 100} style={styles.productCard}>
+//         <TouchableOpacity
+//           activeOpacity={0.9}
+//           onPress={() => navigation.navigate('ProductDetailScreen', { product: item })}
+//         >
+//           {/* Image */}
+//           <View style={styles.imageContainer}>
+//             <Image
+//               source={{ uri: item.image_url }}
+//               style={styles.productImage}
+//             />
+
+//             {!Number(item.inStock) && (
+//               <View style={styles.outOfStockBadge}>
+//                 <Text style={styles.outOfStockText}>Out of Stock</Text>
+//               </View>
+//             )}
+
+//             {/* <TouchableOpacity style={styles.favoriteButton}>
+//               <Icon name="heart-outline" size={22} color="#000" />
+//             </TouchableOpacity> */}
+//           </View>
+
+//           {/* Info */}
+//           <View style={styles.productInfo}>
+//             <Text style={styles.productName} numberOfLines={1}>{item.name}</Text>
+//             <Text style={styles.productDescription} numberOfLines={2}>{item.description}</Text>
+
+//             {/* Rating */}
+//             <View style={styles.ratingContainer}>
+//               <Icon name="star" size={16} color="#1b6001" />
+//               <Text style={styles.ratingText}>{item.rating}</Text>
+//             </View>
+
+//             {/* Price */}
+//             <View style={styles.priceRow}>
+//               <Text style={styles.priceText}>£{item.price}</Text>
+//               <TouchableOpacity style={styles.addButton} disabled={!Number(item.inStock)}>
+//                 <Icon
+//                   name="add-circle"
+//                   size={32}
+//                   color={Number(item.inStock) ? '#1b6001' : '#666'}
+//                 />
+//               </TouchableOpacity>
+//             </View>
+
+//           </View>
+//         </TouchableOpacity>
+//       </Animatable.View>
+//     );
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+
+//       {/* Header */}
+//       <View style={styles.header}>
+//         <TouchableOpacity style={styles.menuButton} onPress={() => navigation.goBack()}>
+//           <Icon name="arrow-back" size={26} color="#000" />
+//         </TouchableOpacity>
+//         <Text style={styles.headerTitle}>Fishing Store</Text>
+//         <TouchableOpacity style={styles.cartButton}>
+//           <Icon name="cart-outline" size={28} color="#000" />
+//           <View style={styles.cartBadge}>
+//             <Text style={styles.cartBadgeText}>3</Text>
+//           </View>
+//         </TouchableOpacity>
+//       </View>
+
+//       {/* Banner */}
+//       <Animatable.View animation="fadeIn" style={styles.banner}>
+//         <View>
+//           <Text style={styles.bannerTitle}>Check out our PREMIUM high nutritional baits!</Text>
+//           <Text style={styles.bannerSubtitle}>
+//             Choose from our baits below to discover more about what we offer!
+//           </Text>
+//         </View>
+//       </Animatable.View>
+
+//       {/* Categories */}
+//       <View style={styles.categoriesSection}>
+//         <FlatList
+//           data={CATEGORIES}
+//           renderItem={renderCategoryItem}
+//           keyExtractor={(item) => item.id}
+//           horizontal
+//           showsHorizontalScrollIndicator={false}
+//           contentContainerStyle={styles.categoriesList}
+//         />
+//       </View>
+
+//       {/* Loading View */}
+//       {loading && (
+//         <Text style={{ textAlign: 'center', marginTop: 20 }}>Loading Products...</Text>
+//       )}
+
+//       {/* Products Grid */}
+//       {!loading && (
+//         <FlatList
+//           data={filteredProducts}
+//           renderItem={renderProductCard}
+//           keyExtractor={(item) => item.id}
+//           numColumns={2}
+//           contentContainerStyle={styles.productsList}
+//           showsVerticalScrollIndicator={false}
+//         />
+//       )}
+//     </SafeAreaView>
+//   );
+// };
+
+// export default StoreProductsScreen;
+
+
+// const styles = ScaledSheet.create({
+//   container: { flex: 1, backgroundColor: '#F5F5F5' },
+
+//   header: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//     paddingHorizontal: '20@s',
+//     paddingVertical: '15@vs',
+//     backgroundColor: '#FFF',
+//     elevation: 3,
+//   },
+
+//   menuButton: { padding: '5@s' },
+
+//   headerTitle: { fontSize: '20@ms', fontWeight: 'bold', color: '#000' },
+
+//   cartButton: { padding: '5@s', position: 'relative' },
+
+//   cartBadge: {
+//     position: 'absolute',
+//     top: 0,
+//     right: 0,
+//     backgroundColor: '#1b6001',
+//     borderRadius: '10@s',
+//     width: '18@s',
+//     height: '18@s',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+
+//   cartBadgeText: { color: '#FFF', fontSize: '10@ms', fontWeight: 'bold' },
+
+//   banner: {
+//     backgroundColor: '#FFF',
+//     marginHorizontal: '20@s',
+//     marginTop: '15@vs',
+//     borderRadius: '12@s',
+//     padding: '20@s',
+//     borderColor: '#E0E0E0',
+//     borderWidth: 1,
+//     elevation: 2,
+//   },
+
+//   bannerTitle: { fontSize: '16@ms', fontWeight: 'bold', color: '#000' },
+//   bannerSubtitle: { fontSize: '13@ms', color: '#666' },
+
+//   categoriesSection: { marginTop: '20@vs' },
+//   categoriesList: { paddingHorizontal: '15@s' },
+
+//   categoryChip: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: '#FFF',
+//     paddingHorizontal: '15@s',
+//     paddingVertical: '10@vs',
+//     borderRadius: '20@s',
+//     marginHorizontal: '5@s',
+//     borderWidth: 1,
+//     borderColor: '#E0E0E0',
+//   },
+
+//   categoryChipActive: { backgroundColor: '#1b6001', borderColor: '#1b6001' },
+//   categoryText: { marginLeft: '5@s', color: '#000', fontSize: '13@ms' },
+//   categoryTextActive: { color: '#FFF' },
+
+//   productsList: { paddingHorizontal: '15@s', paddingTop: '15@vs', paddingBottom: '20@vs' },
+
+//   productCard: {
+//     flex: 1,
+//     backgroundColor: '#FFF',
+//     borderRadius: '15@s',
+//     margin: '5@s',
+//     borderWidth: 1,
+//     borderColor: '#E0E0E0',
+//     elevation: 3,
+//   },
+
+//   imageContainer: {
+//     position: 'relative',
+//     width: '100%',
+//     height: '150@vs',
+//     borderTopLeftRadius: '15@s',
+//     borderTopRightRadius: '15@s',
+//     overflow: 'hidden',   // <<<< THIS FIXES THE IMAGE
+//   },
+
+//   productImage: { width: '100%', height: '100%', resizeMode: 'cover' },
+
+//   outOfStockBadge: {
+//     position: 'absolute',
+//     top: '10@vs',
+//     left: '10@s',
+//     backgroundColor: 'red',
+//     paddingHorizontal: '8@s',
+//     paddingVertical: '4@vs',
+//     borderRadius: '5@s',
+//   },
+
+//   outOfStockText: { color: '#FFF', fontSize: '10@ms', fontWeight: 'bold' },
+
+//   favoriteButton: {
+//     position: 'absolute',
+//     top: '10@vs',
+//     right: '10@s',
+//     backgroundColor: 'rgba(255,255,255,0.9)',
+//     padding: '8@s',
+//     borderRadius: '20@s',
+//   },
+
+//   productInfo: { padding: '12@s' },
+
+//   productName: { fontSize: '14@ms', fontWeight: 'bold', color: '#000' },
+//   productDescription: { fontSize: '11@ms', color: '#666', marginBottom: '8@vs' },
+
+//   ratingContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: '8@vs' },
+
+//   ratingText: { marginLeft: '4@s', fontSize: '12@ms', fontWeight: '600' },
+
+//   priceRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+
+//   priceText: { fontSize: '16@ms', fontWeight: 'bold', color: '#1b6001' },
+
+//   addButton: { padding: '2@s' },
+// });

@@ -5,7 +5,7 @@ import {
   Image, Modal, ActivityIndicator, Switch
 } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { StackActions, useNavigation, useFocusEffect,DrawerActions, } from '@react-navigation/native';
+import { StackActions, useNavigation, useFocusEffect, DrawerActions, } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -19,7 +19,6 @@ import StoreProductsScreen from '../screen/StoreProductsScreen';
 
 import { launchImageLibrary } from 'react-native-image-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
 import apipost from '../api/GetApi';
 import GelleryPic from '../screen/GelleryPic';
 import Qrscanner from '../componnent/Qrscanner';
@@ -106,17 +105,17 @@ const DraweContant = (props) => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('state', () => {
       const drawerState = props.navigation.getState();
-  
+
       const isDrawerOpen = drawerState.history?.some(
         (entry) => entry.type === 'drawer'
       );
-  
+
       if (isDrawerOpen) {
         console.log('📂 Drawer open detected (via state listener)');
         fetchSidebarVisibility();
       }
     });
-  
+
     return unsubscribe;
   }, [props.navigation]);
 
@@ -231,9 +230,16 @@ const DraweContant = (props) => {
           {renderItem('Leagues', <Entypo name="trophy" size={33} color="#1b6001" />, LeaguesTabs, 'LeaguesTabs')}
           {renderItem('Videos', <MaterialCommunityIcons name="message-video" size={33} color="#1b6001" />, Video, 'Video')}
 
-          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('StoreProductsScreen')} >
+          <TouchableOpacity
+            style={styles.item1}
+            onPress={() =>
+              navigation.navigate('LeagueWebView', {
+                url: 'https://reebic.com/shop/',
+              })
+            }
+          >
             <FontAwesome name="shopping-basket" size={25} color="#1b6001" />
-            <Text style={styles.text2}>Visit Our Shops →</Text>
+            <Text style={styles.text2}>Bait Store →</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.item1} onPress={() => setModalVisible(true)}>
             <AntDesign name="delete" size={25} color="#DC143C" />
@@ -263,6 +269,7 @@ const DraweContant = (props) => {
         </View>
       </Modal>
     </SafeAreaView>
+
   );
 };
 

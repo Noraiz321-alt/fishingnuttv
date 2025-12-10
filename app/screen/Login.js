@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
 
 // sami@searlco.com
 // Test123@
@@ -20,11 +21,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 const Login = ({ navigation }) => {
 
   const [show, setshow] = useState(false)
-  const [email, setEmail] = useState('sami@searlco.com');
-  const [password, setPassword] = useState('Test123@');
+  // const [email, setEmail] = useState('sami@searlco.com');
+  // const [password, setPassword] = useState('Test123@');
 
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [valemail, setvalemail] = useState(false)
   const [valpass, setvalpass] = useState(false)
@@ -357,201 +358,310 @@ const Login = ({ navigation }) => {
     }
   };
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        scrollEnabled={true}
-        shows
-      >
-        <ImageBackground style={{ flex: 1 }} source={image.logo}>
-          <View style={{ flex: 1 }}>
-            <View
-              style={{
-                width: '100%',
-                height: wp('54%'),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.scroll}>
+        <ImageBackground style={styles.bg} source={image.logo}>
+          <View style={styles.container}>
+  
+            {/* TOP IMAGE BOX */}
+            <View style={styles.topBox}>
               <Image
                 source={image.backimg}
-                resizeMode='contain'
-                style={{
-                  width: '90%',
-                  height: 60,
-
-                }}
+                resizeMode="contain"
+                style={styles.topImage}
               />
             </View>
-
-            <View
-              style={{
-                flex: 1,
-                width: '100%',
-                backgroundColor: '#b9dfab',
-                borderTopRightRadius: 35,
-                borderTopLeftRadius: 35,
-                justifyContent: 'space-around',
-                // alignItems: 'center'
-              }}
-            >
-              <Text style={{ color: '#1b6001', fontSize: 25, fontWeight: '700', textAlign: 'center' }}>SIGN IN</Text>
-
-              <View style={{
-
-                marginTop: 10,
-                // height: hp(35),
-                width: wp(100),
-                alignItems: 'center'
-              }}>
+  
+            {/* WHITE CARD AREA */}
+            <View style={styles.whiteCard}>
+  
+              <Text style={styles.signText}>SIGN IN</Text>
+  
+              {/* INPUTS */}
+              <View style={styles.inputWrapper}>
+  
+                {/* Email */}
                 <View style={styles.textuser}>
                   <TextInput
-                    placeholder='Email'
-                    keyboardType={'email-address'}
-                    placeholderTextColor={'#1b6001'}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    placeholderTextColor="#1b6001"
                     style={styles.textinput}
                     onChangeText={pre => setEmail(pre)}
                   />
                 </View>
+  
                 {valemail === true && (
-                  <Text style={{ color: 'red', alignSelf: 'flex-start', marginLeft: 40 }}>enter the email</Text>
+                  <Text style={styles.errorText}>enter the email</Text>
                 )}
+  
+                {/* Password */}
                 <View style={styles.textpass}>
-                  <TextInput placeholder='Password'
-                    placeholderTextColor={'#1b6001'}
-                    style={styles.textinput1}
+                  <TextInput
+                    placeholder="Password"
+                    placeholderTextColor="#1b6001"
                     secureTextEntry={!show}
+                    style={styles.textinput1}
                     onChangeText={pre => setPassword(pre)}
                   />
-                  <TouchableOpacity
-                    onPress={hidepass}>
-                    {
-                      show == false ?
-
-                        <FontAwesome name="eye" size={25} color="#1b6001" />
-                        :
-                        <FontAwesome name="eye-slash" size={25} color="#1b6001" />
-                    }
+  
+                  <TouchableOpacity onPress={hidepass}>
+                    {show ? (
+                      <FontAwesome name="eye-slash" size={25} color="#1b6001" />
+                    ) : (
+                      <FontAwesome name="eye" size={25} color="#1b6001" />
+                    )}
                   </TouchableOpacity>
                 </View>
+  
                 {valpass === true && (
-                  <Text style={styles.enterpass}>enter the password</Text>
+                  <Text style={styles.errorPass}>enter the password</Text>
                 )}
+  
               </View>
-
+  
+              {/* FORGOT PASSWORD */}
               <TouchableOpacity onPress={() => navigation.navigate('Fpass')}>
-                <Text style={{ textAlign: 'right', paddingRight: 30, paddingVertical: 15, color: '#1b6001' }}>Forgot Password</Text>
+                <Text style={styles.forgotText}>Forgot Password</Text>
               </TouchableOpacity>
-              <View style={{ marginHorizontal: 20, borderWidth: 1, borderColor: '#1b6001', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-
-                <View style={{ flexDirection: 'row', marginHorizontal: 10, marginVertical: 2, alignItems: 'center' }}>
-                  <TouchableOpacity onPress={checkFingerprintStatus} style={{ flexDirection: 'row', alignItems: 'center' }} >
+  
+              {/* BIOMETRIC BOX */}
+              <View style={styles.biometricBox}>
+  
+                <View style={styles.bioLeft}>
+                  <TouchableOpacity
+                    onPress={checkFingerprintStatus}
+                    style={styles.bioIcons}
+                  >
                     <MaterialIcons name="fingerprint" size={35} color="#1b6001" />
-                    <Text style={{ borderLeftWidth: 1, borderColor: '#1b6001' }}></Text>
-                    <MaterialIcons name="center-focus-weak" size={35} color="#1b6001" />
+                    <MaterialIcons
+                      name="center-focus-weak"
+                      size={35}
+                      color="#1b6001"
+                      style={styles.bioSecondIcon}
+                    />
                   </TouchableOpacity>
-
-                  <Text style={{ fontSize: 16, color: "#1b6001" }}>  Biometric Login</Text>
+  
+                  <Text style={styles.bioText} allowFontScaling={false}>Biometric Login</Text>
                 </View>
-                <View>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "white" }}
-                    thumbColor={isEnabled ? "#1b6001" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleFingerprint}
-                    value={isEnabled}
-                  />
-                </View>
+  
+                <Switch
+                  trackColor={{ false: "#767577", true: "white" }}
+                  thumbColor={isEnabled ? "#1b6001" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleFingerprint}
+                  value={isEnabled}
+                />
               </View>
-              <View style={{ alignItems: "center" }}>
+  
+              {/* SIGN IN BUTTON */}
+              <View style={styles.signinWrapper}>
                 <TouchableOpacity
                   style={styles.signin}
                   onPress={validation}
                   disabled={loading}
                 >
-                  {loading ?
+                  {loading ? (
                     <ActivityIndicator size="large" color="white" />
-                    :
-                    <Text style={{ color: '#b9dfab', fontWeight: '700', fontSize: 20 }}>
-                      SIGN IN
-                    </Text>
-                  }
+                  ) : (
+                    <Text style={styles.signBtnText}>SIGN IN</Text>
+                  )}
                 </TouchableOpacity>
               </View>
-              <View style={styles.headline}>
-                <Text style={{ color: '#1b6001' }}>Don,t have an account?</Text>
-                <TouchableOpacity
-                  onPress={handleButtonPress}
-                >
-                  <Text style={{ fontSize: 15, color: '#1b6001' }}>Sign Up</Text>
-
+  
+              {/* BOTTOM LINE */}
+              <View style={styles.bottomLine}>
+                <Text style={styles.bottomText}>Don’t have an account?</Text>
+                <TouchableOpacity onPress={handleButtonPress}>
+                  <Text style={styles.bottomSignup}>Sign Up</Text>
                 </TouchableOpacity>
               </View>
+  
             </View>
           </View>
         </ImageBackground>
       </KeyboardAwareScrollView>
     </SafeAreaView>
-  )
+  );
+  
 }
 export default Login;
 
-const styles = StyleSheet.create({
-  signin: {
-    width: '50%',
+const styles = ScaledSheet.create({
+  safe: {
+    flex: 1,
+  },
+  scroll: {
+    flexGrow: 1,
+  },
+  bg: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+
+  /* TOP LOGO AREA */
+  topBox: {
+    width: '100%',
+    height: hp('30%'),
     justifyContent: 'center',
     alignItems: 'center',
-    height: 60,
-    borderRadius: 40,
-    marginTop: 50,
-    backgroundColor: '#1b6001'
   },
-  headline: {
+
+  topImage: {
+    width: wp('80%'),
+    height: hp('12%'),
+  },
+
+  /* WHITE AREA */
+  whiteCard: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#b9dfab',
+    borderTopRightRadius: '35@ms',
+    borderTopLeftRadius: '35@ms',
+    justifyContent: 'space-around',
+  },
+
+  signText: {
+    color: '#1b6001',
+    fontSize: '25@ms',
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: '10@vs',
+  },
+
+  inputWrapper: {
+    width: wp('100%'),
+    alignItems: 'center',
+    marginTop: '5@vs',
+  },
+
+  /* EMAIL INPUT */
+  textuser: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: wp('85%'),
+    borderBottomWidth: 2,
+    borderColor: '#1b6001',
+    height: hp('7%'),
+    marginVertical: '20@vs',
   },
-  eye: {
-    width: wp(7),
-    height: hp(7),
-  },
-  enterpass: {
-    color: 'red',
-    alignSelf: 'flex-start',
-    marginTop: 30,
-    marginLeft: 40,
-  },
+
   textinput: {
     color: 'black',
     height: '100%',
     width: '100%',
-    alignSelf: 'center',
-    borderColor: 'white',
-    paddingLeft: 10,
-    fontSize: 16,
+    paddingLeft: '10@s',
+    fontSize: '16@ms',
   },
+
+  errorText: {
+    color: 'red',
+    alignSelf: 'flex-start',
+    marginLeft: '40@s',
+  },
+
+  /* PASSWORD INPUT */
+  textpass: {
+    flexDirection: 'row',
+    width: wp('85%'),
+    borderBottomWidth: 2,
+    borderColor: '#1b6001',
+    alignItems: 'center',
+    height: hp('6%'),
+  },
+
   textinput1: {
     height: '100%',
     width: '90%',
-    alignSelf: 'center',
-    borderColor: 'white',
-    paddingLeft: 10,
-    color: 'black'
+    paddingLeft: '10@s',
+    color: 'black',
+    fontSize: '16@ms',
   },
-  textpass: {
-    flexDirection: 'row',
-    width: wp(85),
-    borderBottomWidth: 2,
+
+  errorPass: {
+    color: 'red',
+    alignSelf: 'flex-start',
+    marginTop: '10@vs',
+    marginLeft: '40@s',
+  },
+
+  forgotText: {
+    textAlign: 'right',
+    paddingRight: '30@s',
+    paddingVertical: '15@vs',
+    color: '#1b6001',
+  },
+
+  /* BIOMETRIC BOX */
+  biometricBox: {
+    marginHorizontal: '20@s',
+    borderWidth: 1,
     borderColor: '#1b6001',
-    alignItems: "center",
-    height: hp(6)
-  },
-  textuser: {
     flexDirection: 'row',
-    width: wp(85),
-    borderBottomWidth: 2,
-    borderColor: '#1b6001',
-    height: hp(7),
-    marginVertical: 30,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10@s',
+    borderRadius: '10@ms',
   },
-})
+
+  bioLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  bioIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  bioSecondIcon: {
+    marginLeft: '10@s',
+  },
+
+  bioText: {
+    fontSize: '16@ms',
+    color: '#1b6001',
+    marginLeft: '10@s',
+  },
+
+  /* SIGN IN BUTTON */
+  signinWrapper: {
+    alignItems: 'center',
+  },
+
+  signin: {
+    width: wp('50%'),
+    height: '50@vs',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '40@ms',
+    marginTop: '40@vs',
+    backgroundColor: '#1b6001',
+  },
+
+  signBtnText: {
+    color: '#b9dfab',
+    fontWeight: '700',
+    fontSize: '20@ms',
+  },
+
+  /* BOTTOM AREA */
+  bottomLine: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '10@vs',
+  },
+
+  bottomText: {
+    color: '#1b6001',
+  },
+
+  bottomSignup: {
+    fontSize: '15@ms',
+    color: '#1b6001',
+    marginLeft: '5@s',
+  },
+});

@@ -17,6 +17,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useEffect } from 'react';
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+
 
 // Custom hook for camera permission
 const useCameraPermission = () => {
@@ -109,71 +111,84 @@ export default function Qrscanner() {
                 />
             </View>
 
-            <Text style={styles.bottomText}>Peg Scanner</Text>
+            <Text style={styles.bottomText} allowFontScaling={false}>Peg Scanner</Text>
         </SafeAreaView>
     );
 }
 
 // Reusable styles
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: '#fff',
     },
+
     header: {
-        marginTop: hp('2%'),
-        paddingHorizontal: wp('5%'),
+        marginTop: '20@vs',
+        paddingHorizontal: '15@s',
         flexDirection: 'row',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 10,
     },
+
     circleButton: {
-        width: wp('12%'),
-        height: wp('12%'),
-        borderRadius: wp('6%'),
+        width: '45@s',
+        height: '45@s',
+        borderRadius: '25@s',
         justifyContent: 'center',
         alignItems: 'center',
     },
+
     statusText: {
         fontWeight: 'bold',
-        fontSize: wp('4.2%'),
+        fontSize: '16@s',
         color: 'black',
     },
+
     infoContainer: {
-        marginTop: hp('2%'),
-        paddingHorizontal: wp('5%'),
+        marginTop: '20@vs',
+        paddingHorizontal: '20@s',
     },
+
     infoText: {
         color: 'black',
         textAlign: 'center',
-        fontSize: wp('4%'),
+        fontSize: '15@s',
     },
+
     scannerContainer: {
-        height: hp('60%'),
-        width: wp('100%'),
+        height: '400@vs',
+        width: '100%',
         alignSelf: 'center',
-        marginTop: hp('3%'),
+        marginTop: '25@vs',
     },
+
     camera: {
         height: '100%',
         width: '100%',
         overflow: 'hidden',
     },
+
     marker: {
         borderColor: '#FFF',
-        borderRadius: 10,
+        borderRadius: '10@s',
+        borderWidth: '2@s',
     },
+
     bottomText: {
-        fontSize: 18,
-        paddingTop: 40,
+        fontSize: '18@s',
+        paddingTop: '35@vs',
         fontWeight: 'bold',
         textAlign: 'center',
-    },
-    permissionText: {
-        fontSize: wp('4%'),
-        textAlign: 'center',
-        marginTop: hp('50%'),
         color: 'black',
-    }
+    },
+
+    permissionText: {
+        fontSize: '15@s',
+        textAlign: 'center',
+        marginTop: '250@vs',
+        color: 'black',
+    },
 });
+

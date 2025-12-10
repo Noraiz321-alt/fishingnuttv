@@ -23,15 +23,15 @@ const All = ({ data }) => {
             {/* FILTER TAG */}
             {isToday ? (
               <View style={styles.todayContainer}>
-                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }}>Today</Text>
+                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }} allowFontScaling={false}>Today</Text>
               </View>
             ) : new Date(item.booking_date) > new Date() ? (
               <View style={styles.upcomingContainer1}>
-                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }}>Upcoming</Text>
+                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }} allowFontScaling={false}>Upcoming</Text>
               </View>
             ) : (
               <View style={styles.upcomingContainer2}>
-                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }}>Previous</Text>
+                <Text style={{ fontSize: 9, color: 'white', fontWeight: 'bold' }} allowFontScaling={false}>Previous</Text>
               </View>
             )}
       

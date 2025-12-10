@@ -12,29 +12,122 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
 
+// const Tab = createBottomTabNavigator();
+
+// export default function BottomTabs({ route }) {
+//   const responseData = route.params?.responseData || null;
+//   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+//   useEffect(() => {
+//     const keyboardDidShowListener = Keyboard.addListener(
+//       'keyboardDidShow',
+//       () => {
+//         setKeyboardVisible(true);
+//       }
+//     );
+//     const keyboardDidHideListener = Keyboard.addListener(
+//       'keyboardDidHide',
+//       () => {
+//         setKeyboardVisible(false);
+//       }
+//     );
+
+//     return () => {
+//       keyboardDidHideListener.remove();
+//       keyboardDidShowListener.remove();
+//     };
+//   }, []);
+
+//   return (
+//     <View style={{ flex: 1 }}>
+//      <Tab.Navigator
+//   screenOptions={{
+//     headerShown: false,
+//     tabBarActiveTintColor: '#1b6001',
+//     tabBarInactiveTintColor: '#999999',
+//     tabBarStyle: {
+//       backgroundColor: '#b9dfab',
+//       borderTopWidth: 1,
+//       borderTopColor: '#ccc',
+//       display: isKeyboardVisible ? 'none' : 'flex',
+//       paddingTop: vs(8), 
+//       paddingBottom: vs(12),
+//       height: vs(65), 
+//     },
+//     tabBarLabelStyle: {
+//       fontSize: s(12), // Responsive font size
+//       fontWeight: '500',
+//     },
+//     tabBarIndicatorStyle: {
+//       height: 0,
+//     },
+//   }}
+// >
+//   <Tab.Screen
+//     name="Booking"
+//     options={{
+//       tabBarLabel: 'Home',
+//       tabBarLabelStyle: { fontSize: s(10), fontWeight: '500' }, // Responsive label
+//       tabBarIcon: ({ focused, color, size }) => (
+//         <Ionicons name="home" size={s(23)} color="#1b6001" />
+//       ),
+//     }}
+//   >
+//     {() => <Booking route={route} />}
+//   </Tab.Screen>
+
+//   <Tab.Screen
+//     name="B-Details"
+//     options={{
+//       tabBarLabel: 'Bookings',
+//       tabBarLabelStyle: { fontSize: s(10), fontWeight: '500' }, // Responsive label
+//       tabBarIcon: ({ focused, color, size }) => (
+//         <FontAwesome5 name="box-open" size={s(20)} color="#1b6001" />
+//       ),
+//     }}
+//   >
+//     {() => <BookingDetails route={route} />}
+//   </Tab.Screen>
+
+//   <Tab.Screen
+//     name="Main"
+//     options={{
+//       tabBarLabel: 'Membership Card',
+//       tabBarLabelStyle: { fontSize: s(10), fontWeight: '500' }, // Responsive label
+//       tabBarIcon: ({ focused, color, size }) => (
+//         <FontAwesome6 name="id-card-clip" size={s(20)} color="#1b6001" />
+//       ),
+//     }}
+//   >
+//     {() => <Main route={route} />}
+//   </Tab.Screen>
+// </Tab.Navigator>
+
+//     </View>
+//   );
+// }
+
+// const styles = ScaledSheet.create({});
+
+
+
+// ------------------- Custom Text Component -------------------
+const AppText = ({ children, style }) => {
+  return <Text style={style} allowFontScaling={false}>{children}</Text>;
+};
+
+// ------------------- Tab Navigator -------------------
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs({ route }) {
-  const responseData = route.params?.responseData || null;
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setKeyboardVisible(true);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false);
-      }
-    );
-
+    const showListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
+    const hideListener = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
     return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
+      showListener.remove();
+      hideListener.remove();
     };
   }, []);
 
@@ -50,48 +143,58 @@ export default function BottomTabs({ route }) {
             borderTopWidth: 1,
             borderTopColor: '#ccc',
             display: isKeyboardVisible ? 'none' : 'flex',
-            paddingTop: vs(8), 
-            paddingBottom: vs(12), // Adjust padding based on vertical scale
-            height: vs(65), 
-          },
-          tabBarIndicatorStyle: {
-            height: 0,
+            paddingTop: vs(8),
+            paddingBottom: vs(12),
+            height: vs(65),
           },
         }}
       >
+
+        {/* Home */}
         <Tab.Screen
           name="Booking"
           options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons name="home" size={s(23)} color="#1b6001" />
+            tabBarLabel: ({ focused }) => (
+              <AppText style={{ fontSize: s(10), fontWeight: '500', color: focused ? '#1b6001' : '#999' }}>
+                Home
+              </AppText>
             ),
+            tabBarIcon: ({ color }) => <Ionicons name="home" size={s(23)} color='#1b6001' />,
           }}
         >
           {() => <Booking route={route} />}
         </Tab.Screen>
+
+        {/* Bookings */}
         <Tab.Screen
           name="B-Details"
           options={{
-            tabBarLabel: 'Bookings',
-            tabBarIcon: ({ focused, color, size }) => (
-              <FontAwesome5 name="box-open" size={s(20)} color="#1b6001" />
+            tabBarLabel: ({ focused }) => (
+              <AppText style={{ fontSize: s(10), fontWeight: '500', color: focused ? '#1b6001' : '#999' }}>
+                Bookings
+              </AppText>
             ),
+            tabBarIcon: ({ color }) => <FontAwesome5 name="box-open" size={s(20)} color='#1b6001' />,
           }}
         >
           {() => <BookingDetails route={route} />}
         </Tab.Screen>
+
+        {/* Membership */}
         <Tab.Screen
           name="Main"
           options={{
-            tabBarLabel: 'Membership Card',
-            tabBarIcon: ({ focused, color, size }) => (
-              <FontAwesome6 name="id-card-clip" size={s(20)} color="#1b6001" />
+            tabBarLabel: ({ focused }) => (
+              <AppText style={{ fontSize: s(10), fontWeight: '500', color: focused ? '#1b6001' : '#999' }}>
+                Membership Card
+              </AppText>
             ),
+            tabBarIcon: ({ color }) => <FontAwesome6 name="id-card-clip" size={s(20)} color='#1b6001' />,
           }}
         >
           {() => <Main route={route} />}
         </Tab.Screen>
+
       </Tab.Navigator>
     </View>
   );

@@ -8,6 +8,8 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation} from '@react-navigation/native'
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Update_password = ({ route }) => {
@@ -188,62 +190,72 @@ const Update_password = ({ route }) => {
 };
 export default Update_password;
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+
   signin: {
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 60,
-    borderRadius: 40,
-    marginTop: 50,
-    backgroundColor: '#1b6001'
+    height: '55@vs',
+    borderRadius: '40@s',
+    marginTop: '40@vs',
+    backgroundColor: '#1b6001',
   },
+
   headline: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   eye: {
-    width: wp(7),
-    height: hp(7),
+    width: '28@s',
+    height: '28@s',
   },
+
   enterpass: {
     color: 'red',
     alignSelf: 'flex-start',
-    marginTop: 30,
-    marginLeft: 40,
+    marginTop: '30@vs',
+    marginLeft: '40@s',
   },
+
   textinput: {
     color: 'black',
     height: '100%',
     width: '100%',
     alignSelf: 'center',
     borderColor: 'white',
-    paddingLeft: 10,
-    fontSize: 16,
+    paddingLeft: '10@s',
+    fontSize: '16@s',
   },
+
   textinput1: {
     height: '100%',
     width: '90%',
     alignSelf: 'center',
-    borderColor: 'white',
-    paddingLeft: 10,
-    color: 'black'
+    paddingLeft: '10@s',
+    color: 'black',
+    fontSize: '16@s',
   },
+
   textpass: {
     flexDirection: 'row',
-    width: wp(85),
-    borderBottomWidth: 2,
+    width: '85%',
+    borderBottomWidth: '2@s',
     borderColor: '#1b6001',
-    alignItems: "center",
-    height: hp(6)
+    alignItems: 'center',
+    height: '55@vs',
   },
+
   textuser: {
     flexDirection: 'row',
-    width: wp(85),
-    borderBottomWidth: 2,
+    width: '85%',
+    borderBottomWidth: '2@s',
     borderColor: '#1b6001',
-    height: hp(7),
-    marginVertical: 30,
+    height: '60@vs',
+    marginVertical: '25@vs',
   },
+
 });
+

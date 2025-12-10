@@ -1,17 +1,825 @@
+// import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
+// import React, { useState, useEffect } from 'react';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
+// import { useNavigation } from '@react-navigation/native';
+// import Swiper from 'react-native-swiper';
+
+// import axios from 'react-native-axios';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import FontAwesome from 'react-native-vector-icons/FontAwesome'
+// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+// import LinearGradient from "react-native-linear-gradient";
+
+
+// const Bcalender = ({ route }) => {
+//   const { width } = Dimensions.get('window');
+
+//   const { itemData, memberID } = route.params;
+//   const currentDate = new Date().toISOString().split('T')[0];
+//   const navigation = useNavigation();
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [dataa, setDataa] = useState([]);
+//   const [getdates, setGetDates] = useState(null);
+//   const [selectedDate, setSelectedDate] = useState('');
+//   const [isModalVisible, setIsModalVisible] = useState(false);
+//   const [selectedPellet, setSelectedPellet] = useState(null);
+//   const [isScrollViewVisible, setScrollViewVisible] = useState(false);
+//   const [selectedValue, setSelectedValue] = useState(null);
+//   const [pelletData, setPelletData] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [index, setIndex] = useState(0);
+
+//   const handleIndexChanged = async (index, id) => {
+//     setLoading(true);
+//     console.log('value name', id)
+//     setCurrentIndex(index);
+//     console.log('user id:', memberID);
+//     // console.log('Current Date:',i
+//     try {
+//       // Perform your post API call here using fetch
+//       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/check-availability/${itemData.lake_id}/${id}/${currentDate}/${memberID}`, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//         }),
+//       });
+//       const responseData = await response.json();
+//       console.log('show data zzzzzz', responseData)
+//       setLoading(false)
+//       setGetDates(responseData);
+//       // console.log('flaf data with date :', responseData);
+//     } catch (error) {
+//       setLoading(false)
+//       console.error('Error in API call:', error.message);
+//     }
+//   };
+//   const dataForFlatList = getdates
+//     ? Object.entries(getdates).map(([date, value]) => ({
+//       date,
+//       value: value.split(':')[0],
+//       flag: value.split(':')[1], // Split the 'value' string and take the second part
+//     }))
+//     : [];
+
+//   const getOrdinalSuffix = (number) => {
+//     const j = number % 10;
+//     const k = number % 100;
+//     if (j === 1 && k !== 11) {
+//       return 'st';
+//     }
+//     if (j === 2 && k !== 12) {
+//       return 'nd';
+//     }
+//     if (j === 3 && k !== 13) {
+//       return 'rd';
+//     }
+//     return 'th';
+//   };
+//   const formattedMonth = (month) => {
+//     const date = new Date(`2024-${month}-01`); // Assuming the year and day
+//     return date.toLocaleDateString('en-US', { month: 'long' });
+//   };
+//   const images = dataa?.map((peg) => peg.peg_image) || [];
+//   // const images = dataa ? dataa.map((peg) => peg.peg_image) : [];
+//   // const images = dataa && dataa.pegs ? dataa.pegs.map((peg) => peg.peg_image) : [];
+
+
+
+//   useEffect(() => {
+//     PegApies()
+//     palletApi()
+//   }, []);
+//   const PegApies = async () => {
+//     try {
+//       const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-pegs/${itemData.lake_id}`);
+//       // console.log('test lid', response.data);
+//       // console.log('API response:', response.data);
+//       setDataa(response.data);
+
+//       handleIndexChanged(currentIndex, response?.data[0]?.id);
+//     } catch (error) {
+//       console.error('Error:', error.message);
+//     }
+//   };
+//   // console.log('peg data',dataa);
+
+//   const availabilitypostapi = async (selectedDateNow) => {
+//     try {
+//       const formdata = new FormData();
+//       formdata.append('peg_id', dataa[currentIndex]?.id || 'N/A');
+//       formdata.append('lake_id', itemData.lake_id);
+//       console.log('show booking dataa>>>o>>>>>', formdata, memberID, selectedDateNow)
+
+
+//       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
+//         method: 'POST',
+//         body: formdata,
+//       });
+
+//       const responseData = await response.json();
+//       console.log('Response data: post api', responseData);
+
+//       if (responseData.error) {
+//         Alert.alert("Details", responseData.error.replace(/\n/g, "\n"));
+//       } else {
+//         handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
+//         setIsModalVisible(true); // Agar error nahi hai toh modal show hoga
+//       }
+
+//       // handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
+
+//       // setIsModalVisible(true);
+//     } catch (error) {
+//       console.error('Error:', error.message);
+//     }
+//   };
+
+
+//   const handleDelete = async (selectedDateNow) => {
+
+//     console.log('member id ', memberID)
+//     console.log('date ', selectedDateNow)
+//     console.log('lake',)
+//     console.log('id',)
+//     try {
+//       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
+//         method: 'DELETE',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           // You may need to include additional headers like authorization headers if required by the API
+//         },
+//       });
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+//       const data = await response.json();
+//       console.log('Delete successful:', data);
+//       handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
+//       // Handle the successful response here
+//     } catch (error) {
+//       console.error('Error deleting data:', error.message);
+//       // Handle errors here
+//     }
+//   };
+
+//   const pelletDelete = async (selectedDateNow) => {
+//     try {
+//       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/order-pellets/${memberID}/${selectedDateNow}/${itemData.lake_id}/${dataa?.[currentIndex]?.id}`, {
+//         method: 'DELETE',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           // Include additional headers if required by the API (e.g., authorization)
+//         },
+//       });
+
+//       // if (!response.ok) {
+//       //   throw new Error(`HTTP error! Status: ${response.status}`);
+//       // }
+
+//       const data = await response.json();
+//       console.log('Delete pellet data:', data);
+
+//       // Handle the successful response here
+//     } catch (error) {
+//       console.error('Error deleting data:', error.message);
+//       // Handle errors here
+//     }
+//   };
+
+//   const palletApi = async () => {
+//     try {
+//       const response = await axios.get('https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/pellets');
+//       setPelletData(response.data);
+//       setPelletData(response.data);
+//     } catch (error) {
+//       console.error('Error:', error.message);
+//     }
+//   };
+//   const handleYesButtonClick = () => {
+
+//     let pellet_weight;
+//     let pellet_price;
+//     if (selectedValue) {
+//       pellet_weight = selectedValue.weight;
+//       pellet_price = selectedValue.price;
+//     } else if (pelletData.length > 0) {
+//       pellet_weight = pelletData[0].weight;
+//       pellet_price = pelletData[0].price;
+//     } else {
+//       pellet_weight = 'DefaultWeight';
+//       pellet_price = 'DefaultPrice';
+//     }
+//     const data = {
+
+//       pellet_weight: pellet_weight,
+//       pellet_price: pellet_price,
+//     };
+//     bookingpostapi(data)
+//   };
+
+//   const bookingpostapi = async (data) => {
+//     try {
+//       const formData = new FormData();
+//       formData.append('pellet_weight', data.pellet_weight);
+//       formData.append('pellet_price', data.pellet_price);
+
+//       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/order-pellets/${memberID}/${selectedDate}/${itemData.lake_id}/${dataa?.[currentIndex]?.id}`, {
+//         method: 'POST',
+//         body: formData,
+//         headers: {
+//           'Accept': 'application/json',
+//           // 'Content-Type': 'multipart/form-data', // You may not need this header
+//         },
+//       });
+
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+
+//       const responseData = await response.json();
+//       console.log('Response data forward:', responseData);
+
+
+//       setIsModalVisible(false);
+//       Alert.alert(
+//         'Success!',
+//         'Thank you for your pellet order. It will be delivered to you at the lake. Please have cash to pay.',
+//         [
+//           {
+//             text: 'OK',
+//             onPress: () => console.log('OK Pressed'),
+//           },
+//         ],
+//         { cancelable: false }
+//       )
+
+//     } catch (error) {
+//       // Handle errors here
+//       console.error('Error:', error.message);
+//     }
+//   };
+//   const SkeletonRow = () => {
+//     return (
+//       <View style={{
+//         flexDirection: 'row',
+//         justifyContent: 'space-between',
+//         marginVertical: 6,
+//         paddingVertical: 15,
+//         paddingHorizontal: 15,
+//         backgroundColor: '#D9D9D9',
+//         borderRadius: 6,
+//       }}>
+//         <ShimmerPlaceholder
+//           LinearGradient={LinearGradient}
+//           style={{ width: 140, height: 18, borderRadius: 4 }}
+//         />
+//         <ShimmerPlaceholder
+//           LinearGradient={LinearGradient}
+//           style={{ width: 100, height: 18, borderRadius: 4 }}
+//         />
+//       </View>
+//     );
+//   };
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <View style={{ flex: 1.5, position: 'relative' }}>
+//       {dataa.length > 0 && (
+//           <>
+//             <Swiper
+//               key={currentIndex} // 👈 force re-render when index changes by dot click
+//               loop={false}
+//               index={currentIndex} // 👈 controlled index
+//               showsPagination={false}
+//               onIndexChanged={(index) => {
+//                 setCurrentIndex(index);
+//                 const id = dataa[index]?.id ?? "NO_ID_FOUND";
+//                 handleIndexChanged(index, id);
+//               }}
+//             >
+//               {images.map((img, index) => (
+//                 <View key={index} style={{ width: '100%', height: hp('36%') }}>
+//                   <Image
+//                     source={{ uri: img }}
+//                     style={{ width: '100%', height: '80%' }}
+//                     resizeMode="cover"
+//                   />
+//                 </View>
+//               ))}
+//             </Swiper>
+
+//             {/* custom clickable dots */}
+//             <View
+//               style={{
+//                 position: 'absolute',
+//                 bottom: 10,
+//                 flexDirection: 'row',
+//                 alignSelf: 'center',
+//                 gap: 3,
+//               }}
+//             >
+//               {images.map((_, index) => (
+//                 <TouchableOpacity
+//                   key={index}
+//                   onPress={() => {
+//                     const id = dataa[index]?.id ?? "NO_ID_FOUND";
+//                     setCurrentIndex(index);
+//                     handleIndexChanged(index, id);
+//                   }}
+//                   style={{
+//                     width: 10,
+//                     height: 10,
+//                     borderRadius: 5,
+//                     backgroundColor:
+//                       currentIndex === index ? '#1b6001' : '#dcdcdc',
+//                   }}
+//                 />
+//               ))}
+//             </View>
+//           </>
+//         )}
+            
+//         <View style={{ position: 'absolute', top: 10, width: '100%' }}>
+//           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15 }}>
+//             <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack()}>
+//               <AntDesign name="left" size={25} color="black" />
+//             </TouchableOpacity>
+//             <View>
+//               <Text style={{ fontSize: 22, color: '#e2e4eb' }}>Choose a peg</Text>
+//             </View>
+//             <View style={styles.paginationContainer}>
+//               <Text style={styles.paginationText}>{`${dataa?.[currentIndex]?.name || 'N/A'} / ${images.length}`}</Text>
+//             </View>
+//           </View>
+//         </View>
+//         <View style={{ position: 'absolute', bottom: 35, left: 0, right: 0, alignItems: 'center' }}>
+//           <View style={{ backgroundColor: '#1b6001',  borderRadius: 5, paddingVertical:7, justifyContent: 'center',paddingHorizontal:20  }}>
+//             <Text style={{ color: 'white', fontSize:12,fontWeight:'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name||'N/A'}`}</Text>
+//           </View>
+//         </View>
+//       </View>
+//       <View style={{ flex: 4 }}>
+//         <View style={styles.sectionHeader}>
+//           <Text style={styles.sectionTitle}>
+//             {itemData.name.length > 27 ? (
+//               <>
+//                 {itemData.name.substring(0, 26)}
+//                 <Text> ...</Text>
+//               </>
+//             ) : (
+//               itemData.name
+//             )}
+//           </Text>
+//         </View>
+//         <View style={styles.sectionContent}>
+//           <Text style={styles.paragraph}>
+
+//             {dataa?.[currentIndex]?.description}
+//           </Text>
+//           {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, */}
+
+//           <View style={{ alignItems: 'center' }}>
+//             <Text style={{ color: 'black', fontSize: 22, fontWeight: 'bold' }}>TAP A DATE TO BOOK</Text>
+//           </View>
+//           <View style={{ alignItems: 'center' }}>
+//             <Text style={{ color: '#555555', fontSize: 12 }}>All Booking are for 24 hours - 8 AM to 8 AM</Text>
+//           </View>
+//           <View>
+//             <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between', }}>
+//               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#1b6001' }}></View>
+//                 <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Available</Text></View>
+//               </View>
+//               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#959595' }}></View>
+//                 <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Unavailable</Text></View>
+//               </View>
+//               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                 <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: 'blueviolet' }}></View>
+//                 <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Booked</Text></View>
+//               </View>
+//             </View>
+//             {loading ? (
+//               <View style={{ height: hp('48%'), paddingTop: 10 }}>
+//                 {[1, 2, 3, 4, 5, 6, 7,8].map((_, i) => (
+//                   <SkeletonRow key={i} />
+//                 ))}
+//               </View>
+//             ) : (
+//               <View style={{ height: hp('48%'), }}>
+//                 {dataForFlatList && dataForFlatList.length > 0 ? (
+//                   <FlatList
+//                     data={dataForFlatList}
+//                     keyExtractor={(item) => `${item.date}-${item.value}`}
+//                     renderItem={({ item }) => {
+//                       // Extracting day, month, and year from the formatted date
+//                       const [year, month, day] = item.value.split('-');
+//                       return (
+//                         <View style={{
+//                           flexDirection: 'row',
+//                           justifyContent: 'space-between',
+//                           // flexWrap:'wrap',
+//                           marginVertical: 5,
+//                           paddingVertical: 8.5,
+//                           paddingHorizontal: 15,
+//                           backgroundColor: item.flag == 1 ? '#1b6001' : item.flag == 2 ? 'blueviolet' : '#959595',
+//                           alignItems: 'center'
+//                         }}>
+//                           <View style={{
+//                             flexDirection: 'row'
+//                           }}>
+//                             <View style={{ flexDirection: 'row' }}>
+//                               <Text style={styles.dateText}>{day}</Text>
+//                               <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'white', top: 1 }}>{getOrdinalSuffix(day)} </Text>
+//                             </View>
+//                             <Text style={styles.dateText}>{formattedMonth(month)}</Text>
+//                             <Text style={styles.dateText}> {year}</Text>
+//                           </View>
+
+//                           {item.flag == 1 ? (
+//                             <TouchableOpacity
+//                               style={styles.btn}
+//                               onPress={() => {
+//                                 Alert.alert(
+//                                   'Confirmation',
+//                                   'Are you sure you want to book for this date?',
+//                                   [
+//                                     {
+//                                       text: 'No',
+//                                       style: 'cancel',
+//                                     },
+//                                     {
+//                                       text: 'Yes',
+//                                       onPress: () => {
+//                                         // Set the selected date here
+//                                         availabilitypostapi(item.value);
+//                                         setSelectedDate(item.value);
+//                                       },
+//                                     },
+//                                   ],
+//                                   { cancelable: false }
+//                                 );
+//                               }}
+//                             >
+//                               <Text style={{ color: 'black' }}>Available</Text>
+//                             </TouchableOpacity>
+//                           ) : item.flag == 0 ? (
+//                             <View style={styles.btn}>
+//                               <View>
+//                                 <Text style={{ color: 'black' }} >Unavailable</Text>
+//                               </View>
+//                             </View>
+//                           ) : (
+
+//                             item.flag == 2 && (
+//                               <View style={styles.btn2}>
+//                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+//                                   <Text style={{ color: 'black' }}>Booked</Text>
+//                                   {
+//                                     new Date(item.value) >= new Date(currentDate) ? (
+//                                       <TouchableOpacity onPress={() => {
+//                                         Alert.alert(
+//                                           'Confirmation',
+//                                           'Are you sure you want to cancel booking',
+//                                           [
+//                                             {
+//                                               text: 'No',
+//                                               style: 'cancel',
+//                                             },
+//                                             {
+//                                               text: 'Yes',
+//                                               onPress: () => {
+//                                                 handleDelete(item.value)
+//                                                 pelletDelete(item.value)
+//                                               },
+//                                             },
+//                                           ],
+//                                           { cancelable: false }
+//                                         );
+//                                       }} >
+//                                         <AntDesign name="delete" size={wp('5%')} color={'black'} />
+//                                       </TouchableOpacity>
+//                                     ) : (
+//                                       <FontAwesome name="ban" size={wp('5%')} color="black" />
+//                                     )
+//                                   }
+//                                 </View>
+//                               </View>
+//                             )
+//                           )}
+
+//                         </View>
+
+//                       )
+//                     }}
+//                   />
+//                 ) : (
+//                   <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: '25%', paddingHorizontal: 20 }}>
+//                     <Text style={{ fontSize: 30, color: '#a1a19f', textAlign: 'center' }}>Your two months booking peg has reached</Text>
+//                   </View>
+//                 )}
+
+//               </View>
+//             )}
+//           </View>
+//         </View>
+//       </View>
+
+//       <Modal
+//         visible={isModalVisible}
+//         animationType="slide"
+//         transparent={true}
+//         onRequestClose={() => setIsModalVisible(false)}
+//       >
+
+//         <View style={styles.modalContainer}>
+//           <View style={styles.modalContent}>
+
+//             <View style={{ alignItems: 'center' }}>
+//               <FontAwesome name="check-circle" size={100} color="#4aaf50" />
+//             </View>
+//             <View style={{ alignItems: 'center', paddingHorizontal: 50 }}>
+//               <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center', color: '#000000' }}>
+//                 Please confirm if you want to order pellet
+
+//               </Text>
+//               <Text style={{ paddingTop: 10, color: '#555555' }}>We allow only fishery pellet.</Text>
+//               <Text style={{ color: '#555555', textAlign: 'center' }}>
+//                 Would you like to order some here?
+//               </Text>
+//             </View>
+//             <View>
+//               <TouchableOpacity onPress={() => setScrollViewVisible(!isScrollViewVisible)}>
+//                 <View style={{ alignItems: 'center', paddingTop: 20 }}>
+//                   <View style={styles.pellet}  >
+//                     <Text style={{ color: 'black' }}>
+//                       {selectedValue
+//                         ? `${selectedValue.weight} X Pkt (750g) - (£${selectedValue.price})`
+//                         : pelletData.length > 0
+//                           ?
+//                           `${pelletData[0].weight} X Pkt (750g) - (£${pelletData[0].price})`
+//                           : 'None'}
+//                     </Text>
+//                     <TouchableOpacity onPress={() => setScrollViewVisible(!isScrollViewVisible)}>
+//                       {isScrollViewVisible ? (
+//                         <AntDesign name="caretup" size={14} color="#555555" />
+//                       ) : (
+//                         <AntDesign name="caretdown" size={14} color="#555555" />
+//                       )}
+//                     </TouchableOpacity>
+//                   </View>
+//                 </View>
+//               </TouchableOpacity>
+//               <View style={{ alignItems: 'center' }}>
+
+//                 {isScrollViewVisible && (
+//                   <View style={{ width: hp('35'), marginTop: 10, paddingTop: 10, borderRadius: 5, }}>
+//                     {/* <ScrollView style={{ height: hp('25%') }}> */}
+//                     {pelletData.map((pellet) => (
+//                       <View style={{ backgroundColor: '#616161', paddingHorizontal: 10, marginBottom: 10, borderRadius: 5, }}>
+//                         <Text style={{ paddingVertical: 5, color: 'white' }} key={pellet.id}
+//                           onPress={() => {
+//                             setSelectedValue(pellet);
+//                             setScrollViewVisible(false);
+//                           }}
+//                         >
+//                           {`${pellet.weight} X Pkt (750g) - (£${pellet.price})`}
+//                         </Text>
+//                       </View>
+//                     ))}
+//                     {/* </ScrollView> */}
+//                   </View>
+//                 )}
+//               </View>
+//             </View>
+
+//             <View style={{
+//               flex: 1,
+//               justifyContent: 'flex-end',
+//               borderRadius: 10
+//             }}>
+
+//               <View style={styles.buttonContainer}>
+//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: hp('35%') }}>
+//                   <TouchableOpacity
+//                     style={styles.button1}
+//                     onPress={() => {
+//                       // Handle booking logic here (including selected pellet)
+//                       setIsModalVisible(false);
+//                     }}
+//                   >
+//                     <Text style={styles.buttonText1}>No</Text>
+//                   </TouchableOpacity>
+//                   <TouchableOpacity
+//                     style={styles.button2}
+//                     onPress={() => handleYesButtonClick()}
+//                   >
+//                     <Text style={styles.buttonText2}>Yes</Text>
+//                   </TouchableOpacity>
+//                 </View>
+//               </View>
+//             </View>
+//           </View>
+
+//         </View>
+//       </Modal>
+
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingBottom: 20,
+//   },
+//   paginationContainer: {
+//     backgroundColor: '#e2e4eb',
+//     justifyContent: 'center',
+//     width: hp('6%'),
+//     height: hp('6%'),
+//     borderRadius: 100,
+//   },
+//   icon: {
+//     backgroundColor: '#e2e4eb',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     width: hp('6%'),
+//     height: hp('6%'),
+//     borderRadius: 100,
+//   },
+//   paginationText: {
+//     textAlign: 'center',
+//     color: '#000',
+//     letterSpacing: -1.8,
+//   },
+
+//   text: {
+//     textAlign: 'center',
+//     padding: hp('1%'),
+//   },
+//   sectionHeader: {
+//     paddingTop: 10,
+//     paddingHorizontal: 15,
+
+//   },
+//   sectionTitle: {
+//     color: 'black',
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     paddingBottom: 2
+//   },
+//   sectionContent: {
+//     paddingVertical: 5,
+//     paddingHorizontal: 15,
+//   },
+//   paragraph: {
+//     marginBottom: 10,
+//     fontSize: 10,
+//     color: '#565656',
+//     height: wp('9%'),
+//   },
+//   dateItem: {
+//     padding: 10,
+//     borderBottomWidth: 8,
+//     borderColor: '#ccc',
+//   },
+//   dateText: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#fff',
+//   },
+//   availabilityText: {
+//     fontSize: 14,
+//     color: '#999',
+//   },
+//   modalContainer: {
+//     flex: 1,
+//     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   modalContent: {
+//     marginHorizontal: 10,
+//     backgroundColor: '#fff',
+//     paddingTop: 10,
+//     // width: hp('42%'),
+//     height: hp('90%'),
+//     //  paddingH:10,
+//     borderRadius: 10,
+//   },
+//   modalTitle: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     marginBottom: 15,
+//   },
+//   modalText: {
+//     marginBottom: 15,
+//   },
+//   modalDateText: {
+//     fontSize: 16,
+//   },
+//   buttonContainer: {
+//     // width: hp('45%'),
+//     // flexDirection: 'row',
+
+//     alignItems: 'center',
+//     // paddingHorizontal: 70,
+//     paddingVertical: 20,
+//     backgroundColor: '#ebebeb',
+//     borderEndEndRadius: 10,
+//     // borderStartEndRadius:10
+//     borderBottomStartRadius: 10
+//   },
+//   button1: {
+//     backgroundColor: '#a0a0a0',
+//     paddingVertical: 8,
+//     alignItems: 'center',
+//     paddingHorizontal: 40,
+//     borderRadius: 5,
+//   },
+//   buttonText1: {
+//     color: '#000',
+//     fontSize: 17,
+//     fontWeight: 'bold'
+//   },
+//   button2: {
+//     backgroundColor: '#4aaf50',
+//     paddingVertical: 8,
+//     alignItems: 'center',
+//     paddingHorizontal: 40,
+//     borderRadius: 5,
+//   },
+//   buttonText2: {
+//     color: '#fff',
+//     fontSize: 17,
+//     fontWeight: 'bold'
+//   },
+//   dateCard: {
+
+//   },
+//   dateText: {
+
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//     color: '#fff',
+//   },
+//   btn: {
+//     // flex:1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     backgroundColor: 'white',
+//     width: hp('18%'),
+//     height: hp('3.5%'),
+//   },
+//   btn2: {
+//     // alignItems: 'center',
+//     paddingHorizontal: 20,
+//     justifyContent: 'center',
+//     backgroundColor: 'white',
+//     width: hp('18%'),
+//     height: hp('3.5%'),
+//   },
+
+//   pellet: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     borderWidth: 1,
+//     width: hp('35'),
+//     paddingHorizontal: 10,
+//     paddingVertical: 5,
+//     alignItems: 'center',
+//     borderRadius: 5,
+//   }
+//   // New styles
+
+// });
+
+
+// export default Bcalender;
+
+
+
+// Bcalender.responsive.js
+
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
+import Swiper from 'react-native-swiper';
+
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Swiper from 'react-native-swiper';
-
-
-
-
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import LinearGradient from "react-native-linear-gradient";
 
 const Bcalender = ({ route }) => {
   const { width } = Dimensions.get('window');
@@ -32,13 +840,11 @@ const Bcalender = ({ route }) => {
   const [index, setIndex] = useState(0);
 
   const handleIndexChanged = async (index, id) => {
-    console.log('value name 12345134', id)
+    setLoading(true);
+    console.log('value name', id)
     setCurrentIndex(index);
-
     console.log('user id:', memberID);
-    // console.log('Current Date:',i
     try {
-      // Perform your post API call here using fetch
       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/check-availability/${itemData.lake_id}/${id}/${currentDate}/${memberID}`, {
         method: 'POST',
         headers: {
@@ -48,10 +854,9 @@ const Bcalender = ({ route }) => {
         }),
       });
       const responseData = await response.json();
-      // console.log('show data zzzzzz', responseData)
+      console.log('show data zzzzzz', responseData)
       setLoading(false)
       setGetDates(responseData);
-      // console.log('flaf data with date :', responseData);
     } catch (error) {
       setLoading(false)
       console.error('Error in API call:', error.message);
@@ -61,7 +866,7 @@ const Bcalender = ({ route }) => {
     ? Object.entries(getdates).map(([date, value]) => ({
       date,
       value: value.split(':')[0],
-      flag: value.split(':')[1], // Split the 'value' string and take the second part
+      flag: value.split(':')[1],
     }))
     : [];
 
@@ -80,14 +885,10 @@ const Bcalender = ({ route }) => {
     return 'th';
   };
   const formattedMonth = (month) => {
-    const date = new Date(`2024-${month}-01`); // Assuming the year and day
-    return date.toLocaleDateString('en-US', { month: 'long' });
+    const date = new Date(`2024-${month}-01`);
+    return date.toLocaleDateString('en-US',{month: 'long' });
   };
   const images = dataa?.map((peg) => peg.peg_image) || [];
-  // const images = dataa ? dataa.map((peg) => peg.peg_image) : [];
-  // const images = dataa && dataa.pegs ? dataa.pegs.map((peg) => peg.peg_image) : [];
-
-
 
   useEffect(() => {
     PegApies()
@@ -96,16 +897,12 @@ const Bcalender = ({ route }) => {
   const PegApies = async () => {
     try {
       const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-pegs/${itemData.lake_id}`);
-      // console.log('test lid', response.data);
-      // console.log('API response:', response.data);
       setDataa(response.data);
-
       handleIndexChanged(currentIndex, response?.data[0]?.id);
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
-  // console.log('peg data',dataa);
 
   const availabilitypostapi = async (selectedDateNow) => {
     try {
@@ -113,7 +910,6 @@ const Bcalender = ({ route }) => {
       formdata.append('peg_id', dataa[currentIndex]?.id || 'N/A');
       formdata.append('lake_id', itemData.lake_id);
       console.log('show booking dataa>>>o>>>>>', formdata, memberID, selectedDateNow)
-
 
       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
         method: 'POST',
@@ -127,30 +923,19 @@ const Bcalender = ({ route }) => {
         Alert.alert("Details", responseData.error.replace(/\n/g, "\n"));
       } else {
         handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
-        setIsModalVisible(true); // Agar error nahi hai toh modal show hoga
+        setIsModalVisible(true);
       }
-
-      // handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
-
-      // setIsModalVisible(true);
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
 
-
   const handleDelete = async (selectedDateNow) => {
-
-    console.log('member id ', memberID)
-    console.log('date ', selectedDateNow)
-    console.log('lake',)
-    console.log('id',)
     try {
       const response = await fetch(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-booking-pegs/${memberID}/${selectedDateNow}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          // You may need to include additional headers like authorization headers if required by the API
         },
       });
       if (!response.ok) {
@@ -159,10 +944,8 @@ const Bcalender = ({ route }) => {
       const data = await response.json();
       console.log('Delete successful:', data);
       handleIndexChanged(currentIndex, dataa[currentIndex]?.id);
-      // Handle the successful response here
     } catch (error) {
       console.error('Error deleting data:', error.message);
-      // Handle errors here
     }
   };
 
@@ -172,21 +955,13 @@ const Bcalender = ({ route }) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          // Include additional headers if required by the API (e.g., authorization)
         },
       });
 
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! Status: ${response.status}`);
-      // }
-
       const data = await response.json();
       console.log('Delete pellet data:', data);
-
-      // Handle the successful response here
     } catch (error) {
       console.error('Error deleting data:', error.message);
-      // Handle errors here
     }
   };
 
@@ -200,7 +975,6 @@ const Bcalender = ({ route }) => {
     }
   };
   const handleYesButtonClick = () => {
-
     let pellet_weight;
     let pellet_price;
     if (selectedValue) {
@@ -214,7 +988,6 @@ const Bcalender = ({ route }) => {
       pellet_price = 'DefaultPrice';
     }
     const data = {
-
       pellet_weight: pellet_weight,
       pellet_price: pellet_price,
     };
@@ -232,7 +1005,6 @@ const Bcalender = ({ route }) => {
         body: formData,
         headers: {
           'Accept': 'application/json',
-          // 'Content-Type': 'multipart/form-data', // You may not need this header
         },
       });
 
@@ -242,7 +1014,6 @@ const Bcalender = ({ route }) => {
 
       const responseData = await response.json();
       console.log('Response data forward:', responseData);
-
 
       setIsModalVisible(false);
       Alert.alert(
@@ -258,30 +1029,34 @@ const Bcalender = ({ route }) => {
       )
 
     } catch (error) {
-      // Handle errors here
       console.error('Error:', error.message);
     }
   };
+
+  const SkeletonRow = () => {
+    return (
+      <View style={styles.skeletonRow}>
+        <ShimmerPlaceholder
+          LinearGradient={LinearGradient}
+          style={styles.skeletonBox1}
+        />
+        <ShimmerPlaceholder
+          LinearGradient={LinearGradient}
+          style={styles.skeletonBox2}
+        />
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flex: 1.5, position: 'relative' }}>
-        {/* <ImageSlider
-          images={images}
-          onEndReached={() => console.log('End reached')}
-          position={currentIndex}
-          onPositionChanged={(index) => {
-            const id = dataa?.[index]?.id ?? null;
-
-            handleIndexChanged(index, id);
-          }}
-        // height={hp('32%')}
-        /> */}
+      <View style={styles.topImageWrap}>
         {dataa.length > 0 && (
           <>
             <Swiper
-              key={currentIndex} // 👈 force re-render when index changes by dot click
+              key={currentIndex}
               loop={false}
-              index={currentIndex} // 👈 controlled index
+              index={currentIndex}
               showsPagination={false}
               onIndexChanged={(index) => {
                 setCurrentIndex(index);
@@ -290,10 +1065,10 @@ const Bcalender = ({ route }) => {
               }}
             >
               {images.map((img, index) => (
-                <View key={index} style={{ width: '100%', height: hp('36%') }}>
+                <View key={index} style={styles.swiperSlide}>
                   <Image
                     source={{ uri: img }}
-                    style={{ width: '100%', height: '80%' }}
+                    style={styles.swiperImage}
                     resizeMode="cover"
                   />
                 </View>
@@ -301,15 +1076,7 @@ const Bcalender = ({ route }) => {
             </Swiper>
 
             {/* custom clickable dots */}
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 10,
-                flexDirection: 'row',
-                alignSelf: 'center',
-                gap: 3,
-              }}
-            >
+            <View style={styles.dotsWrap}>
               {images.map((_, index) => (
                 <TouchableOpacity
                   key={index}
@@ -318,41 +1085,39 @@ const Bcalender = ({ route }) => {
                     setCurrentIndex(index);
                     handleIndexChanged(index, id);
                   }}
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor:
-                      currentIndex === index ? '#1b6001' : '#dcdcdc',
-                  }}
+                  style={[
+                    styles.dot,
+                    currentIndex === index && styles.dotActive
+                  ]}
                 />
               ))}
             </View>
           </>
         )}
 
-        <View style={{ position: 'absolute', top: 10, width: '100%' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15 }}>
+        <View style={styles.topBarAbsolute}>
+          <View style={styles.topBarRow}>
             <TouchableOpacity style={styles.icon} onPress={() => navigation.goBack()}>
-              <AntDesign name="left" size={25} color="black" />
+              <AntDesign name="left" size={s(20)} color="black" />
             </TouchableOpacity>
             <View>
-              <Text style={{ fontSize: 22, color: '#e2e4eb' }}>Choose a peg</Text>
+              <Text style={styles.topBarTitle}>Choose a peg</Text>
             </View>
             <View style={styles.paginationContainer}>
-              <Text style={styles.paginationText}>{`${dataa?.[currentIndex]?.name || 'N/A'} / ${images.length}`}</Text>
+              <Text style={styles.paginationText}  allowFontScaling={false}>{`${dataa?.[currentIndex]?.name || 'N/A'} / ${images.length}`}</Text>
             </View>
           </View>
         </View>
-        <View style={{ position: 'absolute', bottom: 30, left: 0, right: 0, alignItems: 'center' }}>
-          <View style={{ backgroundColor: '#1b6001', width: hp('12%'), borderRadius: 5, height: hp('3%'), justifyContent: 'center' }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>{`Peg No : ${dataa?.[currentIndex]?.name || 'N/A'}  `}</Text>
+        <View style={styles.pegNoWrap}>
+          <View style={styles.pegNoBadge}>
+            <Text style={styles.pegNoText}>{`Peg No : ${dataa?.[currentIndex]?.name || 'N/A'}`}</Text>
           </View>
         </View>
       </View>
-      <View style={{ flex: 4 }}>
+
+      <View style={styles.lowerWrap}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>
+          <Text style={styles.sectionTitle}  allowFontScaling={false}>
             {itemData.name.length > 27 ? (
               <>
                 {itemData.name.substring(0, 26)}
@@ -363,65 +1128,61 @@ const Bcalender = ({ route }) => {
             )}
           </Text>
         </View>
-        <View style={styles.sectionContent}>
-          <Text style={styles.paragraph}>
 
+        <View style={styles.sectionContent}>
+          <Text style={styles.paragraph} numberOfLines={2}  allowFontScaling={false}>
             {dataa?.[currentIndex]?.description}
           </Text>
-          {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, */}
+         
 
-          <View style={{ alignItems: 'center' }}>
-            <Text style={{ color: 'black', fontSize: 22, fontWeight: 'bold' }}>TAP A DATE TO BOOK</Text>
+          <View style={styles.center}>
+            <Text style={styles.ctaTitle}>TAP A DATE TO BOOK</Text>
           </View>
-          <View style={{ alignItems: 'center' }}>
-            <Text style={{ color: '#555555', fontSize: 12 }}>All Booking are for 24 hours - 8 AM to 8 AM</Text>
+          <View style={styles.center}>
+            <Text style={styles.smallNote}  allowFontScaling={false}>All Booking are for 24 hours - 8 AM to 8 AM</Text>
           </View>
+
           <View>
-            <View style={{ flexDirection: 'row', paddingVertical: 10, justifyContent: 'space-between', }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#1b6001' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Available</Text></View>
+            <View style={styles.legendRow}>
+              <View style={styles.legendItem}>
+                <View style={styles.legendColorAvailable}></View>
+                <View><Text style={styles.legendText}  allowFontScaling={false}> Available</Text></View>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: '#959595' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Unavailable</Text></View>
+              <View style={styles.legendItem}>
+                <View style={styles.legendColorUnavailable}></View>
+                <View><Text style={styles.legendText}  allowFontScaling={false}> Unavailable</Text></View>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ width: hp('3%'), height: hp('1.8%'), backgroundColor: 'blueviolet' }}></View>
-                <View><Text style={{ fontSize: 18, color: 'black', letterSpacing: -0.8, }}> Booked</Text></View>
+              <View style={styles.legendItem}>
+                <View style={styles.legendColorBooked}></View>
+                <View><Text style={styles.legendText}  allowFontScaling={false}> Booked</Text></View>
               </View>
             </View>
-            {loading ?
-              <ActivityIndicator size="large" color="black" style={{ top: '100%' }} />
-              :
-              <View style={{ height: hp('48%'), }}>
+
+            {loading ? (
+              <View style={styles.loadingWrap}>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((_, i) => <SkeletonRow key={i} />)}
+              </View>
+            ) : (
+              <View style={styles.flatlistWrap}>
                 {dataForFlatList && dataForFlatList.length > 0 ? (
                   <FlatList
                     data={dataForFlatList}
                     keyExtractor={(item) => `${item.date}-${item.value}`}
+                    contentContainerStyle={{ paddingBottom: 60 }} 
                     renderItem={({ item }) => {
-                      // Extracting day, month, and year from the formatted date
                       const [year, month, day] = item.value.split('-');
                       return (
-                        <View style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          // flexWrap:'wrap',
-                          marginVertical: 5,
-                          paddingVertical: 8.5,
-                          paddingHorizontal: 15,
-                          backgroundColor: item.flag == 1 ? '#1b6001' : item.flag == 2 ? 'blueviolet' : '#959595',
-                          alignItems: 'center'
-                        }}>
-                          <View style={{
-                            flexDirection: 'row'
-                          }}>
-                            <View style={{ flexDirection: 'row' }}>
-                              <Text style={styles.dateText}>{day}</Text>
-                              <Text style={{ fontSize: 10, fontWeight: 'bold', color: 'white', top: 1 }}>{getOrdinalSuffix(day)} </Text>
+                        <View style={[
+                          styles.dateRow,
+                          { backgroundColor: item.flag == 1 ? '#1b6001' : item.flag == 2 ? 'blueviolet' : '#959595' }
+                        ]}>
+                          <View style={styles.dateLeft}>
+                            <View style={styles.dateDayRow}>
+                              <Text style={styles.dateText} allowFontScaling={false}>{day}</Text>
+                              <Text style={styles.daySuffix}allowFontScaling={false}>{getOrdinalSuffix(day)}</Text>
                             </View>
-                            <Text style={styles.dateText}>{formattedMonth(month)}</Text>
-                            <Text style={styles.dateText}> {year}</Text>
+                            <Text style={styles.dateText} allowFontScaling={false}>{formattedMonth(month)}</Text>
+                            <Text style={styles.dateText} allowFontScaling={false}> {year}</Text>
                           </View>
 
                           {item.flag == 1 ? (
@@ -439,7 +1200,6 @@ const Bcalender = ({ route }) => {
                                     {
                                       text: 'Yes',
                                       onPress: () => {
-                                        // Set the selected date here
                                         availabilitypostapi(item.value);
                                         setSelectedDate(item.value);
                                       },
@@ -449,48 +1209,19 @@ const Bcalender = ({ route }) => {
                                 );
                               }}
                             >
-                              <Text style={{ color: 'black' }}>Available</Text>
+                              <Text style={styles.btnText}>Available</Text>
                             </TouchableOpacity>
                           ) : item.flag == 0 ? (
                             <View style={styles.btn}>
                               <View>
-                                <Text style={{ color: 'black' }} >Unavailable</Text>
+                                <Text style={styles.btnText}>Unavailable</Text>
                               </View>
                             </View>
                           ) : (
-                            // item.flag == 2 && (
-                            //   <View style={styles.btn2}>
-                            //     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            //       <Text style={{ color: 'black' }}>Booked</Text>
-                            //       <TouchableOpacity onPress={() => {
-                            //         Alert.alert(
-                            //           'Confirmation',
-                            //           'Are you sure you want to cancel booking',
-                            //           [
-                            //             {
-                            //               text: 'No',
-                            //               style: 'cancel',
-                            //             },
-                            //             {
-                            //               text: 'Yes',
-                            //               onPress: () => {
-                            //                 handleDelete(item.value)
-                            //                 pelletDelete(item.value)
-                            //               },
-                            //             },
-                            //           ],
-                            //           { cancelable: false }
-                            //         );
-                            //       }} >
-                            //         <AntDesign name="delete" size={wp('5%')} color={'black'} />
-                            //       </TouchableOpacity>
-                            //     </View>
-                            //   </View>
-                            // )
                             item.flag == 2 && (
                               <View style={styles.btn2}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                  <Text style={{ color: 'black' }}>Booked</Text>
+                                <View style={styles.bookedRow}>
+                                  <Text style={styles.btnText}>Booked</Text>
                                   {
                                     new Date(item.value) >= new Date(currentDate) ? (
                                       <TouchableOpacity onPress={() => {
@@ -513,10 +1244,10 @@ const Bcalender = ({ route }) => {
                                           { cancelable: false }
                                         );
                                       }} >
-                                        <AntDesign name="delete" size={wp('5%')} color={'black'} />
+                                        <AntDesign name="delete" size={s(18)} color={'black'} />
                                       </TouchableOpacity>
                                     ) : (
-                                      <FontAwesome name="ban" size={wp('5%')} color="black" />
+                                      <FontAwesome name="ban" size={s(18)} color="black" />
                                     )
                                   }
                                 </View>
@@ -525,18 +1256,16 @@ const Bcalender = ({ route }) => {
                           )}
 
                         </View>
-
                       )
                     }}
                   />
                 ) : (
-                  <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: '25%', paddingHorizontal: 20 }}>
-                    <Text style={{ fontSize: 30, color: '#a1a19f', textAlign: 'center' }}>Your two months booking peg has reached</Text>
+                  <View style={styles.emptyWrap}>
+                    <Text style={styles.emptyText}>Your two months booking peg has reached</Text>
                   </View>
                 )}
-
               </View>
-            }
+            )}
           </View>
         </View>
       </View>
@@ -551,76 +1280,63 @@ const Bcalender = ({ route }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
 
-            <View style={{ alignItems: 'center' }}>
-              <FontAwesome name="check-circle" size={100} color="#4aaf50" />
+            <View style={styles.modalIconWrap}>
+              <FontAwesome name="check-circle" size={s(60)} color="#4aaf50" />
             </View>
-            <View style={{ alignItems: 'center', paddingHorizontal: 50 }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center', color: '#000000' }}>
+            <View style={styles.modalTextWrap}>
+              <Text style={styles.modalHeading}>
                 Please confirm if you want to order pellet
-
               </Text>
-              <Text style={{ paddingTop: 10, color: '#555555' }}>We allow only fishery pellet.</Text>
-              <Text style={{ color: '#555555', textAlign: 'center' }}>
-                Would you like to order some here?
-              </Text>
+              <Text style={styles.modalSub}>We allow only fishery pellet.</Text>
+              <Text style={styles.modalSub}>Would you like to order some here?</Text>
             </View>
+
             <View>
               <TouchableOpacity onPress={() => setScrollViewVisible(!isScrollViewVisible)}>
-                <View style={{ alignItems: 'center', paddingTop: 20 }}>
-                  <View style={styles.pellet}  >
-                    <Text style={{ color: 'black' }}>
-                      {selectedValue
-                        ? `${selectedValue.weight} X Pkt (750g) - (£${selectedValue.price})`
-                        : pelletData.length > 0
-                          ?
-                          `${pelletData[0].weight} X Pkt (750g) - (£${pelletData[0].price})`
-                          : 'None'}
-                    </Text>
-                    <TouchableOpacity onPress={() => setScrollViewVisible(!isScrollViewVisible)}>
-                      {isScrollViewVisible ? (
-                        <AntDesign name="caretup" size={14} color="#555555" />
-                      ) : (
-                        <AntDesign name="caretdown" size={14} color="#555555" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
+                <View style={styles.pelletWrap}>
+                  <Text style={styles.pelletText}  allowFontScaling={false}>
+                    {selectedValue
+                      ? `${selectedValue.weight} X Pkt (750g) - (£${selectedValue.price})`
+                      : pelletData.length > 0
+                        ? `${pelletData[0].weight} X Pkt (750g) - (£${pelletData[0].price})`
+                        : 'None'}
+                  </Text>
+                  <TouchableOpacity onPress={() => setScrollViewVisible(!isScrollViewVisible)}>
+                    {isScrollViewVisible ? (
+                      <AntDesign name="caretup" size={s(14)} color="#555555" />
+                    ) : (
+                      <AntDesign name="caretdown" size={s(14)} color="#555555" />
+                    )}
+                  </TouchableOpacity>
                 </View>
               </TouchableOpacity>
-              <View style={{ alignItems: 'center' }}>
-
+              <View style={styles.center}>
                 {isScrollViewVisible && (
-                  <View style={{ width: hp('35'), marginTop: 10, paddingTop: 10, borderRadius: 5, }}>
-                    {/* <ScrollView style={{ height: hp('25%') }}> */}
+                  <View style={styles.pelletListWrap}>
                     {pelletData.map((pellet) => (
-                      <View style={{ backgroundColor: '#616161', paddingHorizontal: 10, marginBottom: 10, borderRadius: 5, }}>
-                        <Text style={{ paddingVertical: 5, color: 'white' }} key={pellet.id}
+                      <View style={styles.pelletListItem} key={pellet.id}>
+                        <Text style={styles.pelletListText}
                           onPress={() => {
                             setSelectedValue(pellet);
                             setScrollViewVisible(false);
                           }}
+                           allowFontScaling={false}
                         >
                           {`${pellet.weight} X Pkt (750g) - (£${pellet.price})`}
                         </Text>
                       </View>
                     ))}
-                    {/* </ScrollView> */}
                   </View>
                 )}
               </View>
             </View>
 
-            <View style={{
-              flex: 1,
-              justifyContent: 'flex-end',
-              borderRadius: 10
-            }}>
-
+            <View style={styles.modalBottomFlex}>
               <View style={styles.buttonContainer}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: hp('35%') }}>
+                <View style={styles.modalButtonsRow}>
                   <TouchableOpacity
                     style={styles.button1}
                     onPress={() => {
-                      // Handle booking logic here (including selected pellet)
                       setIsModalVisible(false);
                     }}
                   >
@@ -635,8 +1351,8 @@ const Bcalender = ({ route }) => {
                 </View>
               </View>
             </View>
-          </View>
 
+          </View>
         </View>
       </Modal>
 
@@ -644,173 +1360,426 @@ const Bcalender = ({ route }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 20,
+    paddingBottom: vs(20),
   },
-  paginationContainer: {
-    backgroundColor: '#e2e4eb',
-    justifyContent: 'center',
-    width: hp('6%'),
-    height: hp('6%'),
-    borderRadius: 100,
+
+  topImageWrap: {
+    flex: 1.5,
+    position: 'relative',
   },
+
+  swiperSlide: {
+    width: '100%',
+    height: vs(260), // roughly same as previous hp('36%')
+  },
+
+  swiperImage: {
+    width: '100%',
+    height: vs(200),
+    // borderRadius: s(5),
+  },
+
+  dotsWrap: {
+    position: 'absolute',
+    bottom: vs(10),
+    flexDirection: 'row',
+    alignSelf: 'center',
+    gap: s(3),
+  },
+
+  dot: {
+    width: s(8),
+    height: s(8),
+    borderRadius: s(5),
+    backgroundColor: '#dcdcdc',
+    marginHorizontal: s(1),
+  },
+
+  dotActive: {
+    backgroundColor: '#1b6001',
+  },
+
+  topBarAbsolute: {
+    position: 'absolute',
+    top: vs(10),
+    width: '100%',
+  },
+
+  topBarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: s(15),
+  },
+
   icon: {
     backgroundColor: '#e2e4eb',
     justifyContent: 'center',
     alignItems: 'center',
-    width: hp('6%'),
-    height: hp('6%'),
-    borderRadius: 100,
+    width: s(40),
+    height: s(40),
+    borderRadius: s(100),
   },
+
+  topBarTitle: {
+    fontSize: s(18),
+    color: '#e2e4eb',
+  },
+
+  paginationContainer: {
+    backgroundColor: '#e2e4eb',
+    justifyContent: 'center',
+    width: s(45),
+    height: s(45),
+    borderRadius: s(100),
+  },
+
   paginationText: {
     textAlign: 'center',
     color: '#000',
-    letterSpacing: -1.8,
+    letterSpacing: -1.2,
+    fontSize: s(12),
   },
 
-  text: {
+  pegNoWrap: {
+    position: 'absolute',
+    bottom: vs(28),
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+
+  pegNoBadge: {
+    backgroundColor: '#1b6001',
+    borderRadius: s(5),
+    paddingVertical: vs(4),
+    justifyContent: 'center',
+    paddingHorizontal: s(15),
+  },
+
+  pegNoText: {
+    color: 'white',
+    fontSize: s(10),
+    fontWeight: 'bold',
     textAlign: 'center',
-    padding: hp('1%'),
   },
-  sectionHeader: {
-    paddingTop: 10,
-    paddingHorizontal: 15,
 
+  lowerWrap: {
+    flex: 4,
   },
+
+  sectionHeader: {
+    paddingTop: vs(10),
+    paddingHorizontal: s(15),
+  },
+
   sectionTitle: {
     color: 'black',
-    fontSize: 24,
+    fontSize: s(20),
     fontWeight: 'bold',
-    paddingBottom: 2
+    paddingBottom: vs(2),
   },
+
   sectionContent: {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingVertical: vs(5),
+    paddingHorizontal: s(15),
   },
+
   paragraph: {
-    marginBottom: 10,
-    fontSize: 10,
+    // marginBottom: vs(5),
+    fontSize: s(10),
     color: '#565656',
-    height: wp('9%'),
+    height: vs(28),
   },
-  dateItem: {
-    padding: 10,
-    borderBottomWidth: 8,
-    borderColor: '#ccc',
+
+  center: {
+    alignItems: 'center',
   },
-  dateText: {
-    fontSize: 16,
+
+  ctaTitle: {
+    color: 'black',
+    fontSize: s(18),
     fontWeight: 'bold',
-    color: '#fff',
-  },
-  availabilityText: {
-    fontSize: 14,
-    color: '#999',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    marginHorizontal: 10,
-    backgroundColor: '#fff',
-    paddingTop: 10,
-    // width: hp('42%'),
-    height: hp('90%'),
-    //  paddingH:10,
-    borderRadius: 10,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  modalText: {
-    marginBottom: 15,
-  },
-  modalDateText: {
-    fontSize: 16,
-  },
-  buttonContainer: {
-    // width: hp('45%'),
-    // flexDirection: 'row',
-
-    alignItems: 'center',
-    // paddingHorizontal: 70,
-    paddingVertical: 20,
-    backgroundColor: '#ebebeb',
-    borderEndEndRadius: 10,
-    // borderStartEndRadius:10
-    borderBottomStartRadius: 10
-  },
-  button1: {
-    backgroundColor: '#a0a0a0',
-    paddingVertical: 8,
-    alignItems: 'center',
-    paddingHorizontal: 40,
-    borderRadius: 5,
-  },
-  buttonText1: {
-    color: '#000',
-    fontSize: 17,
-    fontWeight: 'bold'
-  },
-  button2: {
-    backgroundColor: '#4aaf50',
-    paddingVertical: 8,
-    alignItems: 'center',
-    paddingHorizontal: 40,
-    borderRadius: 5,
-  },
-  buttonText2: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold'
-  },
-  dateCard: {
-
-  },
-  dateText: {
-
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#fff',
-  },
-  btn: {
-    // flex:1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    width: hp('18%'),
-    height: hp('3.5%'),
-  },
-  btn2: {
-    // alignItems: 'center',
-    paddingHorizontal: 20,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    width: hp('18%'),
-    height: hp('3.5%'),
   },
 
-  pellet: {
+  smallNote: {
+    color: '#555555',
+    fontSize: s(11),
+  },
+
+  legendRow: {
+    flexDirection: 'row',
+    paddingVertical: vs(10),
+    justifyContent: 'space-between',
+  },
+
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  legendColorAvailable: {
+    width: s(14),
+    height: s(10),
+    backgroundColor: '#1b6001',
+    marginRight: s(6),
+  },
+
+  legendColorUnavailable: {
+    width: s(14),
+    height: s(10),
+    backgroundColor: '#959595',
+    marginRight: s(6),
+  },
+
+  legendColorBooked: {
+    width: s(14),
+    height: s(10),
+    backgroundColor: 'blueviolet',
+    marginRight: s(6),
+  },
+
+  legendText: {
+    fontSize: s(16),
+    color: 'black',
+    letterSpacing: -0.4,
+  },
+
+  loadingWrap: {
+    height: vs(360), // similar to hp('48%')
+    paddingTop: vs(10),
+  },
+
+  flatlistWrap: {
+    height: vs(360),
+  },
+
+  dateRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    width: hp('35'),
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    marginVertical: vs(4),
+    paddingVertical: vs(9),
+    paddingHorizontal: s(15),
     alignItems: 'center',
-    borderRadius: 5,
-  }
-  // New styles
+    // borderRadius: s(6),
+  },
+
+  dateLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  dateDayRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: s(8),
+  },
+
+  dateText: {
+    fontSize: s(14),
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+
+  daySuffix: {
+    fontSize: s(10),
+    fontWeight: 'bold',
+    color: 'white',
+    top: vs(1),
+  },
+
+  btn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: s(120),
+    height: vs(25),
+  },
+
+  btn2: {
+    paddingHorizontal: s(12),
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: s(120),
+    height: vs(25),
+  },
+
+  btnText: {
+    color: 'black',
+    fontSize: s(12),
+
+  },
+
+  bookedRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+
+  emptyWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: '25%',
+    paddingHorizontal: s(20),
+  },
+
+  emptyText: {
+    fontSize: s(18),
+    color: '#a1a19f',
+    textAlign: 'center',
+  },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContent: {
+    marginHorizontal: s(10),
+    backgroundColor: '#fff',
+    paddingTop: vs(10),
+    width: s(340),
+    height: vs(600),
+    borderRadius: s(10),
+  },
+
+  modalIconWrap: {
+    alignItems: 'center',
+  },
+
+  modalTextWrap: {
+    alignItems: 'center',
+    paddingHorizontal: s(25),
+  },
+
+  modalHeading: {
+    fontSize: s(16),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#000',
+  },
+
+  modalSub: {
+    paddingTop: vs(8),
+    color: '#555555',
+    textAlign: 'center',
+  },
+
+  pelletWrap: {
+    alignItems: 'center',
+    marginTop: vs(20),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderWidth: s(1),
+    width: s(260),
+    paddingHorizontal: s(10),
+    paddingVertical: vs(8),
+    alignItems: 'center',
+    borderRadius: s(5),
+    alignSelf: 'center',
+  },
+
+  pelletText: {
+    color: 'black',
+    fontSize: s(13),
+  },
+
+  pelletListWrap: {
+    width: s(260),
+    marginTop: vs(10),
+    paddingTop: vs(10),
+    justifyContent:'center',
+    borderRadius: s(5),
+  },
+
+  pelletListItem: {
+    backgroundColor: '#616161',
+    paddingHorizontal: s(10),
+    marginBottom: vs(10),
+    borderRadius: s(5),
+  },
+
+  pelletListText: {
+    paddingVertical: vs(6),
+    color: 'white',
+    fontSize: s(13),
+  },
+
+  modalBottomFlex: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    borderRadius: s(10),
+  },
+
+  buttonContainer: {
+    alignItems: 'center',
+    paddingVertical: vs(12),
+    backgroundColor: '#ebebeb',
+    borderBottomStartRadius: s(10),
+  },
+
+  modalButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: s(220),
+  },
+
+  button1: {
+    backgroundColor: '#a0a0a0',
+    paddingVertical: vs(8),
+    paddingHorizontal: s(26),
+    borderRadius: s(5),
+  },
+
+  buttonText1: {
+    color: '#000',
+    fontSize: s(15),
+    fontWeight: 'bold',
+  },
+
+  button2: {
+    backgroundColor: '#4aaf50',
+    paddingVertical: vs(8),
+    paddingHorizontal: s(26),
+    borderRadius: s(5),
+  },
+
+  buttonText2: {
+    color: '#fff',
+    fontSize: s(15),
+    fontWeight: 'bold',
+  },
+
+  // skeleton styles
+  skeletonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: vs(6),
+    paddingVertical: vs(10),
+    paddingHorizontal: s(15),
+    backgroundColor: '#D9D9D9',
+    // borderRadius: s(6),
+  },
+
+  skeletonBox1: {
+    width: s(140),
+    height: vs(18),
+    borderRadius: s(4),
+  },
+
+  skeletonBox2: {
+    width: s(100),
+    height: vs(18),
+    borderRadius: s(4),
+  },
 
 });
-
 
 export default Bcalender;

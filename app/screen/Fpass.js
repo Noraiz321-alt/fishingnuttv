@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import image from '../Utilis/image';
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
 import Code_field from './Code_field';
 
 
@@ -66,94 +67,132 @@ export default function Fpass({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground style={{ flex: 1 }} source={image.logo}>
-                <View style={{ flex: 1 }}>
-
-                    <View
-                        style={{
-                            width: '100%',
-                            height: 240,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Image
-                            source={image.backimg}
-                            resizeMode='contain'
-                            style={{
-                                width: '90%',
-                                height: 60,
-                            }}
-                        />
-                    </View>
-
-                    <View
-                        style={{
-                            flex: 1,
-                            width: '100%',
-                            backgroundColor: '#b9dfab',
-                            borderTopRightRadius: 35,
-                            borderTopLeftRadius: 35,
-                            // justifyContent: 'space-around',
-                            alignItems: 'center'
-                        }}
-                    >
-                        <View style={styles.textuser}>
-                            <TextInput
-                                placeholder='Send Email'
-                                keyboardType={'email-address'}
-                                placeholderTextColor={'#1b6001'}
-                                style={styles.textinput}
-                                onChangeText={pre => setEmail(pre)}
-                            />
-                        </View>
-                        <TouchableOpacity onPress={Eforget} style={styles.Actbtnsignup}>
-                            {loading ?
-                                <ActivityIndicator size="large" color="#1b6001" />
-                                :
-                                <Text style={{ color: '#1b6001', fontSize: 25, fontWeight: '500' }}>Send</Text>
-                            }
-                        </TouchableOpacity>
-
-
-
-                        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                            <Text style={{ marginTop: 50, fontWeight: '700', fontSize: 16, color: '#1b6001' }}>Login</Text>
-                        </TouchableOpacity>
-                    </View>
+        <SafeAreaView style={styles.safe}>
+          <ImageBackground style={styles.bg} source={image.logo}>
+            <View style={styles.container}>
+      
+              {/* TOP LOGO */}
+              <View style={styles.topBox}>
+                <Image
+                  source={image.backimg}
+                  resizeMode='contain'
+                  style={styles.logo}
+                />
+              </View>
+      
+              {/* WHITE CARD */}
+              <View style={styles.whiteCard}>
+      
+                <View style={styles.textuser}>
+                  <TextInput
+                    placeholder="Send Email"
+                    keyboardType="email-address"
+                    placeholderTextColor="#1b6001"
+                    style={styles.textinput}
+                    onChangeText={pre => setEmail(pre)}
+                  />
                 </View>
-            </ImageBackground>
+      
+                {/* SEND BUTTON */}
+                <TouchableOpacity onPress={Eforget} style={styles.Actbtnsignup}>
+                  {loading ? (
+                    <ActivityIndicator size="large" color="#1b6001" />
+                  ) : (
+                    <Text style={styles.sendText}>Send</Text>
+                  )}
+                </TouchableOpacity>
+      
+                {/* LOGIN BUTTON */}
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                  <Text style={styles.loginText}>Login</Text>
+                </TouchableOpacity>
+      
+              </View>
+            </View>
+          </ImageBackground>
         </SafeAreaView>
-    );
+      );
 }
 
-const styles = StyleSheet.create({
-    textinput: {
-        color: 'black',
-        // height: '100%',
-        width: '100%',
-        alignSelf: 'center',
-        borderColor: 'white',
-        paddingLeft: 10,
-        fontSize: 16,
+const styles = ScaledSheet.create({
+    safe: {
+      flex: 1,
     },
+  
+    bg: {
+      flex: 1,
+    },
+  
+    container: {
+      flex: 1,
+    },
+  
+    /* TOP LOGO BOX */
+    topBox: {
+      width: '100%',
+      height: hp('30%'),
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  
+    logo: {
+      width: wp('80%'),
+      height: hp('12%'),
+    },
+  
+    /* WHITE CARD */
+    whiteCard: {
+      flex: 1,
+      width: '100%',
+      backgroundColor: '#b9dfab',
+      borderTopRightRadius: '35@ms',
+      borderTopLeftRadius: '35@ms',
+      alignItems: 'center',
+      paddingTop: '40@vs',
+    },
+  
+    /* INPUT BOX */
     textuser: {
-        flexDirection: 'row',
-        width: wp(85),
-        borderBottomWidth: 2,
-        borderColor: '#1b6001',
-        height: hp(7),
-        marginVertical: 30,
+      flexDirection: 'row',
+      width: wp('85%'),
+      borderBottomWidth: 2,
+      borderColor: '#1b6001',
+      height: hp('7%'),
+      marginVertical: '30@vs',
     },
+  
+    textinput: {
+      width: '100%',
+      height: '100%',
+      paddingLeft: '10@s',
+      fontSize: '16@ms',
+      color: 'black',
+    },
+  
+    /* SEND BUTTON */
     Actbtnsignup: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 3,
-        borderColor: '#1b6001',
-        width: wp(70),
-        height: hp(8),
-        borderRadius: 20,
-        marginVertical: 40
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 3,
+      borderColor: '#1b6001',
+      width: wp('70%'),
+      height: hp('8%'),
+      borderRadius: '20@ms',
+      marginVertical: '40@vs',
     },
-});
+  
+    sendText: {
+      color: '#1b6001',
+      fontSize: '25@ms',
+      fontWeight: '500',
+    },
+  
+    /* LOGIN BUTTON */
+    loginText: {
+      marginTop: '20@vs',
+      fontSize: '16@ms',
+      fontWeight: '700',
+      color: '#1b6001',
+    },
+  });
+  

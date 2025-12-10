@@ -73,7 +73,7 @@ export default function Upcoming({ data, memberID }) {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Pellet Booking Details</Text>
+                            <Text style={styles.modalTitle} allowFontScaling={false}>Pellet Booking Details</Text>
                             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal()}>
                                 <View style={styles.closeButtonInner}>
                                     <AntDesign name="close" size={s(25)} color="black" />
@@ -83,15 +83,15 @@ export default function Upcoming({ data, memberID }) {
                         {selectedItem ? (
                             <>
                                 <View style={styles.modalDetails}>
-                                    <Text style={styles.modalText}>Lake Name: {selectedItem.lake_name}</Text>
+                                    <Text style={styles.modalText} allowFontScaling={false}>Lake Name: {selectedItem.lake_name}</Text>
                                     <View>
                                         <Text style={styles.modalText}>Peg No: {selectedItem.peg_name}</Text>
                                         <Text style={styles.modalText}>{selectedItem.booking_date}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.pelletDetails}>
-                                    <Text style={styles.pelletText}>Weight: {selectedItem.pellet_weight}Kg</Text>
-                                    <Text style={styles.pelletText}>Price: (£{selectedItem.pellet_price})</Text>
+                                    <Text style={styles.pelletText} allowFontScaling={false}>Weight: {selectedItem.pellet_weight}Kg</Text>
+                                    <Text style={styles.pelletText} allowFontScaling={false}>Price: (£{selectedItem.pellet_price})</Text>
                                 </View>
                             </>
                         ) : (
@@ -129,7 +129,7 @@ const styles = ScaledSheet.create({
     },
     imageContainer: {
         width: '90@s',
-        height: '73@vs', // Fixed height for the image container
+        height: '73@vs', // Fixed height for the image containers
         backgroundColor: '#f8f8ff',
         overflow: 'hidden',
         borderRadius: '10@s',

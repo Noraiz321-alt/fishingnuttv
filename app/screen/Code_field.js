@@ -6,6 +6,8 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen'
 import { useNavigation } from '@react-navigation/native'
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+
 import Update_password from './Update_password';
 
 export default function Code_field({ route }) {
@@ -152,38 +154,62 @@ export default function Code_field({ route }) {
     );
 };
 
-const styles = StyleSheet.create({
-    root: { flex: 1, padding: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#b9dfab' },
-    subTitle: { fontSize: 16, marginBottom: 20, marginTop: 30, color: '#1b6001', alignItems: 'center' },
-    codeFieldRoot: { marginTop: 30, marginBottom: 60 },
-    cell: {
-        width: 40,
-        height: 40,
-        lineHeight: 38,
-        fontSize: 24,
-        borderWidth: 2,
-        borderColor: '#1b6001',
-        color: '#1b6001',
-        alignItems: 'center',
-        margin: 5,
-    },
-    focusCell: {
-        borderColor: '#1b6001',
-    },
-    cellText: {
-        fontSize: 24,
-        color: '#1b6001',
-    },
-    Actbtnsignup: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 3,
-        borderColor: '#1b6001',
-        width: wp(40),
-        height: hp(6),
-        borderRadius: 20,
-        // marginVertical: 40
+const styles = ScaledSheet.create({
+  
+  root: {
+    flex: 1,
+    padding: '20@s',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#b9dfab',
+  },
 
-    },
+  subTitle: {
+    fontSize: '16@s',
+    marginBottom: '20@vs',
+    marginTop: '30@vs',
+    color: '#1b6001',
+    textAlign: 'center',
+    // width: '90%',
+  },
+
+  codeFieldRoot: {
+    marginTop: '30@vs',
+    marginBottom: '60@vs',
+  },
+
+  cell: {
+    width: '45@s',
+    height: '45@s',
+    borderWidth: '2@s',
+    borderColor: '#1b6001',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '6@s',
+    borderRadius: '8@s',
+  },
+
+  focusCell: {
+    borderColor: '#1b6001',
+  },
+
+  cellText: {
+    fontSize: '20@s',
+    color: '#1b6001',
+    textAlign: 'center',
+  },
+
+  Actbtnsignup: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: '3@s',
+    borderColor: '#1b6001',
+    width: '180@s',
+    height: '50@vs',
+    borderRadius: '20@s',
+    marginTop: '20@vs',
+  },
+
 });
+
 

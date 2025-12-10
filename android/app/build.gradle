@@ -51,11 +51,10 @@ android {
         applicationId "com.fishingnuttv"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "3.8"
+        versionCode 21
+        versionName "4.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
-
     signingConfigs {
         debug {
             storeFile file('debug.keystore')

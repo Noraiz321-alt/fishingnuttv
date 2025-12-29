@@ -1,68 +1,95 @@
+// Qrscanner.js
 
-import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { useEffect } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity,
-    Linking,
- 
-} from 'react-native';
 import React, { useState } from 'react';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    TouchableOpacity, 
+    Linking, 
+    Alert,
+    Platform 
+} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useEffect } from 'react';
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+
+
+// Custom hook for camera permission
+const useCameraPermission = () => {
+    const [granted, setGranted] = useState(false);
+
+    useEffect(() => {
+        const checkPermission = async () => {
+            try {
+                let result;
+                if (Platform.OS === 'ios') {
+                    result = await request(PERMISSIONS.IOS.CAMERA);
+                } else {
+                    result = await request(PERMISSIONS.ANDROID.CAMERA);
+                }
+
+                if (result === RESULTS.GRANTED) {
+                    setGranted(true);
+                } else if (result === RESULTS.BLOCKED) {
+                    Alert.alert(
+                        "Camera Permission",
+                        "Please enable camera permission in settings."
+                    );
+                }
+            } catch (error) {
+                console.error("Permission error:", error);
+            }
+        };
+
+        checkPermission();
+    }, []);
+
+    return granted;
+};
 
 export default function Qrscanner() {
     const navigation = useNavigation();
     const [scanStatus, setScanStatus] = useState('Check Availability');
+    const cameraGranted = useCameraPermission();
 
-    const onRead = (e) => {
-        console.log(e.data);
-        const domain = e.data.split('/')[2];
-        setScanStatus(domain);
-        Linking.openURL(e.data);
+    const handleQRCode = (data) => {
+        try {
+            const url = new URL(data); // Validate URL
+            setScanStatus(url.hostname);
+            Linking.openURL(data);
+        } catch (err) {
+            Alert.alert("Invalid QR Code", "Scanned code is not a valid URL.");
+        }
     };
-    useEffect(() => {
-        const checkCameraPermission = async () => {
-          try {
-            let result;
-            if (Platform.OS === 'ios') {
-              result = await request(PERMISSIONS.IOS.CAMERA);
-              console.log('iOS Camera Permission:', result);
-            } else {
-              return; // Skip Android if not needed
-            }
-      
-            if (result === RESULTS.GRANTED) {
-              console.log('Camera access granted on iOS');
-            } else if (result === RESULTS.BLOCKED) {
-              console.warn('Camera permission blocked. Guide user to settings.');
-            }
-          } catch (error) {
-            console.error('iOS Permission Error:', error);
-          }
-        };
-        checkCameraPermission();
-      }, []);
-    
+
+    if (!cameraGranted) {
+        return (
+            <SafeAreaView style={styles.safeContainer}>
+                <Text style={styles.permissionText}>
+                    Camera permission is required to scan QR codes.
+                </Text>
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.safeContainer}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity style={styles.nav} onPress={() => navigation.goBack()}>
+                <TouchableOpacity 
+                    style={[styles.circleButton, { backgroundColor: '#b9dfab' }]} 
+                    onPress={() => navigation.goBack()}
+                >
                     <AntDesign name="left" size={wp('5%')} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.statusText}>{scanStatus}</Text>
-                <View style={styles.nav2} >
-                    {/* <AntDesign name="left" size={wp('5%')} color="black" /> */}
-                </View>
+                <View style={[styles.circleButton, { backgroundColor: '#fff' }]} />
             </View>
 
             {/* Info Text */}
@@ -75,92 +102,93 @@ export default function Qrscanner() {
             {/* QR Scanner */}
             <View style={styles.scannerContainer}>
                 <QRCodeScanner
-                    onRead={onRead}
+                    onRead={(e) => handleQRCode(e.data)}
                     reactivate={true}
-                    reactivateTimeout={500}
+                    reactivateTimeout={1000} // 1 second to prevent double scan
                     showMarker={true}
                     markerStyle={styles.marker}
                     cameraStyle={styles.camera}
-
                 />
             </View>
-             <View>
-                    <Text style={styles.bottomText}>Peg Scanner</Text>
-                </View>
 
+            <Text style={styles.bottomText} allowFontScaling={false}>Peg Scanner</Text>
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({
+// Reusable styles
+const styles = ScaledSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: '#fff',
     },
+
     header: {
-        marginTop: hp('2%'),
-        paddingHorizontal: wp('5%'),
+        marginTop: '20@vs',
+        paddingHorizontal: '15@s',
         flexDirection: 'row',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 10,
     },
-    nav: {
-        width: wp('12%'),
-        height: wp('12%'),
-        borderRadius: wp('6%'),
-        backgroundColor: '#b9dfab',
+
+    circleButton: {
+        width: '45@s',
+        height: '45@s',
+        borderRadius: '25@s',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginRight: wp('3%'),
     },
-    nav2: {
-        width: wp('12%'),
-        height: wp('12%'),
-        borderRadius: wp('6%'),
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        // marginRight: wp('3%'),
-    },
+
     statusText: {
         fontWeight: 'bold',
-        fontSize: wp('4.2%'),
+        fontSize: '16@s',
         color: 'black',
     },
+
     infoContainer: {
-        marginTop: hp('2%'),
-        paddingHorizontal: wp('5%'),
+        marginTop: '20@vs',
+        paddingHorizontal: '20@s',
     },
+
     infoText: {
         color: 'black',
         textAlign: 'center',
-        fontSize: wp('4%'),
+        fontSize: '15@s',
     },
+
     scannerContainer: {
-        height: hp('60%'),
-        width: wp('100%'),
+        height: '400@vs',
+        width: '100%',
         alignSelf: 'center',
-        marginTop: hp('3%'),
+        marginTop: '25@vs',
     },
+
     camera: {
         height: '100%',
         width: '100%',
-        // borderRadius: 15,
         overflow: 'hidden',
     },
+
     marker: {
         borderColor: '#FFF',
-        borderRadius: 10,
+        borderRadius: '10@s',
+        borderWidth: '2@s',
     },
+
     bottomText: {
-        //   marginTop: 20,
-        fontSize: 18,
-        //   color: 'black',
-        paddingTop: 40,
+        fontSize: '18@s',
+        paddingTop: '35@vs',
         fontWeight: 'bold',
         textAlign: 'center',
+        color: 'black',
+    },
+
+    permissionText: {
+        fontSize: '15@s',
+        textAlign: 'center',
+        marginTop: '250@vs',
+        color: 'black',
     },
 });
-
 

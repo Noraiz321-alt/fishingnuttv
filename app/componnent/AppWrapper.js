@@ -37,6 +37,7 @@ const AppWrapper = () => {
     try {
       const res = await fetch('https://www.fishingnuttv.com/fntv-custom/signupWizard/update_app_alert.php');
       const data = await res.json();
+      console.log('Version check response:', data);
 
       let latestVersion = platform === 'android'
         ? data.latest_version_android

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet, Text, View, SafeAreaView, TouchableOpacity,
@@ -14,11 +13,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import StoreProductsScreen from '../screen/StoreProductsScreen';
 
 import { launchImageLibrary } from 'react-native-image-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 import apipost from '../api/GetApi';
 import GelleryPic from '../screen/GelleryPic';
 import Qrscanner from '../componnent/Qrscanner';
@@ -26,6 +24,7 @@ import Video from '../screen/Video';
 import View_Post from '../screen/View_Post';
 import LeaguesTabs from '../screen/LeaguesTabs';
 
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 const DraweContant = (props) => {
   const navigation = useNavigation();
   const { route } = props;
@@ -37,6 +36,7 @@ const DraweContant = (props) => {
   const [profileImage, setProfileImage] = useState(Data.prof_image || '');
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [shopUrl, setShopUrl] = useState(null);
 
   const [pageSwitches, setPageSwitches] = useState({
     GelleryPic: false,
@@ -70,6 +70,7 @@ const DraweContant = (props) => {
         View_Post: visibleItems.includes('View_Post'),
         LeaguesTabs: visibleItems.includes('LeaguesTabs'),
         Video: visibleItems.includes('Video'),
+        'Bait Store': visibleItems.includes('Bait Store'), // ✅ Add this line
       };
 
       setPageSwitches(updatedSwitches);
@@ -113,11 +114,14 @@ const DraweContant = (props) => {
       if (isDrawerOpen) {
         console.log('📂 Drawer open detected (via state listener)');
         fetchSidebarVisibility();
+        fetchShopUrl();
+
       }
     });
 
     return unsubscribe;
   }, [props.navigation]);
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -125,11 +129,29 @@ const DraweContant = (props) => {
       const fetchAndPost = async () => {
         await getUserProfile();
         await fetchSidebarVisibility();
+        await fetchShopUrl();
         // await postSidebarVisibility(memberID);
       };
       fetchAndPost();
     }, [])
   );
+
+
+
+  const fetchShopUrl = async () => {
+    try {
+      const response = await fetch('https://www.fishingnuttv.com/fntv-custom/signupWizard/bait_store_api.php');
+      const data = await response.json();
+      console.log('show url data>>>>>', data)
+      if (data.status === 'success') {
+        setShopUrl(data.shop_url); // API se URL mil gaya
+      } else {
+        console.error('API returned error');
+      }
+    } catch (err) {
+      console.error('Network/API Error:', err);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -210,10 +232,16 @@ const DraweContant = (props) => {
           <View style={styles.imgWrapper}>
             <View style={styles.mainImg}>
               {loading ? (
-                <ActivityIndicator size="large" color="#1b6001" />
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator size="large" color="#1b6001" />
+                </View>
               ) : (
                 <TouchableOpacity onPress={() => navigation.navigate('Zoom_image', { itemData })}>
-                  <Image source={{ uri: profileImage }} style={styles.Img} resizeMode="cover" />
+                  <Image
+                    source={{ uri: profileImage }}
+                    style={styles.Img}
+                    resizeMode="cover"
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -223,27 +251,31 @@ const DraweContant = (props) => {
           </View>
         </View>
 
-        <View style={{ paddingLeft: 15 }}>
+        <View style={{ paddingLeft: s(15),paddingBottom:s(25), }}>
           {renderItem('Your Catches', <MaterialIcons name="photo-library" size={33} color="#1b6001" />, 'GelleryPic', 'GelleryPic')}
           {renderItem('Peg Scanner', <MaterialIcons name="document-scanner" size={33} color="#1b6001" />, Qrscanner, 'Qrscanner')}
           {renderItem('View Posts', <MaterialIcons name="newspaper" size={33} color="#1b6001" />, View_Post, 'View_Post')}
           {renderItem('Leagues', <Entypo name="trophy" size={33} color="#1b6001" />, LeaguesTabs, 'LeaguesTabs')}
           {renderItem('Videos', <MaterialCommunityIcons name="message-video" size={33} color="#1b6001" />, Video, 'Video')}
 
-          <TouchableOpacity
-            style={styles.item1}
-            onPress={() =>
-              navigation.navigate('LeagueWebView', {
-                url: 'https://reebic.com/shop/',
-              })
-            }
-          >
-            <FontAwesome name="shopping-basket" size={25} color="#1b6001" />
-            <Text style={styles.text2}>Bait Store →</Text>
-          </TouchableOpacity>
+
+          {pageSwitches['Bait Store'] && shopUrl && (
+            <TouchableOpacity
+              style={styles.item1}
+              onPress={() =>
+                navigation.navigate('LeagueWebView', {
+                  url: shopUrl,
+                })
+              }
+            >
+              <FontAwesome name="shopping-basket" size={25} color="#1b6001" />
+              <Text style={styles.text2}>Bait Store →</Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity style={styles.item1} onPress={() => setModalVisible(true)}>
             <AntDesign name="delete" size={25} color="#DC143C" />
-            <Text style={styles.text1}>Close My Account</Text>
+            <Text style={styles.text1} allowFontScaling={false}>Close My Account</Text>
           </TouchableOpacity>
         </View>
       </DrawerContentScrollView>
@@ -269,13 +301,12 @@ const DraweContant = (props) => {
         </View>
       </Modal>
     </SafeAreaView>
-
   );
 };
 
 export default DraweContant;
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#b9dfab',
@@ -284,95 +315,92 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: vs(10),
   },
-
   imgWrapper: {
     flex: 1,
     alignItems: 'center',
-    position: 'relative', // Important!
-    width: wp(35),
+    position: 'relative',
+    width: s(140), // scaled
     aspectRatio: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
-
   mainImg: {
     width: '100%',
     height: '100%',
-    borderRadius: wp(20),
-    borderWidth: 4,
+    borderRadius: s(70),
+    borderWidth: s(4),
     borderColor: '#1b6001',
-    overflow: 'hidden', // ✅ Keep this
+    overflow: 'hidden',
   },
-
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   Img: {
     width: '100%',
     height: '100%',
   },
-
   cameraIconContainer: {
     position: 'absolute',
-    bottom: 5,
-    right: 10,
+    bottom: vs(5),
+    right: s(10),
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 8,
-    borderRadius: 100,
+    padding: s(8),
+    borderRadius: s(100),
     elevation: 5,
     zIndex: 5,
   },
-
   name: {
     color: '#1b6001',
-    fontSize: 20,
+    fontSize: s(18),
     fontWeight: '600',
-    marginTop: 10,
+    marginTop: vs(10),
   },
   item1: {
-    marginVertical: 15,
+    marginVertical: vs(15),
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   row: {
     flexDirection: 'row',
-    alignItems: 'center', // this ensures vertical alignment
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 15, // adds consistent spacing
-    paddingRight: 15, // some padding to keep switch from screen edge
+    marginVertical: vs(15),
+    paddingRight: s(15),
   },
-
   item: {
     flexDirection: 'row',
-    alignItems: 'center', // vertically center icon + text
-    flex: 1, // take up available horizontal space
+    alignItems: 'center',
+    flex: 1,
   },
   text2: {
-    fontSize: 18,
+    fontSize: s(16),
     color: '#1b6001',
     fontWeight: '500',
-    marginLeft: 10,
+    marginLeft: s(10),
   },
   text1: {
-    fontSize: 18,
+    fontSize: s(16),
     color: '#DC143C',
     fontWeight: '500',
-    marginLeft: 10,
+    marginLeft: s(10),
   },
   btn: {
-    paddingHorizontal: 15,
+    paddingHorizontal: s(15),
     alignItems: 'center',
-    height: '8%',
+    height: vs(55),
     width: '100%',
     backgroundColor: '#1b6001',
     flexDirection: 'row',
-    marginBottom: 50,
+    marginBottom: vs(50),
   },
   textbtn: {
     color: '#b9dfab',
     fontWeight: '600',
-    fontSize: 20,
-    paddingLeft: 10,
+    fontSize: s(18),
+    paddingLeft: s(10),
     opacity: 0.9,
   },
   modalContainer: {
@@ -383,37 +411,37 @@ const styles = StyleSheet.create({
   },
   modalMainContainer: {
     backgroundColor: '#1b6001',
-    padding: 20,
-    borderRadius: 10,
-    width: wp(80),
+    padding: s(20),
+    borderRadius: s(10),
+    width: '80%',
   },
   modalText: {
     color: '#b9dfab',
     fontWeight: 'bold',
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: s(20),
+    marginBottom: vs(20),
     textAlign: 'center',
   },
   modalButtonText: {
     color: '#b9dfab',
-    fontSize: 20,
+    fontSize: s(18),
     fontWeight: '500',
   },
   cancelBtn: {
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#b9dfab',
-    width: wp(28),
-    height: hp(8),
-    borderRadius: 25,
+    width: '28%',
+    height: vs(45),
+    borderRadius: s(25),
   },
   deleteBtn: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 3,
+    borderWidth: s(3),
     borderColor: '#b9dfab',
-    width: wp(30),
-    height: hp(8),
-    borderRadius: 25,
+    width: '30%',
+    height: vs(45),
+    borderRadius: s(25),
   },
 });

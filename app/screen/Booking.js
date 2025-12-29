@@ -14,6 +14,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Bcalender from '../componnent/Bcalender';
 
+
 export default function Booking({ route }) {
   const responseData = route.params?.responseData || null;
   console.log('Lake  details data>>>>>>>???????', responseData.memInfo)
@@ -44,8 +45,6 @@ export default function Booking({ route }) {
       };
     }, [])
   );
-
-
   const saveMemInfo = async () => {
     try {
       if (responseData?.memInfo) {
@@ -58,10 +57,7 @@ export default function Booking({ route }) {
       console.error('Error saving memInfo to AsyncStorage:', error);
     }
   };
-
-
   useEffect(() => {
-
     saveMemInfo()
     LakeApies()
     Favorite()
@@ -91,7 +87,6 @@ export default function Booking({ route }) {
 
     checkAdminStatus();
     // console.log('favvvvv')
-
 
   }, [searchQuery]);
 
@@ -221,7 +216,7 @@ export default function Booking({ route }) {
     );
   };
   const renderItem = ({ item, index }) => (
-    <View style={{ paddingBottom: 15, paddingTop: 5 }}>
+    <View style={{ paddingBottom: 15, }}>
       <View style={styles.card}>
         <View style={styles.imageContainer}>
           <Image
@@ -296,7 +291,7 @@ export default function Booking({ route }) {
 
       <View style={styles.searchContainer}>
         <View style={styles.searchBox}>
-          <AntDesign name="search1" size={s(40)} color='#9ca74b' />
+          <AntDesign name="search1" size={s(30)} color='#9ca74b' />
           <TextInput
             style={styles.searchInput}
             placeholder="Search Lakes"
@@ -304,7 +299,7 @@ export default function Booking({ route }) {
             onChangeText={(text) => setSearchQuery(text)}
           />
           <View style={styles.filterIcon}>
-            <AntDesign name="filter" size={s(40)} color='#9ca74b' />
+            <AntDesign name="filter" size={s(30)} color='#9ca74b' />
           </View>
         </View>
       </View>
@@ -370,12 +365,15 @@ const styles = ScaledSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: '8@s',
-    paddingVertical: '6@vs',
+    paddingVertical: '3@vs',
     borderColor: 'gray',
+    // borderColor: '#d0d0d0',
+
     borderRadius: '10@s',
+    marginBottom: '15@vs',
   },
   searchInput: {
-    fontSize: '22@s',
+    fontSize: '20@s',
     color: 'black',
     width: '210@s', // Adjust the width as needed
   },
@@ -386,7 +384,7 @@ const styles = ScaledSheet.create({
   },
   titleContainer: {
     paddingHorizontal: '10@s',
-    paddingVertical: '10@vs',
+    // paddingVertical: '10@vs',
     borderBottomEndRadius: '20@s',
   },
   titleText: {
@@ -434,8 +432,9 @@ const styles = ScaledSheet.create({
   paragraph: {
     color: '#565656',
     paddingTop: '4@vs', // Scaled padding top
+    paddingBottom:'13@vs', 
     fontSize: '13@s', // Scaled font size
-    height: '45@vs', // Scaled height
+    // height: '45@vs', // Scaled heights
   },
   peg: {
     color: '#000000',
@@ -503,8 +502,4 @@ const styles = ScaledSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
-});
-
-
-
-
+});  

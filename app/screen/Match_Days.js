@@ -68,7 +68,11 @@ export default function Match_Days({ route }) {
                 <View style={styles.cardHeader}>
                     <Text style={styles.cardTitle}>{item.name}</Text>
 
+                
+
+                    
                     <Text style={styles.activeTag}>active</Text>
+                
                 </View>
 
                 <View style={styles.row}>
@@ -185,6 +189,7 @@ const styles = StyleSheet.create({
     },
     activeTag: {
         backgroundColor: '#2e7d32',
+        borderRadius: wp('1.5%'),
         color: '#fff',
         fontWeight: '600',
         paddingHorizontal: wp('3%'),

@@ -188,7 +188,7 @@ const Main = ({ route }) => {
               logoBorderRadius={100} // ✅ Yeh line logo ko gol bana degi
             />
             <View style={{ alignItems: 'center' }}>
-              <Text style={{ fontWeight: '700', color: '#1b6001', fontSize: 25, paddingBottom: 20 }} >Membership expiry</Text>
+              <Text style={{ fontWeight: '700', color: '#1b6001', fontSize: 25, paddingBottom: 20,textAlign:'center' }} >Membership expiry</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 10, paddingHorizontal: 10 }}>
                 <View>
                   <Text style={{ fontSize: 20, color: 'red' }} >{expirdata.membership_expiry_date}</Text>

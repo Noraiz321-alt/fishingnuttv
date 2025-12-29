@@ -32,7 +32,7 @@ export default function View_Post() {
       </View>
       <View style={{flex:1}}>
       <Tab.Navigator
-      initialRouteName="All"
+      initialRouteName="Blogs"
       screenOptions={{
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: '#a1a19f',

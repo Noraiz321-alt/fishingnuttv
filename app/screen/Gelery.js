@@ -12,6 +12,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 
 export default function Gelery({ route }) {
     const [loading, setLoading] = useState(false);
@@ -352,6 +353,7 @@ export default function Gelery({ route }) {
                             <DateTimePickerModal
                                 isVisible={isTimePickerVisible}
                                 mode="time"
+                                date={new Date()}              
                                 onConfirm={handleConfirm}
                                 onCancel={hideTimePicker}
                             />
@@ -386,85 +388,79 @@ export default function Gelery({ route }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 10,
-
+        padding: s(10),
     },
+
     icon: {
-        // marginRight: 10,
-        width: wp('12%'),
-        height: wp('12%'),
-        borderRadius: 25,
+        width: s(45),
+        height: s(45),
+        borderRadius: s(25),
         backgroundColor: '#b9dfab',
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    content: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+
     uploadButton: {
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        padding: 10,
+        paddingVertical: vs(10),
+        paddingHorizontal: s(10),
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 40
+        marginBottom: vs(40),
     },
-    instructions: {
-        marginTop: 20,
-        fontSize: 18,
-        textAlign: 'center',
-    },
+
     input: {
         borderWidth: 1,
         width: '48%',
-        padding: 10,
-        fontSize: 18,
+        padding: s(10),
+        fontSize: s(14),
         color: 'black',
+        borderRadius: s(5),
     },
+
     saveButton: {
         alignItems: 'center',
         backgroundColor: '#1b6001',
-        width: 150,
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 20,
-
+        width: s(150),
+        paddingVertical: vs(10),
+        borderRadius: s(5),
+        marginTop: vs(20),
     },
+
     saveButtonText: {
         color: '#fff',
-        fontSize: 16,
-        // fontWeight:'bold',
+        fontSize: s(16),
         textAlign: 'center',
     },
+
     imageContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        // marginTop: 20,
-        marginBottom: 20,
-        width: '100%',
-        height: 80,
-
+        marginBottom: vs(20),
+        height: vs(80),
         alignItems: 'center',
     },
+
     image: {
-        width: 100,
-        height: 70,
-        // margin: 5,
+        width: s(100),
+        height: vs(70),
+        margin: s(5),
+        borderRadius: s(5),
     },
+
     pellet: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-    }
+        paddingHorizontal: s(10),
+        paddingVertical: vs(10),
+    },
 });

@@ -86,7 +86,7 @@ export default function Previous({ data, memberID }) {
 
                     <View style={styles.modalContent}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Pellet Booking Details</Text>
+                            <Text style={{  fontSize: s(20), fontWeight: 'bold', color: 'black' }} allowFontScaling={false}>Pellet Booking Details</Text>
                             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal()}>
 
                             <View style={{
@@ -105,10 +105,10 @@ export default function Previous({ data, memberID }) {
                         {selectedItem ? (
                             <>
                                 <View style={{ paddingVertical: 10, marginBottom: 10 }}>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>Lake Name: {selectedItem.lake_name}</Text>
+                                    <Text style={{  fontSize: s(15), fontWeight: 'bold', color: 'black' }} allowFontScaling={false}>Lake Name: {selectedItem.lake_name}</Text>
                                     <View>
-                                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black', paddingVertical: 10 }} >Peg No: {selectedItem.peg_name}</Text>
-                                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }} >{selectedItem.booking_date}</Text>
+                                        <Text style={{ fontSize: s(15), fontWeight: 'bold', color: 'black', paddingVertical: 10 }} >Peg No: {selectedItem.peg_name}</Text>
+                                        <Text style={{ fontSize: s(15), fontWeight: 'bold', color: 'black' }} >{selectedItem.booking_date}</Text>
                                     </View>
                                 </View>
 
@@ -117,10 +117,10 @@ export default function Previous({ data, memberID }) {
                                     justifyContent: 'space-between', backgroundColor: '#616161', borderRadius: 5, paddingVertical: 10, paddingHorizontal: 10,
                                 }}>
                                     <View style={{}}>
-                                        <Text style={{ color: 'white', fontSize: 18 }}>Weight: {selectedItem.pellet_weight}Kg</Text>
+                                        <Text style={{ color: 'white', fontSize: s(18),}} allowFontScaling={false}>Weight: {selectedItem.pellet_weight}Kg</Text>
                                     </View>
                                     <View>
-                                        <Text style={{ color: 'white', fontSize: 18 }}>Price: (£{selectedItem.pellet_price})</Text>
+                                        <Text style={{ color: 'white', fontSize: s(18), }} allowFontScaling={false}>Price: (£{selectedItem.pellet_price})</Text>
                                     </View>
                                 </View>
                                 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {  View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
@@ -19,7 +19,7 @@ const LeagueWebView = ({ route }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
+
     checkRedirectParams();
   }, []);
 
@@ -28,7 +28,7 @@ const LeagueWebView = ({ route }) => {
       const savedParams = await AsyncStorage.getItem('redirect_params');
       if (savedParams) {
         const cleanedParams = savedParams.replace(/'/g, '');
-        const fullUrl = `${url}&${cleanedParams}`; 
+        const fullUrl = `${url}&${cleanedParams}`;
 
 
         console.log('Final URL with redirect params:', fullUrl);
@@ -78,10 +78,25 @@ const LeagueWebView = ({ route }) => {
         source={{ uri: title === 'Join League' && finalUrl ? finalUrl : url }}
         style={{ flex: 1 }}
         javaScriptEnabled={true}
+        domStorageEnabled={true}
         injectedJavaScript={injectZoomFix}
+
+        // EVENTS
         onLoadStart={() => setLoading(true)}
+
+        onLoadProgress={({ nativeEvent }) => {
+          if (nativeEvent.progress === 1) {
+            setLoading(false);
+          }
+        }}
+
+        onNavigationStateChange={(navState) => {
+          if (!navState.loading) {
+            setLoading(false);
+          }
+        }}
+
         onLoadEnd={() => {
-          setLoading(false);
           if (webViewRef.current) {
             webViewRef.current.injectJavaScript(injectZoomFix);
           }

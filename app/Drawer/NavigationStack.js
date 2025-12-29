@@ -34,8 +34,7 @@ import Match_result from '../screen/Match_result';
 import Header from '../componnent/Header';
 import LeaguesTabs from '../screen/LeaguesTabs';
 import LeaderBoard from '../screen/LeaderBoard';
-import StoreProductsScreen from '../screen/StoreProductsScreen';
-import ProductDetailScreen from '../screen/ProductDetailScreen';
+
 
 export default function NavigationStack() {
 
@@ -87,8 +86,6 @@ export default function NavigationStack() {
         <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="LeaguesTabs" component={LeaguesTabs} />
         <Stack.Screen name="LeaderBoard" component={LeaderBoard} />
-        <Stack.Screen name="StoreProductsScreen" component={StoreProductsScreen} />
-        <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen} />
 
         <Stack.Screen
           name="LeagueWebView"

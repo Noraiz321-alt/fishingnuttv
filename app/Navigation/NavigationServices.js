@@ -2,15 +2,6 @@ import { StackActions } from '@react-navigation/native';
 
 let _navigator;
 
-const VALID_SCREENS = [
-  'Main',
-  'View_Post',
-  'News',
-  'Blogs',
-  'BottomTabs',
-  'B-Details',
-];
-
 function setTopLevelNavigator(navigatorRef) {
   _navigator = navigatorRef;
   console.log('✅ Navigator SET:', !!navigatorRef);

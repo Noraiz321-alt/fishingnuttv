@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking, ActivityIndicator, Switch,StatusBar } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking, 
+ActivityIndicator, Switch,StatusBar,Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import image from '../Utilis/image'
 import { StackActions, useNavigation } from '@react-navigation/native'
@@ -12,20 +13,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+import { useDispatch } from 'react-redux';
+import { setUser, updateUser, clearUser } from '../store/authSlice';
+
 
 // sami@searlco.com
 // Test123@
 // andy@searlco.com
 // @ndY1979??
 
-const Login = ({ navigation }) => {
+// semi.u786@gmail.com
 
+
+
+const Login = ({ navigation, route }) => {
+  const dispatch = useDispatch();
   const [show, setshow] = useState(false)
-  // const [email, setEmail] = useState('sami@searlco.com');
-  // const [password, setPassword] = useState('Test123@');
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [email, setEmail] = useState('sami@searlco.com');
+  const [password, setPassword] = useState('Test123@');
+
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
 
   const [valemail, setvalemail] = useState(false)
   const [valpass, setvalpass] = useState(false)
@@ -34,6 +44,7 @@ const Login = ({ navigation }) => {
   const [signupUrl, setSignupUrl] = useState(null);
 
   useEffect(() => {
+
      if (Platform.OS === 'android') {
             StatusBar.setBackgroundColor('#000000', true); // black background
             StatusBar.setBarStyle('light-content', true);  // white text/icons
@@ -68,16 +79,31 @@ const Login = ({ navigation }) => {
 
   
   const checkFingerprintStatus = async () => {
+    if (route.params?.fromLogout) return;
     try {
       const fingerprintEnabled = await AsyncStorage.getItem('fingerprintEnabled');
       console.log('Fingerprint enabled status:', fingerprintEnabled);
       if (fingerprintEnabled === 'true') {
         authenticateWithFingerprint();
-      } else {
-        // navigation.navigate('Login');
       }
     } catch (error) {
       console.error('Error checking fingerprint status:', error);
+    }
+  };
+
+  const onBiometricIconPress = async () => {
+    try {
+      const fingerprintEnabled = await AsyncStorage.getItem('fingerprintEnabled');
+      if (fingerprintEnabled === 'true') {
+        await authenticateWithFingerprint();
+      } else {
+        Alert.alert(
+          'Biometric Login',
+          'Please enable Biometric Login with the switch above, then login with email/password once. After that you can use fingerprint to login.'
+        );
+      }
+    } catch (e) {
+      console.error('Biometric press error:', e);
     }
   };
 
@@ -122,9 +148,11 @@ const Login = ({ navigation }) => {
       console.log('User data from AsyncStorage:', user); // Log user data from AsyncStorage
       if (user !== null) {
         // If user details are stored in AsyncStorage, navigate to the 'NavigationDrawer' screen
+        const parsed = JSON.parse(user);
+        dispatch(setUser(parsed));
         navigation.dispatch(
           StackActions.replace('NavigationDrawer', {
-            responseData: JSON.parse(user),
+            responseData: parsed,
           })
         );
         return; // Return early to prevent further execution
@@ -161,6 +189,7 @@ const Login = ({ navigation }) => {
                 // Remove user data if biometric login is disabled
                 await AsyncStorage.removeItem('user');
                 await AsyncStorage.setItem('fingerprintEnabled', 'false');
+                dispatch(clearUser());
               } catch (error) {
                 console.error('Error removing user data:', error);
               }
@@ -181,6 +210,7 @@ const Login = ({ navigation }) => {
               try {
                 await AsyncStorage.removeItem('user');
                 await AsyncStorage.setItem('fingerprintEnabled', 'true');
+                dispatch(clearUser());
               } catch (error) {
                 console.error('Error setting fingerprint preference:', error);
               }
@@ -205,26 +235,9 @@ const Login = ({ navigation }) => {
       Alert.alert('Error', 'Signup URL not loaded yet.');
     }
   };
-  // const handleButtonPress = () => {
-  //   if (Platform.OS === 'android') {
-  //     const url = 'https://www.fishingnuttv.com';
-  //     Linking.openURL(url)
-  //       .then((data) => {
-  //         // Do something if the URL was opened successfully
-  //         console.log('URL Opened:', data);
-  //       })
-  //       .catch((error) => {
-  //         // Handle errors when trying to open the URL
-  //         console.error('Error opening URL:', error);
-  //       });
-  //   } else if (Platform.OS === 'ios') {
-  //     navigation.navigate('SignUp');
-  //     // navigation.navigate('PaypalButton');
-  //   }
-  // };
 
 
-  
+
   const val = (email) => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
@@ -271,6 +284,8 @@ const Login = ({ navigation }) => {
 
       // Store updated data in AsyncStorage
       await AsyncStorage.setItem('user', JSON.stringify(updatedData));
+      // Also update Redux user
+      dispatch(updateUser(updatedData));
 
       console.log('Data updated successfully in AsyncStorage:', updatedData);
     } catch (error) {
@@ -327,6 +342,8 @@ const Login = ({ navigation }) => {
             // console.log('User data stored in AsyncStorage:', data);
             await updateDataInAsyncStorage(data);
             console.log('User data stored in AsyncStorage:', data);
+            // Redux me bhi user set karo
+            dispatch(setUser(data));
             navigation.dispatch(
               StackActions.replace('NavigationDrawer', {
                 responseData: data,
@@ -348,7 +365,6 @@ const Login = ({ navigation }) => {
             } else {
               Alert.alert(data.message);
             }
-
           }
         })
     } catch (error) {
@@ -430,7 +446,7 @@ const Login = ({ navigation }) => {
   
                 <View style={styles.bioLeft}>
                   <TouchableOpacity
-                    onPress={checkFingerprintStatus}
+                    onPress={onBiometricIconPress}
                     style={styles.bioIcons}
                   >
                     <MaterialIcons name="fingerprint" size={35} color="#1b6001" />
@@ -664,4 +680,6 @@ const styles = ScaledSheet.create({
     color: '#1b6001',
     marginLeft: '5@s',
   },
+
 });
+          

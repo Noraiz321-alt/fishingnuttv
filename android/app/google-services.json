@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287996956334",
+    "project_id": "fishingnuttv-searlco",
+    "storage_bucket": "fishingnuttv-searlco.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287996956334:android:430f5c9e9ac6e59f50a73f",
+        "android_client_info": {
+          "package_name": "com.fishingnuttv"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuFcl58ExYLdsz8VCuBaQ8dywjL_ofSfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

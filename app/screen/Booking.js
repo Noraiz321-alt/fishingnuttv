@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, Modal, Animated, StatusBar } from 'react-native'
+import { View, Text, FlatList, ImageBackground, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, Modal, Animated, StatusBar, PermissionsAndroid, Platform, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, DrawerActions, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,29 +9,161 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import LinearGradient from "react-native-linear-gradient";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Bcalender from '../componnent/Bcalender';
+import messaging from '@react-native-firebase/messaging';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import NavigationService from '../Navigation/NavigationServices';
 
 
 export default function Booking({ route }) {
-  const responseData = route.params?.responseData || null;
-  console.log('Lake  details data>>>>>>>???????', responseData.memInfo)
+  const reduxUser = useSelector(state => state.auth.user);
+  // Preference: Redux user, fallback to params
+  const responseData = reduxUser || route.params?.responseData || {};
+  // console.log('Lake  details data>>>>>>>???????', responseData.memInfo)
+  const isFromNotification = route?.params?.fromNotification === true;
+
+  useEffect(() => {
+    if (isFromNotification) {
+      console.log('🔔 Opened from notification');
+    }
+  }, []);
+  ////////
+  const isPending = responseData?.memberStatus === 'pending';
+
+  console.log('Lake details data >>>>>', responseData);
+
+  const memInfo = responseData?.memInfo || null;
+
+  ////////////
+  // console.log('Lake details data >>>>>', memInfo);
+
   const toggleDrawer = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
 
+  const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false);
   const scaleAnimation = new Animated.Value(0.8);
 
-  const navigation = useNavigation();
+  // 🔔 Custom notification modal (admin image notification)
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [notificationInfo, setNotificationInfo] = useState(null);
+  const [notificationImageLoading, setNotificationImageLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lakeData, setLakeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [favorite, setFavorite] = useState([]);
   const [profileImage, setProfileImage] = useState(responseData.prof_image);
   const [selectedLake, setSelectedLake] = useState(null);
+
+  // 🔔 Notification data → modal open (sirf custom image membership ke liye)
+  useEffect(() => {
+    const notifData = route?.params?.notificationData || route?.params?.data;
+    if (!notifData) return;
+
+    console.log('🔔 Booking - notification data:', notifData);
+    setNotificationInfo(notifData);
+
+    const isExpiryReminder =
+      typeof notifData.body === 'string' &&
+      notifData.body.toLowerCase().includes('membership is expiring soon');
+
+    if (notifData?.image) {
+      setNotificationImageLoading(true);
+    }
+
+    // Sirf tab modal dikhana jab expiry reminder na ho
+    if (!isExpiryReminder && (notifData?.image || notifData?.title)) {
+      setShowNotificationModal(true);
+    }
+  }, [route?.params?.notificationData, route?.params?.data]);
+
+
+
+  async function requestUserPermission() {
+    if (Platform.OS === 'android' && Platform.Version >= 33) {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Android notification permission granted');
+        return true; // ✅ IMPORTANT
+      } else {
+        console.log('Android notification permission denied');
+        return false;
+      }
+    }
+
+    // Android < 13
+    return true;
+  }
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const initFCM = async () => {
+      const hasPermission = await requestUserPermission();
+
+      if (!hasPermission) {
+        console.log('Permission not granted, FCM skipped');
+        return;
+      }
+
+      // 🔑 FCM TOKEN
+      const fcmToken = await messaging().getToken();
+      console.log('🔥 FCM TOKEN:', fcmToken);
+
+      // 🆔 USER ID
+      const userId = responseData?.memberID;
+      console.log('👤 USER ID:', userId);
+
+      if (fcmToken && userId) {
+        sendFCMTokenToServer(userId, fcmToken);
+      }
+
+      // 🔔 Foreground message
+      unsubscribe = messaging().onMessage(async remoteMessage => {
+        Alert.alert(
+          'New FCM Message',
+          remoteMessage.notification?.title || 'Message',
+        );
+      });
+    };
+
+    initFCM();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
+
+  const sendFCMTokenToServer = async (userId, fcmToken) => {
+    console.log('fcm token', fcmToken)
+    try {
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('fcmtoken', fcmToken);
+
+      const response = await fetch(
+        'https://fishingnuttv.com/fntv-custom/appFCMtoken.php',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      );
+
+      const result = await response.json();
+      console.log('✅ FCM Token API Response:', result);
+    } catch (error) {
+      console.log('❌ Error sending FCM token:', error);
+    }
+  };
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -87,8 +219,8 @@ export default function Booking({ route }) {
 
     checkAdminStatus();
     // console.log('favvvvv')
-
   }, [searchQuery]);
+
 
   const getUserDataaa = async () => {
     try {
@@ -114,8 +246,6 @@ export default function Booking({ route }) {
       console.error('Error fetching user profile data:', error);
     }
   };
-
-
   const LakeApies = async () => {
     try {
       const response = await axios.get(`${apipost.Lakeapi}/${responseData.memberID}`, { timeout: 10000 });
@@ -161,8 +291,6 @@ export default function Booking({ route }) {
     }
 
   };
-
-
   const unmarkAsFavorite = async (lakeId) => {
     try {
       const response = await axios.post(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/custom-lakes/${responseData.memberID}/${lakeId}/unfavorite`);
@@ -256,24 +384,34 @@ export default function Booking({ route }) {
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
             <Text style={styles.peg}>Pegs Available Today: {item.max_pegs}</Text>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.navigate('Bcalender', { itemData: item, memberID: responseData.memberID })}
               style={styles.choosePegButton}
             >
               <Text style={styles.choosePegButtonText}>Choose A Peg {item.button}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            {!isPending && (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Bcalender', {
+                    itemData: item,
+                    memberID: responseData.memberID,
+                  })
+                }
+                style={styles.choosePegButton}
+              >
+                <Text style={styles.choosePegButtonText}>
+                  Choose A Peg {item.button}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
     </View>
   );
 
-
-
-
   return (
-
-
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.headerContainer}>
         <TouchableOpacity style={styles.nav} onPress={toggleDrawer}>
@@ -283,9 +421,13 @@ export default function Booking({ route }) {
         <View>
           <Image style={styles.Imglg} source={require('../image/logooo.png')} />
         </View>
-        <View>
-          <Image source={{ uri: profileImage }} style={styles.mainImg} resizeMode='stretch' />
-        </View>
+        <TouchableOpacity
+          style={styles.notifIconWrap}
+          onPress={() => NavigationService.navigate('NotificationsList')}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="notifications" size={s(24)} color="#1b6001" />
+        </TouchableOpacity>
       </View>
 
 
@@ -335,6 +477,151 @@ export default function Booking({ route }) {
           <Animated.View style={[styles.popup, { transform: [{ scale: scaleAnimation }] }]}>
             <Text style={styles.text}>🎉 Welcome to Admin Version 🎯</Text>
           </Animated.View>
+        </View>
+      </Modal>
+
+      {/* 🔔 Membership / custom notification modal */}
+      <Modal
+        visible={showNotificationModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowNotificationModal(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.6)',
+          }}>
+          <View
+            style={{
+              width: '88%',
+              maxHeight: '100%',
+              backgroundColor: '#f7fff4',
+              borderRadius: 18,
+              paddingVertical: 16,
+              paddingHorizontal: 14,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.25,
+              shadowRadius: 8,
+              elevation: 8,
+            }}>
+
+            {/* TOP GREEN BAR + TITLE */}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <View
+                style={{
+                  width: 6,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: '#1b6001',
+                  marginRight: 8,
+                }}
+              />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: '700',
+                    color: '#1b6001',
+                  }}
+                  numberOfLines={1}
+                >
+                  {notificationInfo?.title || 'Notification'}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: '#4d7c3a',
+                    marginTop: 2,
+                  }}>
+                  FishingNutTV Notification
+                </Text>
+              </View>
+            </View>
+
+            {/* IMAGE */}
+            {notificationInfo?.image ? (
+              <View
+                style={{
+                  width: '100%',
+                  height: 150,
+                  borderRadius: 12,
+                  marginBottom: 12,
+                  backgroundColor: '#e8f0e5',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  overflow: 'hidden',
+                }}>
+                {notificationImageLoading ? (
+                  <ActivityIndicator size="large" color="#1b6001" />
+                ) : null}
+                <Image
+                  source={{ uri: notificationInfo.image }}
+                  style={{
+                    width: '100%',
+                    height: 150,
+                    borderRadius: 12,
+                    position: 'absolute',
+                  }}
+                  resizeMode="cover"
+                  onLoadEnd={() => setNotificationImageLoading(false)}
+                />
+              </View>
+            ) : null}
+
+            {/* BODY TEXT */}
+            <View
+              style={{
+                maxHeight: 180,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: '#d5ebcb',
+                backgroundColor: '#ffffff',
+                paddingHorizontal: 10,
+                paddingVertical: 8,
+                marginBottom: 12,
+              }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: '#333',
+                  lineHeight: 20,
+                }}>
+                {notificationInfo?.body || ''}
+              </Text>
+            </View>
+
+            {/* BUTTONS ROW */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() => setShowNotificationModal(false)}
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 14,
+                  borderRadius: 999,
+                  borderWidth: 1,
+                  borderColor: '#1b6001',
+                  marginRight: 8,
+                }}>
+                <Text style={{ color: '#1b6001', fontWeight: '600', fontSize: 14 }}>
+                  Close
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
 
@@ -430,7 +717,7 @@ const styles = ScaledSheet.create({
   paragraph: {
     color: '#565656',
     paddingTop: '4@vs', // Scaled padding top
-    paddingBottom:'13@vs', 
+    paddingBottom: '13@vs',
     fontSize: '13@s', // Scaled font size
     // height: '45@vs', // Scaled heights
   },
@@ -458,6 +745,14 @@ const styles = ScaledSheet.create({
     borderRadius: '100@s', // Scaled border radius
     borderWidth: '3@s', // Scaled border width
     borderColor: '#b9dfab',
+  },
+  notifIconWrap: {
+    width: '45@s',
+    height: '45@s',
+    borderRadius: '100@s',
+    backgroundColor: '#b9dfab',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   nav: {
     width: '45@s', // Scaled width

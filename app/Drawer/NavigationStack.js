@@ -34,6 +34,9 @@ import Match_result from '../screen/Match_result';
 import Header from '../componnent/Header';
 import LeaguesTabs from '../screen/LeaguesTabs';
 import LeaderBoard from '../screen/LeaderBoard';
+import NotificationsList from '../screen/NotificationsList';
+import NotificationDetail from '../screen/NotificationDetail';
+import NavigationServices from '../Navigation/NavigationServices'
 
 
 export default function NavigationStack() {
@@ -48,7 +51,9 @@ export default function NavigationStack() {
   //   },[])
 
   return (
-    <NavigationContainer >
+    <NavigationContainer
+      ref={(ref) => NavigationServices.setTopLevelNavigator(ref)}
+    >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {/* {
           saplash ? (
@@ -58,12 +63,12 @@ export default function NavigationStack() {
 
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="NavigationDrawer" component={NavigationDrawer} />
-        <Stack.Screen name="Main" component={Main} />
+     
         <Stack.Screen name="BottomTabs" component={BottomTabs} />
         <Stack.Screen name="DraweContant" component={DraweContant} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Fpass" component={Fpass} />
-        <Stack.Screen name="Booking" component={Booking} />
+
         <Stack.Screen name="Bcalender" component={Bcalender} />
         <Stack.Screen name="Testm" component={Testm} />
         <Stack.Screen name="Gelery" component={Gelery} />
@@ -76,8 +81,7 @@ export default function NavigationStack() {
         <Stack.Screen name="Video" component={Video} />
         <Stack.Screen name="VideoPlayerScreen" component={VideoPlayerScreen} />
         <Stack.Screen name="View_Post" component={View_Post} />
-        <Stack.Screen name="Blog" component={Blog} />
-        <Stack.Screen name="News" component={News} />
+
         <Stack.Screen name="NewsPage" component={NewsPage} />
         <Stack.Screen name="NewsUpload" component={NewsUpload} />
         <Stack.Screen name="League" component={League} />
@@ -86,12 +90,13 @@ export default function NavigationStack() {
         <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="LeaguesTabs" component={LeaguesTabs} />
         <Stack.Screen name="LeaderBoard" component={LeaderBoard} />
-
         <Stack.Screen
           name="LeagueWebView"
           component={LeagueWebView}
           options={{ headerShown: false }} // ❌ Hide default
         />
+        <Stack.Screen name="NotificationsList" component={NotificationsList} />
+        <Stack.Screen name="NotificationDetail" component={NotificationDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   )

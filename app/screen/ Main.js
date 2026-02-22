@@ -5,15 +5,15 @@ import image from '../Utilis/image';
 import { useNavigation, DrawerActions, useFocusEffect } from '@react-navigation/native'
 import axios from 'react-native-axios'
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
 const Main = ({ route }) => {
   const navigation = useNavigation();
-  const responseData = route.params?.responseData || null;
-  console.log('responce data ',responseData)
-
+  const reduxUser = useSelector(state => state.auth.user);
+  // Preference: Redux user, fallback to params
+  const responseData = reduxUser || route.params?.responseData || null;
   const [showTestModal, setShowTestModal] = useState(false);
   const [notificationInfo, setNotificationInfo] = useState(null);
-  const [notificationImageLoading, setNotificationImageLoading] = useState(false);
 
   const [profileImage, setProfileImage] = useState(responseData?.prof_image || '');
 
@@ -33,7 +33,6 @@ const Main = ({ route }) => {
     if (!notifData) return;
 
     setNotificationInfo(notifData);
-    if (notifData?.image) setNotificationImageLoading(true);
 
     if (fromNotification && showMembershipModal) {
       setShowTestModal(true);
@@ -306,7 +305,7 @@ const Main = ({ route }) => {
                 <View
                   style={{
                     width: 6,
-                    height: 60,
+                    height: 32,
                     borderRadius: 999,
                     backgroundColor: '#1b6001',
                     marginRight: 8,
@@ -319,7 +318,7 @@ const Main = ({ route }) => {
                       fontWeight: '700',
                       color: '#1b6001',
                     }}
-                    numberOfLines={3}
+                    numberOfLines={1}
                   >
                     {notificationInfo?.title || 'Membership Update'}
                   </Text>
@@ -334,40 +333,24 @@ const Main = ({ route }) => {
                 </View>
               </View>
 
-              {/* IMAGE – loader jab tak load na ho */}
+              {/* IMAGE */}
               {notificationInfo?.image ? (
-                <View
+                <Image
+                  source={{ uri: notificationInfo.image }}
                   style={{
                     width: '100%',
                     height: 150,
                     borderRadius: 12,
                     marginBottom: 12,
-                    backgroundColor: '#e8f0e5',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                  }}>
-                  {notificationImageLoading ? (
-                    <ActivityIndicator size="large" color="#1b6001" />
-                  ) : null}
-                  <Image
-                    source={{ uri: notificationInfo.image }}
-                    style={{
-                      width: '100%',
-                      height: 150,
-                      borderRadius: 12,
-                      position: 'absolute',
-                    }}
-                    resizeMode="cover"
-                    onLoadEnd={() => setNotificationImageLoading(false)}
-                  />
-                </View>
+                  }}
+                  resizeMode="cover"
+                />
               ) : null}
 
-              {/* BODY TEXT – fixed height, andar scroll */}
+              {/* BODY – SCROLLABLE TEXT */}
               <View
                 style={{
-                  maxHeight: 180,
+                  flex: 1,
                   borderRadius: 12,
                   borderWidth: 1,
                   borderColor: '#d5ebcb',
@@ -377,9 +360,9 @@ const Main = ({ route }) => {
                   marginBottom: 12,
                 }}>
                 <ScrollView
-                  showsVerticalScrollIndicator={true}
-                  nestedScrollEnabled={true}
+                  style={{ maxHeight: 180 }}
                   contentContainerStyle={{ paddingBottom: 4 }}
+                  showsVerticalScrollIndicator={true}
                 >
                   <Text
                     style={{
@@ -387,7 +370,7 @@ const Main = ({ route }) => {
                       color: '#333',
                       lineHeight: 20,
                     }}>
-                    {notificationInfo?.body ?? ''}
+                    {notificationInfo?.body || ''}
                   </Text>
                 </ScrollView>
               </View>
@@ -507,6 +490,8 @@ const styles = ScaledSheet.create({
   },
   cardText2: {
     color: '#1b6001',
+   
+   
     fontSize: s(25),
     top: vs(10),
   },

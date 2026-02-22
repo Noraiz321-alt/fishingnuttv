@@ -12,12 +12,15 @@ import Testm from '../componnent/Testm'
 import axios from 'react-native-axios';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 
 export default function BookingDetails({ route }) {
   const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
-  const responseData = route.params?.responseData || null;
+  const reduxUser = useSelector(state => state.auth.user);
+  // Preference: Redux user, fallback to params
+  const responseData = reduxUser || route.params?.responseData || null;
   const memberID = responseData?.memberID || null;
 
   useFocusEffect(
@@ -35,7 +38,7 @@ export default function BookingDetails({ route }) {
   const [apiData, setApiData] = useState(null);
   const [previousBookings, setPreviousBookings] = useState([]);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
-  const [profileImage, setProfileImage] = useState(responseData.prof_image);
+  const [profileImage, setProfileImage] = useState(responseData?.prof_image);
 
   const getUserProfile = async () => {
     try {

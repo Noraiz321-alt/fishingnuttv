@@ -7,7 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import axios from 'react-native-axios';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScaledSheet } from 'react-native-size-matters';
 
 import Gelery from './Gelery';
@@ -15,15 +15,22 @@ import Zoom_image from '../componnent/Zoom_image';
 
 export default function GelleryPic({ route }) {
     const { data } = route.params;
+
+    console.log('show gellary data ', data)
     const memberID = data?.memberID;
+
+    const memberStatus = data?.memberStatus;
+    const isApproved = memberStatus === 'approved';
+
     const [catchData, setCatchData] = useState([]);
     const [apiMessage, setApiMessage] = useState('');
     const navigation = useNavigation();
+    const insets = useSafeAreaInsets(); // 👈 magic
 
     useFocusEffect(
         React.useCallback(() => {
             fetchData();
-            return () => {};
+            return () => { };
         }, [])
     );
 
@@ -75,7 +82,7 @@ export default function GelleryPic({ route }) {
 
                 {/* DETAILS BELOW IMAGE */}
                 <View style={styles.detailsContainer}>
-                    <Text style={styles.detailText}><Text style={styles.bold}>Lake:</Text> {item.lake_name.length > 11 ? item.lake_name.substring(0,11)+'...' : item.lake_name}</Text>
+                    <Text style={styles.detailText}><Text style={styles.bold}>Lake:</Text> {item.lake_name.length > 11 ? item.lake_name.substring(0, 11) + '...' : item.lake_name}</Text>
                     <Text style={styles.detailText}><Text style={styles.bold}>Peg:</Text> {item.peg_name}</Text>
                     <Text style={styles.detailText}><Text style={styles.bold}>Time:</Text> {item.time}</Text>
                     <Text style={styles.detailText}><Text style={styles.bold}>Bait:</Text> {item.bait}</Text>
@@ -125,32 +132,43 @@ export default function GelleryPic({ route }) {
                 )}
             </View>
 
-            <TouchableOpacity style={styles.cameraIconContainer} onPress={() => navigation.navigate('Gelery', { data: route.params })}>
-                <MaterialCommunityIcons name="camera-plus-outline" size={wp('8%')} color="black" />
-            </TouchableOpacity>
+            {isApproved && (
+                <TouchableOpacity
+                    style={[styles.cameraIconContainer, { bottom: insets.bottom + 10 }]}
+                    onPress={() => navigation.navigate('Gelery', { data: route.params })}
+                >
+                    <MaterialCommunityIcons
+                        name="camera-plus-outline"
+                        size={wp('8%')}
+                        color="black"
+                    />
+                </TouchableOpacity>
+            )}
         </SafeAreaView>
     );
 }
 
 const styles = ScaledSheet.create({
-    header: { flexDirection:'row', alignItems:'center', padding:'10@s', justifyContent:'space-between' },
-    nav: { width:'45@s', height:'45@s', borderRadius:'25@s', backgroundColor:'#b9dfab', justifyContent:'center', alignItems:'center' },
-    nav1: { width:'45@s', height:'45@s' },
-    headerText: { fontSize:'16@s', fontWeight:'bold', color:'black' },
-    container: { flex:1 },
-    card: { flex:1, margin:'5@s', backgroundColor:'#fff', borderRadius:'8@s', overflow:'hidden', elevation:6, borderWidth:'0.5@s', borderColor:'lightgray' },
-    
+    header: { flexDirection: 'row', alignItems: 'center', padding: '10@s', justifyContent: 'space-between' },
+    nav: { width: '45@s', height: '45@s', borderRadius: '25@s', backgroundColor: '#b9dfab', justifyContent: 'center', alignItems: 'center' },
+    nav1: { width: '45@s', height: '45@s' },
+    headerText: { fontSize: '16@s', fontWeight: 'bold', color: 'black' },
+    container: { flex: 1 },
+    card: { flex: 1, margin: '5@s', backgroundColor: '#fff', borderRadius: '8@s', overflow: 'hidden', elevation: 6, borderWidth: '0.5@s', borderColor: 'lightgray' },
+
     // IMAGE FULL CARD FRAME
-    image: { width:'100%', height:wp('45%'), borderTopLeftRadius:'8@s', borderTopRightRadius:'8@s' },
+    image: { width: '100%', height: wp('45%'), borderTopLeftRadius: '8@s', borderTopRightRadius: '8@s' },
 
     // DETAILS BELOW IMAGE
-    detailsContainer: { padding:'8@s' },
-    bold: { fontWeight:'bold' },
-    detailText: { fontSize:'12@s', marginBottom:'4@s', color:'black' },
-    cardActions: { flexDirection:'row', justifyContent:'space-between', marginTop:'10@s',},
-    emptyContainer: { flex:1, justifyContent:'center', alignItems:'center' },
-    emptyText: { fontSize:'14@s', color:'gray' },
-    cameraIconContainer: { position:'absolute', bottom:'10@s',
-    right:'10@s',borderWidth:1,borderRadius:'10@s',
-    borderColor:'#b9dfab',backgroundColor:'#b9dfab', width:'50@s', height:'50@s',justifyContent:'center', alignItems:'center' },
+    detailsContainer: { padding: '8@s' },
+    bold: { fontWeight: 'bold' },
+    detailText: { fontSize: '12@s', marginBottom: '4@s', color: 'black' },
+    cardActions: { flexDirection: 'row', justifyContent: 'space-between', marginTop: '10@s', },
+    emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    emptyText: { fontSize: '14@s', color: 'gray' },
+    cameraIconContainer: {
+        position: 'absolute',
+        right: '10@s', borderWidth: 1, borderRadius: '10@s',
+        borderColor: '#b9dfab', backgroundColor: '#b9dfab', width: '50@s', height: '50@s', justifyContent: 'center', alignItems: 'center'
+    },
 });

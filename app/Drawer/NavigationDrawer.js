@@ -6,6 +6,28 @@ import DraweContant from './DraweContant';
 import { DrawerActions } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 
+// export default function NavigationDrawer({ route }) {
+//   const Drawer = createDrawerNavigator();
+
+//   return (
+//     <Drawer.Navigator
+//       drawerType="back"
+//       screenOptions={{
+//         swipeEnabled: false,
+//         headerShown: false,
+//         drawerStyle: {
+//           width: s(260), // Responsive width
+//         },
+//       }}
+//       drawerContent={(props) => <DraweContant {...props} route={route} />}
+//       drawerPosition="left"
+//     >
+//       <Drawer.Screen name="BottomTabs">
+//         {() => <BottomTabs route={route} />}
+//       </Drawer.Screen>
+//     </Drawer.Navigator>
+//   );
+// }
 export default function NavigationDrawer({ route }) {
   const Drawer = createDrawerNavigator();
 
@@ -16,15 +38,17 @@ export default function NavigationDrawer({ route }) {
         swipeEnabled: false,
         headerShown: false,
         drawerStyle: {
-          width: s(260), // Responsive width
+          width: s(260),
         },
       }}
       drawerContent={(props) => <DraweContant {...props} route={route} />}
       drawerPosition="left"
     >
-      <Drawer.Screen name="BottomTabs">
-        {() => <BottomTabs route={route} />}
-      </Drawer.Screen>
+      <Drawer.Screen
+        name="BottomTabs"
+        component={BottomTabs}
+        initialParams={route?.params}   // login ka responseData pehli dafa
+      />
     </Drawer.Navigator>
   );
 }

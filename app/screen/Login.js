@@ -150,11 +150,7 @@ const Login = ({ navigation, route }) => {
         // If user details are stored in AsyncStorage, navigate to the 'NavigationDrawer' screen
         const parsed = JSON.parse(user);
         dispatch(setUser(parsed));
-        navigation.dispatch(
-          StackActions.replace('NavigationDrawer', {
-            responseData: parsed,
-          })
-        );
+        navigation.dispatch(StackActions.replace('NavigationDrawer'));
         return; // Return early to prevent further execution
       }
       console.log('IsLoggedIn: null'); // Log login state

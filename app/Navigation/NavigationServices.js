@@ -1,17 +1,28 @@
 import { StackActions } from '@react-navigation/native';
 
 let _navigator;
+let _pendingNotification = null;
 
 function setTopLevelNavigator(navigatorRef) {
   _navigator = navigatorRef;
   console.log('✅ Navigator SET:', !!navigatorRef);
 }
 
+function setPendingNotification(routeName, params = {}) {
+  _pendingNotification = { routeName, params };
+}
+
+function getAndClearPendingNotification() {
+  const p = _pendingNotification;
+  _pendingNotification = null;
+  return p;
+}
+
 function navigate(routeName, params = {}) {
   console.log('➡️ TRY NAVIGATE:', routeName, params);
 
   if (!_navigator) {
-    console.log('⚠️ Navigator not ready');
+    setPendingNotification(routeName, params);
     return;
   }
 
@@ -64,4 +75,6 @@ function navigate(routeName, params = {}) {
 export default {
   navigate,
   setTopLevelNavigator,
+  setPendingNotification,
+  getAndClearPendingNotification,
 };

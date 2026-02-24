@@ -1,4 +1,3 @@
-
 import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
@@ -6,19 +5,26 @@ import notifee, { EventType } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
 
-// 🔹 Prevent double notifications
+// 🔹 Prevent duplicate notifications
 let lastMessageId = null;
+const NOTIF_ID_MEMBERSHIP = 'fntv_membership'; // ek hi membership notif – replace, duplicate nahi
+
+function getNotificationId(remoteMessage) {
+  const data = remoteMessage.data || {};
+  if (data.type === 'membership') return NOTIF_ID_MEMBERSHIP;
+  return remoteMessage.messageId || `msg_${Date.now()}`;
+}
 
 // 🔹 Handle background & kill mode messages
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  // ✅ Block duplicate messages
-  if (remoteMessage.messageId === lastMessageId) return;
-  lastMessageId = remoteMessage.messageId;
+  const messageId = remoteMessage.messageId || `msg_${Date.now()}`;
+  if (messageId === lastMessageId) return;
+  lastMessageId = messageId;
 
   console.log('📩 BACKGROUND RECEIVED:', remoteMessage);
-   console.log('📦 DATA PAYLOAD:', remoteMessage.data); // 👈 yahan
 
   const { title, body } = remoteMessage.data || {};
+  const notifId = getNotificationId(remoteMessage);
 
   const channelId = await notifee.createChannel({
     id: 'high',
@@ -28,8 +34,9 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   });
 
   await notifee.displayNotification({
-    title,
-    body,
+    id: notifId,
+    title: title || 'Notification',
+    body: body || '',
     data: remoteMessage.data,
     android: {
       channelId,

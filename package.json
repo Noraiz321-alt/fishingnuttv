@@ -4,6 +4,8 @@
     "private": true,
     "scripts": {
         "android": "react-native run-android",
+        "android:resizable": "react-native run-android --no-packager",
+        "emulator:resizable": "emulator -avd Resizable_Experimental",
         "ios": "react-native run-ios",
         "lint": "eslint .",
         "start": "react-native start",

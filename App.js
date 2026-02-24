@@ -26,11 +26,14 @@ const App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('📩 FOREGROUND RECEIVED:', remoteMessage);
 
-      const { title, body } = remoteMessage.data || {};
+      const data = remoteMessage.data || {};
+      const { title, body } = data;
+      const notifId = data.type === 'membership' ? 'fntv_membership' : (remoteMessage.messageId || `fg_${Date.now()}`);
 
       await notifee.displayNotification({
-        title,
-        body,
+        id: notifId,
+        title: title || 'Notification',
+        body: body || '',
         data: remoteMessage.data,
         android: {
           channelId: 'high',

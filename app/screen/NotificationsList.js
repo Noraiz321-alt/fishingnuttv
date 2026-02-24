@@ -7,7 +7,7 @@ import {
   Image,
   ActivityIndicator,
   RefreshControl,
-  SafeAreaView,
+
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const API_URL = 'https://fishingnuttv.com/fntv-custom/signupWizard/all_firebase_notifications.php';
 const DELETE_NOTIFICATION_API = 'https://fishingnuttv.com/fntv-custom/signupWizard/delete_notification.php';
@@ -32,7 +33,16 @@ export default function NotificationsList() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get(API_URL);
+      if (!userId) {
+        console.log('NotificationsList: userId not available yet, skipping fetch');
+        setList([]);
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+
+      const url = `${API_URL}?user_id=${encodeURIComponent(userId)}`;
+      const res = await axios.get(url);
       const data = res.data;
       console.log('show data',data)
       const arr = Array.isArray(data) ? data : data?.data || data?.notifications || [];

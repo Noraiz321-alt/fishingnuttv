@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { InteractionManager } from 'react-native';
 import BottomTabs from './BottomTabs';
 import DraweContant from './DraweContant';
 import { DrawerActions } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import NavigationService from '../Navigation/NavigationServices';
 
 // export default function NavigationDrawer({ route }) {
 //   const Drawer = createDrawerNavigator();
@@ -30,6 +32,16 @@ import { ScaledSheet, s, vs } from 'react-native-size-matters';
 // }
 export default function NavigationDrawer({ route }) {
   const Drawer = createDrawerNavigator();
+
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => {
+      const pending = NavigationService.getAndClearPendingNotification();
+      if (pending?.routeName) {
+        setTimeout(() => NavigationService.navigate(pending.routeName, pending.params || {}), 100);
+      }
+    });
+    return () => task.cancel();
+  }, []);
 
   return (
     <Drawer.Navigator

@@ -39,22 +39,18 @@ import NotificationDetail from '../screen/NotificationDetail';
 import NavigationServices from '../Navigation/NavigationServices'
 
 
-export default function NavigationStack() {
+export default function NavigationStack({ initialRouteName = 'Login' }) {
 
   const Stack = createNativeStackNavigator();
-  const [saplash, setSaplash] = useState(true)
-
-  //   useEffect(()=>{
-  // setTimeout(()=>{
-  //   setSaplash(false);
-  // },2000)
-  //   },[])
 
   return (
     <NavigationContainer
       ref={(ref) => NavigationServices.setTopLevelNavigator(ref)}
     >
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName={initialRouteName}
+        screenOptions={{ headerShown: false }}
+      >
         {/* {
           saplash ? (
             <Stack.Screen name="Sscreen" component={Sscreen} />

@@ -27,6 +27,7 @@ import LeaguesTabs from '../screen/LeaguesTabs';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '../store/authSlice';
+import { clearPendingNotification } from '../Notification/pendingNotification';
 const DraweContant = (props) => {
   const navigation = useNavigation();
   const { route } = props;
@@ -168,6 +169,7 @@ const DraweContant = (props) => {
         await AsyncStorage.removeItem('user');
       }
       dispatch(clearUser());
+      await clearPendingNotification();
       navigation.dispatch(StackActions.replace('Login', { fromLogout: true }));
     } catch (error) {
       console.error('Logout error:', error);

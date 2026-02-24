@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { InteractionManager } from 'react-native';
 import BottomTabs from './BottomTabs';
 import DraweContant from './DraweContant';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, useFocusEffect } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import NavigationService from '../Navigation/NavigationServices';
+import { consumePendingNotificationIfAuthenticated } from '../Notification/pendingNotification';
 
 // export default function NavigationDrawer({ route }) {
 //   const Drawer = createDrawerNavigator();
@@ -32,16 +32,14 @@ import NavigationService from '../Navigation/NavigationServices';
 // }
 export default function NavigationDrawer({ route }) {
   const Drawer = createDrawerNavigator();
-
-  useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => {
-      const pending = NavigationService.getAndClearPendingNotification();
-      if (pending?.routeName) {
-        setTimeout(() => NavigationService.navigate(pending.routeName, pending.params || {}), 100);
-      }
-    });
-    return () => task.cancel();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const task = InteractionManager.runAfterInteractions(() => {
+        consumePendingNotificationIfAuthenticated();
+      });
+      return () => task.cancel();
+    }, [])
+  );
 
   return (
     <Drawer.Navigator

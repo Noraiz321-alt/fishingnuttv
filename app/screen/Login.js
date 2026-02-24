@@ -15,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
 import { useDispatch } from 'react-redux';
 import { setUser, updateUser, clearUser } from '../store/authSlice';
+import { consumePendingNotificationIfAuthenticated } from '../Notification/pendingNotification';
 
 
 // sami@searlco.com
@@ -151,6 +152,7 @@ const Login = ({ navigation, route }) => {
         const parsed = JSON.parse(user);
         dispatch(setUser(parsed));
         navigation.dispatch(StackActions.replace('NavigationDrawer'));
+        await consumePendingNotificationIfAuthenticated();
         return; // Return early to prevent further execution
       }
       console.log('IsLoggedIn: null'); // Log login state
@@ -334,18 +336,13 @@ const Login = ({ navigation, route }) => {
         .then(async (data) => {
           setLoading(false)
           if (data.success) {
-            // await AsyncStorage.setItem('user', JSON.stringify(data));
-            // console.log('User data stored in AsyncStorage:', data);
             await updateDataInAsyncStorage(data);
             console.log('User data stored in AsyncStorage:', data);
-            // Redux me bhi user set karo
             dispatch(setUser(data));
             navigation.dispatch(
-              StackActions.replace('NavigationDrawer', {
-                responseData: data,
-              })
+              StackActions.replace('NavigationDrawer')
             );
-            // checkLoginStatus(); // Call checkLoginStatus after storing user data
+            await consumePendingNotificationIfAuthenticated();
           } else {
             console.log('Navigation error');
             if (data.membership_type == 0) {

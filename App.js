@@ -1,5 +1,5 @@
 
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, AppState } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import 'fast-text-encoding'; // 👈 this will polyfill TextEncoder and
 import AppWrapper from './app/componnent/AppWrapper';
@@ -8,6 +8,7 @@ import { notificationListeners } from './app/Notification/NotificationServices'
 import notifee from '@notifee/react-native';
 import { Provider } from 'react-redux';
 import store from './app/store';
+import { consumePendingNotificationIfAuthenticated } from './app/Notification/pendingNotification';
 
 
 const App = () => {
@@ -45,7 +46,19 @@ const App = () => {
       });
     });
 
-    return unsubscribe;
+    const appStateSub = AppState.addEventListener('change', state => {
+      if (state === 'active') {
+        consumePendingNotificationIfAuthenticated();
+      }
+    });
+
+    // Initial check (cold start / after reload)
+    consumePendingNotificationIfAuthenticated();
+
+    return () => {
+      unsubscribe();
+      appStateSub.remove();
+    };
   }, []);
 
   return (

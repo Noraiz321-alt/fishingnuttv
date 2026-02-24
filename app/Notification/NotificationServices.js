@@ -1,5 +1,7 @@
 import notifee, { EventType } from '@notifee/react-native';
 import NavigationService from '../Navigation/NavigationServices';
+import store from '../store';
+import { savePendingNotification } from './pendingNotification';
 
 // export function notificationListeners() {
 //     notifee.onForegroundEvent(({ type, detail }) => {
@@ -18,28 +20,45 @@ export function notificationListeners() {
       const data = detail.notification?.data || {};
       console.log('✅ FOREGROUND CLICK →', data);
 
+      const state = store.getState();
+      const user = state?.auth?.user;
+
       // membership: News/Blogs → View_Post (backend kabhi screen: BottomTabs bhej deta hai); Main/Booking/B-Details → BottomTabs
       if (data.type === 'membership') {
         const tab = data.tab || data.screen || 'Main';
         if (tab === 'News' || tab === 'Blogs') {
           // News/Blogs View_Post ke andar hain, BottomTabs ke nahi
-          NavigationService.navigate('View_Post', {
-            tab,
-            notificationData: data,
-            fromNotification: true,
-          });
+          const routeName = 'View_Post';
+          const params = { tab, notificationData: data, fromNotification: true };
+          if (user) {
+            NavigationService.navigate(routeName, params);
+          } else {
+            savePendingNotification(routeName, params);
+          }
         } else {
-          NavigationService.navigate('BottomTabs', {
+          const routeName = 'BottomTabs';
+          const params = {
             tab: ['Booking', 'B-Details', 'Main'].includes(tab) ? tab : 'Booking',
             notificationData: data,
             fromNotification: true,
-          });
+          };
+          if (user) {
+            NavigationService.navigate(routeName, params);
+          } else {
+            savePendingNotification(routeName, params);
+          }
         }
         return;
       }
 
       const screen = data.screen || 'Main';
-      NavigationService.navigate(screen, data);
+      const routeName = screen;
+      const params = data;
+      if (user) {
+        NavigationService.navigate(routeName, params);
+      } else {
+        savePendingNotification(routeName, params);
+      }
     }
   });
 }

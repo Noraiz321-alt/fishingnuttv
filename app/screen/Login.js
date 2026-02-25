@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking, 
-ActivityIndicator, Switch,StatusBar,Platform } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Linking,
+ActivityIndicator, Switch, StatusBar, Platform } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import image from '../Utilis/image'
 import { StackActions, useNavigation } from '@react-navigation/native'
@@ -22,14 +23,16 @@ import { consumePendingNotificationIfAuthenticated } from '../Notification/pendi
 // Test123@
 // andy@searlco.com
 // @ndY1979??
+// noraizshamshad60@gmail.com
 
-// semi.u786@gmail.com
 
 
 
 const Login = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  const insets = useSafeAreaInsets();
   const [show, setshow] = useState(false)
+
 
 
   const [email, setEmail] = useState('sami@searlco.com');
@@ -367,8 +370,11 @@ const Login = ({ navigation, route }) => {
     }
   };
   return (
-    <SafeAreaView style={styles.safe}>
-      <KeyboardAwareScrollView contentContainerStyle={styles.scroll}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: '#b9dfab' }]}>
+      <KeyboardAwareScrollView
+        style={{ backgroundColor: '#b9dfab' }}
+        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 16 }]}
+      >
         <ImageBackground style={styles.bg} source={image.logo}>
           <View style={styles.container}>
   

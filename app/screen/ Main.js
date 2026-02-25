@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const Main = ({ route }) => {
   const navigation = useNavigation();
   const reduxUser = useSelector(state => state.auth.user);
+  console.log('redux',reduxUser)
   // Preference: Redux user, fallback to params
   const responseData = reduxUser || route.params?.responseData || null;
   const [showTestModal, setShowTestModal] = useState(false);
@@ -65,8 +66,6 @@ const Main = ({ route }) => {
       method: 'get',
       url: ('https://www.fishingnuttv.com/fntv-custom/fntvAPIs/refApi.php?auth=fntv7945@@-&act=qrLink&memberStatus=' + responseData.memberStatus + '&memberID=' + responseData.memberID),
     });
-    // console.log('URL: ', url)
-    // console.log("This is response7 data: ", res.data)
     setVari(res.data)
   }
 
@@ -75,7 +74,7 @@ const Main = ({ route }) => {
     try {
       const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/signupWizard/update_memExpiry.php?id=${responseData.memberID}`);
       console.log('display url >>>>x>>>>>', response.data);
-      setUpdateExpiry(response.data); // can be string or object
+      setUpdateExpiry(response.data);
     } catch (error) {
       console.error('Error fetching user profile data:', error);
     }
@@ -86,11 +85,8 @@ const Main = ({ route }) => {
   const expirydata = async () => {
     try {
       const response = await axios.get(`https://www.fishingnuttv.com/fntv-custom/fntv-apis-lar/public/api/membership-expiry-date/${responseData.memberID}`);
-      // console.log('User Profile Image :', response.data);
-      response.data;
       console.log('expair data', response.data);
       setExpirData(response.data);
-
     } catch (error) {
       console.error('Error fetching user profile data:', error);
     }
@@ -252,17 +248,27 @@ const Main = ({ route }) => {
 
               <View style={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 10, paddingHorizontal: 10 }}>
                 <View>
-                  <Text style={{ fontSize: 20, fontWeight: 'bold', color: expiryTextColor }}>
-                    {expirdata?.membership_expiry_date}
-                  </Text>
+                  {((responseData?.memberStatus === 'approved') && (expirdata?.membership_expiry_date === '0000-00-00')) ? (
+                    <View style={{ backgroundColor: '#1b6001', borderRadius: 50, paddingHorizontal: 24, paddingVertical: 10, alignItems: 'center' }}>
+                      <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
+                        {expirdata?.membership_expiry_date}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: responseData?.memberStatus === 'pending' ? 'red' : '#1b6001' }}>
+                      {expirdata?.membership_expiry_date}
+                    </Text>
+                  )}
                 </View>
-                <TouchableOpacity onPress={handleButtonPress} style={{ paddingHorizontal: 50, backgroundColor: '#1b6001', borderRadius: 50, paddingVertical: 10, alignItems: 'center' }}>
-                  {loading ?
-                    <ActivityIndicator size="small" color="white" />
-                    :
-                    <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }} >Renew Membership</Text>
-                  }
-                </TouchableOpacity>
+                {!((responseData?.memberStatus === 'approved') && (expirdata?.membership_expiry_date === '0000-00-00')) && (
+                  <TouchableOpacity onPress={handleButtonPress} style={{ paddingHorizontal: 50, backgroundColor: '#1b6001', borderRadius: 50, paddingVertical: 10, alignItems: 'center' }}>
+                    {loading ?
+                      <ActivityIndicator size="small" color="white" />
+                      :
+                      <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }} >Renew Membership</Text>
+                    }
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>

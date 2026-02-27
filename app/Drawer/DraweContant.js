@@ -36,7 +36,11 @@ const DraweContant = (props) => {
   const reduxUser = useSelector(state => state.auth.user);
   // Preference: Redux user, fallback to route params (old flow)
   const Data = reduxUser || route?.params?.responseData || {};
-  const isPending = Data?.memberStatus === 'pending';
+  const status = (Data?.memberStatus || '').toLowerCase();
+  const isPending =
+    status === 'pending' ||
+    status === 'suspend' ||
+    status === 'suspended';
 
   console.log('show data drawer', Data)
   const memberID = Data.memberID || '';

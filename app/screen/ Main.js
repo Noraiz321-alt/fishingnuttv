@@ -127,13 +127,14 @@ const Main = ({ route }) => {
   };
 
 
-  const cardBgColor =
-    responseData?.memberStatus === 'pending' ? '#FFA500' : '#b9dfab';
+  // Membership status helpers
+  const status = (responseData?.memberStatus || '').toLowerCase();
+  const isPendingOrSuspended =
+    status === 'pending' || status === 'suspend' || status === 'suspended';
 
-  const expiryTextColor =
-    responseData?.memberStatus === 'pending'
-      ? 'red'
-      : '#1b6001';
+  const cardBgColor = isPendingOrSuspended ? '#FFA500' : '#b9dfab';
+
+  const expiryTextColor = isPendingOrSuspended ? 'red' : '#1b6001';
 
 
   // const sendPostRequest = async () => {
@@ -255,7 +256,7 @@ const Main = ({ route }) => {
                       </Text>
                     </View>
                   ) : (
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: responseData?.memberStatus === 'pending' ? 'red' : '#1b6001' }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: expiryTextColor }}>
                       {expirdata?.membership_expiry_date}
                     </Text>
                   )}

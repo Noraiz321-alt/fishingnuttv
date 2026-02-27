@@ -23,6 +23,7 @@ import { consumePendingNotificationIfAuthenticated } from '../Notification/pendi
 // Test123@
 // andy@searlco.com
 // @ndY1979??
+// semi.u786@gmail.com
 // noraizshamshad60@gmail.com
 
 
@@ -151,12 +152,13 @@ const Login = ({ navigation, route }) => {
       const user = await AsyncStorage.getItem('user');
       console.log('User data from AsyncStorage:', user); // Log user data from AsyncStorage
       if (user !== null) {
-        // If user details are stored in AsyncStorage, navigate to the 'NavigationDrawer' screen
         const parsed = JSON.parse(user);
-        dispatch(setUser(parsed));
+        await refreshMemberFromExpiry(parsed);
         navigation.dispatch(StackActions.replace('NavigationDrawer'));
+        // Kill mode: thodi der wait karke consume — pending pehle save ho jaye (headless / getInitialNotification)
+        await new Promise(r => setTimeout(r, 600));
         await consumePendingNotificationIfAuthenticated();
-        return; // Return early to prevent further execution
+        return;
       }
       console.log('IsLoggedIn: null'); // Log login state
       // If user details are not stored in AsyncStorage, stay on the same screen
@@ -274,23 +276,33 @@ const Login = ({ navigation, route }) => {
     setshow(pre => !pre)
   }
 
-  const updateDataInAsyncStorage = async (newData) => {
+  // Login / fingerprint ke baad hamesha latest status laane ke liye Expiry API call
+  const refreshMemberFromExpiry = async (baseUser) => {
     try {
-      // Get existing data from AsyncStorage
-      const existingData = await AsyncStorage.getItem('user');
-      let parsedData = existingData ? JSON.parse(existingData) : {};
+      const memberID = baseUser?.memberID;
+      if (!memberID) {
+        console.warn('refreshMemberFromExpiry: memberID missing, using baseUser only');
+        await AsyncStorage.setItem('user', JSON.stringify(baseUser));
+        dispatch(setUser(baseUser));
+        return;
+      }
 
-      // Merge new data with existing data
-      const updatedData = { ...parsedData, ...newData };
+      const url = `https://www.fishingnuttv.com/fntv-custom/fntvAPIs/refApi.php?auth=fntv7945@@-&act=Expiry&user_id=${memberID}`;
+      const res = await fetch(url);
+      const latest = await res.json();
+      console.log('🔄 Expiry API response:', latest);
 
-      // Store updated data in AsyncStorage
-      await AsyncStorage.setItem('user', JSON.stringify(updatedData));
-      // Also update Redux user
-      dispatch(updateUser(updatedData));
-
-      console.log('Data updated successfully in AsyncStorage:', updatedData);
+      const toStore = latest?.success ? latest : baseUser;
+      await AsyncStorage.setItem('user', JSON.stringify(toStore));
+      dispatch(setUser(toStore));
     } catch (error) {
-      console.log('Error updating data in AsyncStorage:', error);
+      console.error('refreshMemberFromExpiry error:', error);
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify(baseUser));
+      } catch (e) {
+        console.error('fallback save baseUser error:', e);
+      }
+      dispatch(setUser(baseUser));
     }
   };
 
@@ -338,13 +350,14 @@ const Login = ({ navigation, route }) => {
         .then(res => res.json())
         .then(async (data) => {
           setLoading(false)
+          console.log('🔐 Login API response:', data);
           if (data.success) {
-            await updateDataInAsyncStorage(data);
-            console.log('User data stored in AsyncStorage:', data);
-            dispatch(setUser(data));
+            await refreshMemberFromExpiry(data);
             navigation.dispatch(
               StackActions.replace('NavigationDrawer')
             );
+            // Kill mode: thodi der wait karke consume — pending pehle save ho jaye
+            await new Promise(r => setTimeout(r, 600));
             await consumePendingNotificationIfAuthenticated();
           } else {
             console.log('Navigation error');

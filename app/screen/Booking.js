@@ -32,7 +32,8 @@ export default function Booking({ route }) {
     }
   }, []);
   ////////
-  const isPending = responseData?.memberStatus === 'pending';
+  const status = (responseData?.memberStatus || '').toLowerCase();
+  const isPending = status === 'pending' || status === 'suspend' || status === 'suspended';
 
   console.log('Lake details data >>>>>', responseData);
 

@@ -6,14 +6,13 @@ import notifee, { EventType } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
 
-// 🔹 Prevent duplicate notifications
+// 🔹 Prevent duplicate notifications by messageId
 let lastMessageId = null;
-const NOTIF_ID_MEMBERSHIP = 'fntv_membership'; // ek hi membership notif – replace, duplicate nahi
 
 function getNotificationId(remoteMessage) {
   const data = remoteMessage.data || {};
-  if (data.type === 'membership') return NOTIF_ID_MEMBERSHIP;
-  return remoteMessage.messageId || `msg_${Date.now()}`;
+  // Prefer FCM messageId or any backend-provided id; fallback to timestamp-based id
+  return remoteMessage.messageId || data.id || `msg_${Date.now()}`;
 }
 
 // 🔹 Handle background & kill mode messages

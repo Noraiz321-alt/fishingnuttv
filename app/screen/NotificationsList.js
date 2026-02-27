@@ -30,6 +30,9 @@ export default function NotificationsList() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const fetchNotifications = async () => {
     try {
@@ -79,6 +82,85 @@ export default function NotificationsList() {
     }
   };
 
+  const getItemId = (item) => item?.id ?? item?.notification_id;
+
+  const toggleSelectItem = (item) => {
+    const id = getItemId(item);
+    if (id == null) return;
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (!Array.isArray(list) || list.length === 0) return;
+    // If already all selected, clear; otherwise select all with valid ids
+    const allIds = list
+      .map(getItemId)
+      .filter(id => id != null);
+    const allSelected = selectedIds.size && allIds.every(id => selectedIds.has(id));
+    if (allSelected) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(allIds));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!userId) {
+      Alert.alert('Error', 'Please log in to delete notifications.');
+      return;
+    }
+    if (!selectedIds.size) return;
+
+    Alert.alert(
+      'Delete notifications',
+      `Are you sure you want to delete ${selectedIds.size} notification(s)?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            setBulkDeleting(true);
+            try {
+              const idsArray = Array.from(selectedIds);
+              for (const notificationId of idsArray) {
+                try {
+                  const url = `${DELETE_NOTIFICATION_API}?user_id=${encodeURIComponent(
+                    userId,
+                  )}&notification_id=${encodeURIComponent(notificationId)}`;
+                  const res = await axios.get(url);
+                  if (res.data?.success === false) {
+                    console.warn('Bulk delete failed for id:', notificationId, res.data);
+                  }
+                } catch (err) {
+                  console.warn('Bulk delete API error for id:', notificationId, err?.message);
+                }
+              }
+              setList(prev =>
+                prev.filter(item => {
+                  const id = getItemId(item);
+                  return !selectedIds.has(id);
+                }),
+              );
+              setSelectedIds(new Set());
+              setSelectMode(false);
+            } finally {
+              setBulkDeleting(false);
+            }
+          },
+        },
+      ],
+    );
+  };
+
   const handleDelete = async (item) => {
     const notificationId = item?.id ?? item?.notification_id;
     if (!userId) {
@@ -112,12 +194,26 @@ export default function NotificationsList() {
     const imageUrl = item?.image || item?.image_url || item?.notification_image || null;
     const dateStr = item?.created_at || item?.date || item?.createdAt || '';
 
-    const itemId = item?.id ?? item?.notification_id;
+    const itemId = getItemId(item);
     const isDeleting = deletingId === itemId;
+    const isSelected = itemId != null && selectedIds.has(itemId);
 
     return (
-      <View style={styles.card}>
+      <View style={[styles.card, selectMode && isSelected && styles.cardSelected]}>
         <View style={styles.cardTopRow}>
+          {selectMode && (
+            <TouchableOpacity
+              onPress={() => toggleSelectItem(item)}
+              style={styles.checkboxWrap}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons
+                name={isSelected ? 'checkbox-outline' : 'square-outline'}
+                size={s(22)}
+                color={isSelected ? '#1b6001' : '#999'}
+              />
+            </TouchableOpacity>
+          )}
           <View style={styles.iconWrap}>
             <Ionicons name="notifications" size={s(22)} color="#1b6001" />
           </View>
@@ -127,22 +223,35 @@ export default function NotificationsList() {
               <Text style={styles.cardDate}>{formatDate(dateStr)}</Text>
             ) : null}
           </View>
-          <TouchableOpacity
-            onPress={() => handleDelete(item)}
-            disabled={isDeleting}
-            style={styles.deleteIconWrap}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            {isDeleting ? (
-              <ActivityIndicator size="small" color="#c62828" />
-            ) : (
-              <Ionicons name="trash-outline" size={s(22)} color="#c62828" />
-            )}
-          </TouchableOpacity>
+          {!selectMode && (
+            <TouchableOpacity
+              onPress={() => handleDelete(item)}
+              disabled={isDeleting}
+              style={styles.deleteIconWrap}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              {isDeleting ? (
+                <ActivityIndicator size="small" color="#c62828" />
+              ) : (
+                <Ionicons name="trash-outline" size={s(22)} color="#c62828" />
+              )}
+            </TouchableOpacity>
+          )}
         </View>
         <TouchableOpacity
           activeOpacity={0.85}
-          onPress={() => navigation.navigate('NotificationDetail', { notification: item })}
+          onPress={() =>
+            selectMode
+              ? toggleSelectItem(item)
+              : navigation.navigate('NotificationDetail', { notification: item })
+          }
+          onLongPress={() => {
+            if (!selectMode) {
+              setSelectMode(true);
+              toggleSelectItem(item);
+            }
+          }}
+          delayLongPress={300}
         >
           {imageUrl ? (
             <Image
@@ -160,11 +269,41 @@ export default function NotificationsList() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.nav}>
-          <AntDesign name="left" size={wp('5%')} color="black" />
+        <TouchableOpacity onPress={() => (selectMode ? setSelectMode(false) || setSelectedIds(new Set()) : navigation.goBack())} style={styles.nav}>
+          <AntDesign name={selectMode ? 'close' : 'left'} size={wp('5%')} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Notifications</Text>
-        <Image style={styles.nav1} source={require('../image/logooo.png')} />
+        <Text style={styles.headerTitle}>
+          {selectMode ? 'Select notifications' : 'Notifications'}
+        </Text>
+        {selectMode ? (
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              onPress={handleSelectAll}
+              style={styles.headerActionBtn}
+              disabled={!list.length}
+            >
+              <Text style={styles.headerActionText}>Select All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleBulkDelete}
+              style={styles.headerActionBtn}
+              disabled={!selectedIds.size || bulkDeleting}
+            >
+              {bulkDeleting ? (
+                <ActivityIndicator size="small" color="#c62828" />
+              ) : (
+                <Ionicons name="trash-outline" size={s(22)} color={selectedIds.size ? '#c62828' : '#ccc'} />
+              )}
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => setSelectMode(true)}
+            style={styles.nav}
+          >
+            <Ionicons name="checkmark-done-outline" size={wp('5%')} color="black" />
+          </TouchableOpacity>
+        )}
       </View>
       {loading ? (
         <View style={styles.center}>
@@ -216,6 +355,19 @@ const styles = ScaledSheet.create({
     borderRadius: '100@s',
   },
   headerTitle: { fontSize: wp('5%'), fontWeight: 'bold', color: 'black' },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerActionBtn: {
+    marginLeft: 8,
+    paddingHorizontal: 4,
+  },
+  headerActionText: {
+    fontSize: s(12),
+    color: '#1b6001',
+    fontWeight: '500',
+  },
   listContent: { padding: 12, paddingBottom: 24 },
   card: {
     backgroundColor: '#fff',
@@ -234,6 +386,15 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 6,
+  },
+  cardSelected: {
+    borderColor: '#1b6001',
+    backgroundColor: '#f1f8e9',
+  },
+  checkboxWrap: {
+    marginRight: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconWrap: {
     width: s(40),

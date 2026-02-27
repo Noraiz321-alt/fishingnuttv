@@ -8,8 +8,39 @@ import { notificationListeners } from './app/Notification/NotificationServices'
 import notifee from '@notifee/react-native';
 import { Provider } from 'react-redux';
 import store from './app/store';
-import { consumePendingNotificationIfAuthenticated } from './app/Notification/pendingNotification';
+import { consumePendingNotificationIfAuthenticated, saveInitialNotificationIfAny } from './app/Notification/pendingNotification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser } from './app/store/authSlice';
 
+
+const EXPIRY_REFRESH_MIN_INTERVAL_MS = 60 * 1000; // 60 sec throttle
+let lastExpiryRefreshAt = 0;
+
+async function refreshMemberFromExpiryIfNeeded() {
+  try {
+    const now = Date.now();
+    if (now - lastExpiryRefreshAt < EXPIRY_REFRESH_MIN_INTERVAL_MS) {
+      return;
+    }
+
+    const state = store.getState();
+    const baseUser = state?.auth?.user;
+    const memberID = baseUser?.memberID;
+    if (!memberID) return;
+
+    const url = `https://www.fishingnuttv.com/fntv-custom/fntvAPIs/refApi.php?auth=fntv7945@@-&act=Expiry&user_id=${memberID}`;
+    const res = await fetch(url);
+    const latest = await res.json();
+    console.log('🔄 [AppState] Expiry API response:', latest);
+
+    const toStore = latest?.success ? latest : baseUser;
+    await AsyncStorage.setItem('user', JSON.stringify(toStore));
+    store.dispatch(setUser(toStore));
+    lastExpiryRefreshAt = now;
+  } catch (e) {
+    console.warn('refreshMemberFromExpiryIfNeeded error:', e?.message || e);
+  }
+}
 
 const App = () => {
   useEffect(() => {
@@ -29,7 +60,7 @@ const App = () => {
 
       const data = remoteMessage.data || {};
       const { title, body } = data;
-      const notifId = data.type === 'membership' ? 'fntv_membership' : (remoteMessage.messageId || `fg_${Date.now()}`);
+      const notifId = remoteMessage.messageId || data.id || `fg_${Date.now()}`;
 
       await notifee.displayNotification({
         id: notifId,
@@ -48,12 +79,15 @@ const App = () => {
 
     const appStateSub = AppState.addEventListener('change', state => {
       if (state === 'active') {
+        refreshMemberFromExpiryIfNeeded();
         consumePendingNotificationIfAuthenticated();
       }
     });
 
-    // Initial check (cold start / after reload)
-    consumePendingNotificationIfAuthenticated();
+    // Kill mode: notification tap pe pehle pending save (UI side), taake login ke baad consume mile
+    saveInitialNotificationIfAny();
+    // Initial foreground refresh (agar already logged-in user hai)
+    refreshMemberFromExpiryIfNeeded();
 
     return () => {
       unsubscribe();

@@ -5,8 +5,9 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  SafeAreaView,
+
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';

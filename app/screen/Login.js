@@ -36,7 +36,7 @@ const Login = ({ navigation, route }) => {
 
 
 
-  const [email, setEmail] = useState('sami@searlco.com');
+  const [email, setEmail] = useState('semi.u786@gmail.com');
   const [password, setPassword] = useState('Test123@');
 
   // const [email, setEmail] = useState('');

@@ -40,6 +40,9 @@ export default function BottomTabs({ route, navigation }) {
       ? '#FFA500'
       : '#b9dfab';
 
+
+      
+
   useEffect(() => {
     console.log('🟢 useEffect → route.params: ', route?.params);
     const targetTab = route?.params?.tab;

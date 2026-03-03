@@ -44,6 +44,8 @@ export default function NotificationsList() {
         return;
       }
 
+      console.log('show list id>>>>>>>>XXX>>>>',userId)
+
       const url = `${API_URL}?user_id=${encodeURIComponent(userId)}`;
       const res = await axios.get(url);
       const data = res.data;

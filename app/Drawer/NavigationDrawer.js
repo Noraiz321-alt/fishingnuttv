@@ -1,32 +1,64 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { InteractionManager } from 'react-native';
 import BottomTabs from './BottomTabs';
 import DraweContant from './DraweContant';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, useFocusEffect } from '@react-navigation/native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { consumePendingNotificationIfAuthenticated } from '../Notification/pendingNotification';
 
+// export default function NavigationDrawer({ route }) {
+//   const Drawer = createDrawerNavigator();
+
+//   return (
+//     <Drawer.Navigator
+//       drawerType="back"
+//       screenOptions={{
+//         swipeEnabled: false,
+//         headerShown: false,
+//         drawerStyle: {
+//           width: s(260), // Responsive width
+//         },
+//       }}
+//       drawerContent={(props) => <DraweContant {...props} route={route} />}
+//       drawerPosition="left"
+//     >
+//       <Drawer.Screen name="BottomTabs">
+//         {() => <BottomTabs route={route} />}
+//       </Drawer.Screen>
+//     </Drawer.Navigator>
+//   );
+// }
 export default function NavigationDrawer({ route }) {
   const Drawer = createDrawerNavigator();
+  useFocusEffect(
+    React.useCallback(() => {
+      const task = InteractionManager.runAfterInteractions(() => {
+        consumePendingNotificationIfAuthenticated();
+      });
+      return () => task.cancel();
+    }, [])
+  );
 
   return (
     <Drawer.Navigator
-      // drawerType="back"
+      drawerType="back"
       screenOptions={{
-        drawerType: "front",   // 👈 FIX
-
         swipeEnabled: false,
         headerShown: false,
         drawerStyle: {
-          width: s(260), // Responsive width
+          width: s(260),
         },
       }}
       drawerContent={(props) => <DraweContant {...props} route={route} />}
       drawerPosition="left"
     >
-      <Drawer.Screen name="BottomTabs">
-        {() => <BottomTabs route={route} />}
-      </Drawer.Screen>
+      <Drawer.Screen
+        name="BottomTabs"
+        component={BottomTabs}
+        initialParams={route?.params}   // login ka responseData pehli dafa
+      />
     </Drawer.Navigator>
   );
 }

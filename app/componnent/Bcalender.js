@@ -1,3 +1,4 @@
+
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, Alert, Image, Modal, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
@@ -965,13 +966,10 @@ const styles = ScaledSheet.create({
     height: vs(18),
     borderRadius: s(4),
   },
-
   skeletonBox2: {
     width: s(100),
     height: vs(18),
     borderRadius: s(4),
   },
-
 });
-
 export default Bcalender;

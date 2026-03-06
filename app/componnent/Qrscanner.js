@@ -60,6 +60,7 @@ export default function Qrscanner() {
 
     const handleQRCode = (data) => {
         try {
+            console.log("📦 Scanned QR Raw Data:", data);
             const url = new URL(data); // Validate URL
             setScanStatus(url.hostname);
             Linking.openURL(data);
@@ -67,7 +68,7 @@ export default function Qrscanner() {
             Alert.alert("Invalid QR Code", "Scanned code is not a valid URL.");
         }
     };
-
+    
     if (!cameraGranted) {
         return (
             <SafeAreaView style={styles.safeContainer}>

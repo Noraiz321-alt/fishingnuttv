@@ -11,14 +11,18 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-clipboard/clipboard": "^1.16.2",
     "@react-native-community/datetimepicker": "^8.4.3",
+    "@react-native-firebase/app": "^23.8.6",
+    "@react-native-firebase/messaging": "^23.8.6",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/drawer": "^6.6.4",
     "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
+    "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.6.8",
     "base-64": "^1.0.0",
     "fast-text-encoding": "^1.0.6",
@@ -56,6 +60,7 @@
     "react-native-vector-icons": "^10.0.1",
     "react-native-webview": "^13.6.0",
     "react-native-youtube-iframe": "^2.3.0",
+    "react-redux": "^9.2.0",
     "uri-js": "^4.4.1"
   },
   "overrides": {

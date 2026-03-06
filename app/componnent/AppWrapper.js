@@ -13,10 +13,10 @@ const AppWrapper = () => {
   useEffect(() => {
     // Check version on initial load
     checkVersion();
-    
+
     // Add app state change listener
     const subscription = AppState.addEventListener('change', handleAppStateChange);
-    
+
     return () => {
       subscription.remove();
     };

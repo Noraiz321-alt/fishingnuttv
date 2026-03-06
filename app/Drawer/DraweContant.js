@@ -25,11 +25,24 @@ import View_Post from '../screen/View_Post';
 import LeaguesTabs from '../screen/LeaguesTabs';
 
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearUser } from '../store/authSlice';
+import { clearPendingNotification } from '../Notification/pendingNotification';
 const DraweContant = (props) => {
   const navigation = useNavigation();
   const { route } = props;
+  const dispatch = useDispatch();
 
-  const Data = route?.params?.responseData || {};
+  const reduxUser = useSelector(state => state.auth.user);
+  // Preference: Redux user, fallback to route params (old flow)
+  const Data = reduxUser || route?.params?.responseData || {};
+  const status = (Data?.memberStatus || '').toLowerCase();
+  const isPending =
+    status === 'pending' ||
+    status === 'suspend' ||
+    status === 'suspended';
+
+  console.log('show data drawer', Data)
   const memberID = Data.memberID || '';
   const fullName = `${Data.first_name || ''} ${Data.last_name || ''}`;
 
@@ -159,7 +172,9 @@ const DraweContant = (props) => {
       if (fingerprintEnabled === 'false') {
         await AsyncStorage.removeItem('user');
       }
-      navigation.dispatch(StackActions.replace('Login'));
+      dispatch(clearUser());
+      await clearPendingNotification();
+      navigation.dispatch(StackActions.replace('Login', { fromLogout: true }));
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -201,6 +216,8 @@ const DraweContant = (props) => {
       setModalVisible(false);
       const res = await axios.get(`${apipost.deleteacount}${memberID}`);
       if (res.data.message === 'User account deleted successfully') {
+        // Redux + navigation cleanup on account delete
+        dispatch(clearUser());
         navigation.dispatch(StackActions.replace('Login'));
       }
     } catch (err) {
@@ -251,9 +268,16 @@ const DraweContant = (props) => {
           </View>
         </View>
 
-        <View style={{ paddingLeft: s(15),paddingBottom:s(25), }}>
+        <View style={{ paddingLeft: 15 }}>
           {renderItem('Your Catches', <MaterialIcons name="photo-library" size={33} color="#1b6001" />, 'GelleryPic', 'GelleryPic')}
-          {renderItem('Peg Scanner', <MaterialIcons name="document-scanner" size={33} color="#1b6001" />, Qrscanner, 'Qrscanner')}
+          {!isPending &&
+            renderItem(
+              'Peg Scanner',
+              <MaterialIcons name="document-scanner" size={33} color="#1b6001" />,
+              Qrscanner,
+              'Qrscanner'
+            )
+          }
           {renderItem('View Posts', <MaterialIcons name="newspaper" size={33} color="#1b6001" />, View_Post, 'View_Post')}
           {renderItem('Leagues', <Entypo name="trophy" size={33} color="#1b6001" />, LeaguesTabs, 'LeaguesTabs')}
           {renderItem('Videos', <MaterialCommunityIcons name="message-video" size={33} color="#1b6001" />, Video, 'Video')}

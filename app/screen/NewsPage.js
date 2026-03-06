@@ -10,6 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const NewsPage = ({ route }) => {
     const navigation = useNavigation();
     const { itemData } = route.params;
+    console.log('show data>>>', itemData);
+
     const contentWidth = Dimensions.get('window').width;
 
     console.log('Share URL:', itemData.share_url);
